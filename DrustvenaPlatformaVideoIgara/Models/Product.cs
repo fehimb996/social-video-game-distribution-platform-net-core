@@ -19,15 +19,15 @@ public partial class Product
 
     public virtual ICollection<Picture> Pictures { get; set; } = new List<Picture>();
 
+    public virtual ICollection<ProductDeveloper> ProductDevelopers { get; set; } = new List<ProductDeveloper>();
+
+    public virtual ICollection<ProductGenre> ProductGenres { get; set; } = new List<ProductGenre>();
+
+    public virtual ICollection<ProductPlatform> ProductPlatforms { get; set; } = new List<ProductPlatform>();
+
+    public virtual ICollection<ProductPublisher> ProductPublishers { get; set; } = new List<ProductPublisher>();
+
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
     public virtual ICollection<WishlistItem> WishlistItems { get; set; } = new List<WishlistItem>();
-
-    public virtual ICollection<Developer> Developers { get; set; } = new List<Developer>();
-
-    public virtual ICollection<Genre> Genres { get; set; } = new List<Genre>();
-
-    public virtual ICollection<Platform> Platforms { get; set; } = new List<Platform>();
-
-    public virtual ICollection<Publisher> Publishers { get; set; } = new List<Publisher>();
 }

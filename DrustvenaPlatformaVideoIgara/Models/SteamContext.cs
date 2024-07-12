@@ -37,6 +37,14 @@ public partial class SteamContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
+    public virtual DbSet<ProductDeveloper> ProductDevelopers { get; set; }
+
+    public virtual DbSet<ProductGenre> ProductGenres { get; set; }
+
+    public virtual DbSet<ProductPlatform> ProductPlatforms { get; set; }
+
+    public virtual DbSet<ProductPublisher> ProductPublishers { get; set; }
+
     public virtual DbSet<Publisher> Publishers { get; set; }
 
     public virtual DbSet<Review> Reviews { get; set; }
@@ -58,7 +66,7 @@ public partial class SteamContext : DbContext
     {
         modelBuilder.Entity<Country>(entity =>
         {
-            entity.HasKey(e => e.CountryId).HasName("PK__Country__10D160BF8F69179C");
+            entity.HasKey(e => e.CountryId).HasName("PK__Country__10D160BFD678C330");
 
             entity.ToTable("Country");
 
@@ -68,34 +76,17 @@ public partial class SteamContext : DbContext
 
         modelBuilder.Entity<Developer>(entity =>
         {
-            entity.HasKey(e => e.DeveloperId).HasName("PK__Develope__DE084CD12979A3DA");
+            entity.HasKey(e => e.DeveloperId).HasName("PK__Develope__DE084CD1B88AEA86");
 
             entity.ToTable("Developer");
 
             entity.Property(e => e.DeveloperId).HasColumnName("DeveloperID");
             entity.Property(e => e.DeveloperName).HasMaxLength(40);
-
-            entity.HasMany(d => d.Products).WithMany(p => p.Developers)
-                .UsingEntity<Dictionary<string, object>>(
-                    "ProductDeveloper",
-                    r => r.HasOne<Product>().WithMany()
-                        .HasForeignKey("ProductId")
-                        .HasConstraintName("FK_ProductDeveloper_Product"),
-                    l => l.HasOne<Developer>().WithMany()
-                        .HasForeignKey("DeveloperId")
-                        .HasConstraintName("FK_ProductDeveloper_Developer"),
-                    j =>
-                    {
-                        j.HasKey("DeveloperId", "ProductId");
-                        j.ToTable("ProductDeveloper");
-                        j.IndexerProperty<int>("DeveloperId").HasColumnName("DeveloperID");
-                        j.IndexerProperty<int>("ProductId").HasColumnName("ProductID");
-                    });
         });
 
         modelBuilder.Entity<Friend>(entity =>
         {
-            entity.HasKey(e => e.FriendId).HasName("PK__Friend__A2CF65630ADDEA45");
+            entity.HasKey(e => e.FriendId).HasName("PK__Friend__A2CF6563182AF1D4");
 
             entity.ToTable("Friend");
 
@@ -116,34 +107,17 @@ public partial class SteamContext : DbContext
 
         modelBuilder.Entity<Genre>(entity =>
         {
-            entity.HasKey(e => e.GenreId).HasName("PK__Genre__0385055E5B1DDF01");
+            entity.HasKey(e => e.GenreId).HasName("PK__Genre__0385055EB75D8AB6");
 
             entity.ToTable("Genre");
 
             entity.Property(e => e.GenreId).HasColumnName("GenreID");
             entity.Property(e => e.GenreName).HasMaxLength(40);
-
-            entity.HasMany(d => d.Products).WithMany(p => p.Genres)
-                .UsingEntity<Dictionary<string, object>>(
-                    "ProductGenre",
-                    r => r.HasOne<Product>().WithMany()
-                        .HasForeignKey("ProductId")
-                        .HasConstraintName("FK_ProductGenre_Product"),
-                    l => l.HasOne<Genre>().WithMany()
-                        .HasForeignKey("GenreId")
-                        .HasConstraintName("FK_ProductGenre_Genre"),
-                    j =>
-                    {
-                        j.HasKey("GenreId", "ProductId");
-                        j.ToTable("ProductGenre");
-                        j.IndexerProperty<int>("GenreId").HasColumnName("GenreID");
-                        j.IndexerProperty<int>("ProductId").HasColumnName("ProductID");
-                    });
         });
 
         modelBuilder.Entity<Invoice>(entity =>
         {
-            entity.HasKey(e => e.InvoiceId).HasName("PK__Invoice__D796AAD5D46D6872");
+            entity.HasKey(e => e.InvoiceId).HasName("PK__Invoice__D796AAD5011FC926");
 
             entity.ToTable("Invoice");
 
@@ -165,7 +139,7 @@ public partial class SteamContext : DbContext
 
         modelBuilder.Entity<InvoiceDetail>(entity =>
         {
-            entity.HasKey(e => e.InvoiceDetailsId).HasName("PK__InvoiceD__9F18B3E5D56CAB67");
+            entity.HasKey(e => e.InvoiceDetailsId).HasName("PK__InvoiceD__9F18B3E5A316237F");
 
             entity.ToTable(tb => tb.HasTrigger("trg_UpdatePrice"));
 
@@ -185,7 +159,7 @@ public partial class SteamContext : DbContext
 
         modelBuilder.Entity<Message>(entity =>
         {
-            entity.HasKey(e => e.MessageId).HasName("PK__Message__C87C037CDCFCD7E9");
+            entity.HasKey(e => e.MessageId).HasName("PK__Message__C87C037C5F6BC994");
 
             entity.ToTable("Message");
 
@@ -208,7 +182,7 @@ public partial class SteamContext : DbContext
 
         modelBuilder.Entity<PaymentMethod>(entity =>
         {
-            entity.HasKey(e => e.PaymentMethodId).HasName("PK__PaymentM__DC31C1F353CE4CCA");
+            entity.HasKey(e => e.PaymentMethodId).HasName("PK__PaymentM__DC31C1F33D93FCA2");
 
             entity.ToTable("PaymentMethod");
 
@@ -218,7 +192,7 @@ public partial class SteamContext : DbContext
 
         modelBuilder.Entity<Picture>(entity =>
         {
-            entity.HasKey(e => e.PictureId).HasName("PK__Picture__8C2866F8F89DF0DB");
+            entity.HasKey(e => e.PictureId).HasName("PK__Picture__8C2866F83C9ECF6C");
 
             entity.ToTable("Picture");
 
@@ -233,34 +207,17 @@ public partial class SteamContext : DbContext
 
         modelBuilder.Entity<Platform>(entity =>
         {
-            entity.HasKey(e => e.PlatformId).HasName("PK__Platform__F559F6DA022D7239");
+            entity.HasKey(e => e.PlatformId).HasName("PK__Platform__F559F6DAD4D4D084");
 
             entity.ToTable("Platform");
 
             entity.Property(e => e.PlatformId).HasColumnName("PlatformID");
             entity.Property(e => e.PlatformName).HasMaxLength(40);
-
-            entity.HasMany(d => d.Products).WithMany(p => p.Platforms)
-                .UsingEntity<Dictionary<string, object>>(
-                    "ProductPlatform",
-                    r => r.HasOne<Product>().WithMany()
-                        .HasForeignKey("ProductId")
-                        .HasConstraintName("FK_ProductPlatform_Product"),
-                    l => l.HasOne<Platform>().WithMany()
-                        .HasForeignKey("PlatformId")
-                        .HasConstraintName("FK_ProductPlatform_Platform"),
-                    j =>
-                    {
-                        j.HasKey("PlatformId", "ProductId");
-                        j.ToTable("ProductPlatform");
-                        j.IndexerProperty<int>("PlatformId").HasColumnName("PlatformID");
-                        j.IndexerProperty<int>("ProductId").HasColumnName("ProductID");
-                    });
         });
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__Product__B40CC6EDB7A8DE34");
+            entity.HasKey(e => e.ProductId).HasName("PK__Product__B40CC6ED154E565D");
 
             entity.ToTable("Product");
 
@@ -269,36 +226,95 @@ public partial class SteamContext : DbContext
             entity.Property(e => e.ProductName).HasMaxLength(70);
         });
 
+        modelBuilder.Entity<ProductDeveloper>(entity =>
+        {
+            entity.HasKey(e => e.ProductDeveloperId).HasName("PK__ProductD__B0619AA2C50AEBF3");
+
+            entity.ToTable("ProductDeveloper");
+
+            entity.Property(e => e.ProductDeveloperId).HasColumnName("ProductDeveloperID");
+            entity.Property(e => e.DeveloperId).HasColumnName("DeveloperID");
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+            entity.HasOne(d => d.Developer).WithMany(p => p.ProductDevelopers)
+                .HasForeignKey(d => d.DeveloperId)
+                .HasConstraintName("FK_ProductDeveloper_Developer");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.ProductDevelopers)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK_ProductDeveloper_Product");
+        });
+
+        modelBuilder.Entity<ProductGenre>(entity =>
+        {
+            entity.HasKey(e => e.ProductGenreId).HasName("PK__ProductG__02B490791124D500");
+
+            entity.ToTable("ProductGenre");
+
+            entity.Property(e => e.ProductGenreId).HasColumnName("ProductGenreID");
+            entity.Property(e => e.GenreId).HasColumnName("GenreID");
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+            entity.HasOne(d => d.Genre).WithMany(p => p.ProductGenres)
+                .HasForeignKey(d => d.GenreId)
+                .HasConstraintName("FK_ProductGenre_Genre");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.ProductGenres)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK_ProductGenre_Product");
+        });
+
+        modelBuilder.Entity<ProductPlatform>(entity =>
+        {
+            entity.HasKey(e => e.ProductPlatformId).HasName("PK__ProductP__0CD1A56CB0529CE9");
+
+            entity.ToTable("ProductPlatform");
+
+            entity.Property(e => e.ProductPlatformId).HasColumnName("ProductPlatformID");
+            entity.Property(e => e.PlatformId).HasColumnName("PlatformID");
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+            entity.HasOne(d => d.Platform).WithMany(p => p.ProductPlatforms)
+                .HasForeignKey(d => d.PlatformId)
+                .HasConstraintName("FK_ProductPlatform_Platform");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.ProductPlatforms)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK_ProductPlatform_Product");
+        });
+
+        modelBuilder.Entity<ProductPublisher>(entity =>
+        {
+            entity.HasKey(e => e.ProductPublisherId).HasName("PK__ProductP__32D21D4CD26D82B6");
+
+            entity.ToTable("ProductPublisher");
+
+            entity.Property(e => e.ProductPublisherId).HasColumnName("ProductPublisherID");
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
+            entity.Property(e => e.PublisherId).HasColumnName("PublisherID");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.ProductPublishers)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK_ProductPublisher_Product");
+
+            entity.HasOne(d => d.Publisher).WithMany(p => p.ProductPublishers)
+                .HasForeignKey(d => d.PublisherId)
+                .HasConstraintName("FK_ProductPublisher_Publisher");
+        });
+
         modelBuilder.Entity<Publisher>(entity =>
         {
-            entity.HasKey(e => e.PublisherId).HasName("PK__Publishe__4C657E4BAE57CD33");
+            entity.HasKey(e => e.PublisherId).HasName("PK__Publishe__4C657E4B272BA05E");
 
             entity.ToTable("Publisher");
 
             entity.Property(e => e.PublisherId).HasColumnName("PublisherID");
             entity.Property(e => e.PublisherName).HasMaxLength(40);
-
-            entity.HasMany(d => d.Products).WithMany(p => p.Publishers)
-                .UsingEntity<Dictionary<string, object>>(
-                    "ProductPublisher",
-                    r => r.HasOne<Product>().WithMany()
-                        .HasForeignKey("ProductId")
-                        .HasConstraintName("FK_ProductPublisher_Product"),
-                    l => l.HasOne<Publisher>().WithMany()
-                        .HasForeignKey("PublisherId")
-                        .HasConstraintName("FK_ProductPublisher_Publisher"),
-                    j =>
-                    {
-                        j.HasKey("PublisherId", "ProductId");
-                        j.ToTable("ProductPublisher");
-                        j.IndexerProperty<int>("PublisherId").HasColumnName("PublisherID");
-                        j.IndexerProperty<int>("ProductId").HasColumnName("ProductID");
-                    });
         });
 
         modelBuilder.Entity<Review>(entity =>
         {
-            entity.HasKey(e => e.ReviewId).HasName("PK__Review__74BC79AE7ED2E55C");
+            entity.HasKey(e => e.ReviewId).HasName("PK__Review__74BC79AEC888C84B");
 
             entity.ToTable("Review");
 
@@ -319,7 +335,7 @@ public partial class SteamContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__User__1788CCACB5FFB022");
+            entity.HasKey(e => e.UserId).HasName("PK__User__1788CCAC5C4EFC72");
 
             entity.ToTable("User");
 
@@ -339,7 +355,7 @@ public partial class SteamContext : DbContext
 
         modelBuilder.Entity<Wallet>(entity =>
         {
-            entity.HasKey(e => e.WalletId).HasName("PK__Wallet__84D4F92EB0A0ABD1");
+            entity.HasKey(e => e.WalletId).HasName("PK__Wallet__84D4F92E7E05EA4C");
 
             entity.ToTable("Wallet");
 
@@ -354,7 +370,7 @@ public partial class SteamContext : DbContext
 
         modelBuilder.Entity<WalletTransaction>(entity =>
         {
-            entity.HasKey(e => e.TransactionId).HasName("PK__WalletTr__55433A4B4ECE1556");
+            entity.HasKey(e => e.TransactionId).HasName("PK__WalletTr__55433A4B374ECDEA");
 
             entity.ToTable("WalletTransaction");
 
@@ -373,7 +389,7 @@ public partial class SteamContext : DbContext
 
         modelBuilder.Entity<Wishlist>(entity =>
         {
-            entity.HasKey(e => e.WishlistId).HasName("PK__Wishlist__233189CB1D69C963");
+            entity.HasKey(e => e.WishlistId).HasName("PK__Wishlist__233189CB5801D674");
 
             entity.ToTable("Wishlist");
 
@@ -387,7 +403,7 @@ public partial class SteamContext : DbContext
 
         modelBuilder.Entity<WishlistItem>(entity =>
         {
-            entity.HasKey(e => e.WishlistItemId).HasName("PK__Wishlist__171E2181C9227DD5");
+            entity.HasKey(e => e.WishlistItemId).HasName("PK__Wishlist__171E2181D35D1B8D");
 
             entity.ToTable("WishlistItem");
 

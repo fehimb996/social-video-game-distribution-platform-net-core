@@ -9,5 +9,5 @@ public partial class Publisher
 
     public string PublisherName { get; set; } = null!;
 
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+    public virtual ICollection<ProductPublisher> ProductPublishers { get; set; } = new List<ProductPublisher>();
 }

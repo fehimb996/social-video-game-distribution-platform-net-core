@@ -9,5 +9,5 @@ public partial class Platform
 
     public string PlatformName { get; set; } = null!;
 
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+    public virtual ICollection<ProductPlatform> ProductPlatforms { get; set; } = new List<ProductPlatform>();
 }
