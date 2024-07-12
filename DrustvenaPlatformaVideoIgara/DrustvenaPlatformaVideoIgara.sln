@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrustvenaPlatformaVideoIgara", "DrustvenaPlatformaVideoIgara.csproj", "{FBAF16D1-3836-4DAB-972F-5A14198866F1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FBAF16D1-3836-4DAB-972F-5A14198866F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBAF16D1-3836-4DAB-972F-5A14198866F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBAF16D1-3836-4DAB-972F-5A14198866F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBAF16D1-3836-4DAB-972F-5A14198866F1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3B139BA4-90E4-439B-906A-A6174CA2E76B}
+	EndGlobalSection
+EndGlobal
