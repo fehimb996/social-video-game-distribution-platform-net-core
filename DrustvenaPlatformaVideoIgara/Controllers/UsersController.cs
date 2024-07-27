@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DrustvenaPlatformaVideoIgara.Models;
+using BCrypt.Net;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
 namespace DrustvenaPlatformaVideoIgara.Controllers
 {
@@ -25,48 +27,74 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(await steamContext.ToListAsync());
         }
 
-        // GET: Users/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Profile()
         {
-            if (id == null)
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
             {
-                return NotFound();
+                return RedirectToAction("Login", "Users");
             }
 
-            var user = await _context.Users
-                .Include(u => u.Country)
-                .FirstOrDefaultAsync(m => m.UserId == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
+            var user = _context.Users.Find(userId);
             return View(user);
         }
 
-        // GET: Users/Create
-        public IActionResult Create()
+        // GET: Users/Register
+        public IActionResult Register()
         {
-            ViewData["CountryId"] = new SelectList(_context.Countries, "CountryId", "CountryId");
+            ViewData["CountryId"] = new SelectList(_context.Countries, "CountryId", "CountryName");
             return View();
         }
 
-        // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Users/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserId,NickName,FirstName,LastName,Email,Password,ProfilePicture,ProfileDescription,CountryId")] User user)
+        public async Task<IActionResult> Register([Bind("UserId,NickName,FirstName,LastName,Email,Password,ProfilePicture,ProfileDescription,CountryId")] User user)
         {
             if (ModelState.IsValid)
             {
+                // Hash the password
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 _context.Add(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Login));
             }
-            ViewData["CountryId"] = new SelectList(_context.Countries, "CountryId", "CountryId", user.CountryId);
+            ViewData["CountryId"] = new SelectList(_context.Countries, "CountryId", "CountryName", user.CountryId);
             return View(user);
         }
+
+        // GET: Users/Login
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        // POST: Users/Login
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(string email, string password)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
+
+            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
+            {
+                // Add user info to session
+                HttpContext.Session.SetInt32("UserId", user.UserId);
+                HttpContext.Session.SetString("NickName", user.NickName);
+                return RedirectToAction("Index", "Home"); // Redirect to home page after login
+            }
+
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            return View();
+        }
+
+        // GET: Users/Logout
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear(); // Clear the session
+            return RedirectToAction("Login");
+        }
+
 
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -86,8 +114,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         }
 
         // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("UserId,NickName,FirstName,LastName,Email,Password,ProfilePicture,ProfileDescription,CountryId")] User user)

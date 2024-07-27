@@ -59,6 +59,9 @@ public partial class SteamContext : DbContext
 
     public virtual DbSet<WishlistItem> WishlistItems { get; set; }
 
+    // Procedures
+
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=DefaultConnection");
 
