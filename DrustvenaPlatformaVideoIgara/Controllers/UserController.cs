@@ -1,30 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DrustvenaPlatformaVideoIgara.Models;
-using BCrypt.Net;
+using Microsoft.AspNetCore.Hosting;
 
 namespace DrustvenaPlatformaVideoIgara.Controllers
 {
-    public class UsersController : Controller
+    public class UserController : Controller
     {
         private readonly SteamContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public UsersController(SteamContext context, IWebHostEnvironment webHostEnvironment)
+        public UserController(SteamContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
         }
 
-        // GET: Users
+        // GET: User
         public async Task<IActionResult> Index()
         {
             var steamContext = _context.Users.Include(u => u.Country);
@@ -105,7 +102,50 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return RedirectToAction("Login");
         }
 
-        // GET: Users/Edit/5
+        // GET: User/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users
+                .Include(u => u.Country)
+                .FirstOrDefaultAsync(m => m.UserId == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        //// GET: User/Create
+        //public IActionResult Create()
+        //{
+        //    ViewData["CountryId"] = new SelectList(_context.Countries, "CountryId", "CountryId");
+        //    return View();
+        //}
+
+        //// POST: User/Create
+        //// To protect from overposting attacks, enable the specific properties you want to bind to.
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("UserId,NickName,FirstName,LastName,Email,Password,ProfilePicture,ProfileDescription,CountryId")] User user)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(user);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["CountryId"] = new SelectList(_context.Countries, "CountryId", "CountryId", user.CountryId);
+        //    return View(user);
+        //}
+
+        // GET: User/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -136,19 +176,15 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             {
                 try
                 {
-                    // Check if a new profile picture is provided
                     if (ProfilePicture != null)
                     {
                         user.ProfilePicture = await SaveProfilePicture(ProfilePicture);
                     }
-                    else
+
+                    var existingUser = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.UserId == id);
+                    if (existingUser != null)
                     {
-                        // Keep the existing profile picture value
-                        var existingUser = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.UserId == id);
-                        if (existingUser != null)
-                        {
-                            user.ProfilePicture = existingUser.ProfilePicture;
-                        }
+                        user.Password = existingUser.Password;
                     }
 
                     _context.Update(user);
@@ -171,7 +207,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(user);
         }
 
-        // Method to save profile picture
         private async Task<string> SaveProfilePicture(IFormFile profilePicture)
         {
             var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "images");
@@ -199,7 +234,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return "/images/" + uniqueFileName;
         }
 
-        // GET: Users/Delete/5
+        // GET: User/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -218,7 +253,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(user);
         }
 
-        // POST: Users/Delete/5
+        // POST: User/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -236,31 +271,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.UserId == id);
-        }
-
-        // GET: Users/Library
-        public async Task<IActionResult> Library()
-        {
-            var userId = HttpContext.Session.GetInt32("UserId");
-            if (userId == null)
-            {
-                return RedirectToAction("Login", "Users");
-            }
-
-            // Fetch the invoice details for the logged-in user
-            var userInvoices = await _context.Invoices
-                .Include(i => i.InvoiceDetails)
-                .ThenInclude(id => id.Product)
-                .Where(i => i.UserId == userId)
-                .ToListAsync();
-
-            // Extract the products from the invoice details
-            var products = userInvoices
-                .SelectMany(i => i.InvoiceDetails)
-                .Select(id => id.Product)
-                .ToList();
-
-            return View(products);
         }
     }
 }

@@ -1,0 +1,21 @@
+﻿@model IEnumerable<DrustvenaPlatformaVideoIgara.Models.Product>
+
+@{
+    ViewData["Title"] = "Library";
+}
+
+<h2>Library</h2>
+
+@if (Model.Any())
+{
+    <ul>
+        @foreach (var product in Model)
+        {
+            <li>@product.ProductName</li>
+        }
+    </ul>
+}
+else
+{
+    <p>You have not purchased any games yet.</p>
+}
