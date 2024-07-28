@@ -23,16 +23,17 @@
             @Html.DisplayFor(model => model.LastName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ProfilePicture)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProfilePicture)
+            @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+            {
+                <img src="@Model.ProfilePicture" alt="Profile Picture" style="max-width: 100px; max-height: 100px;" />
+            }
+            else
+            {
+                <span>No Profile Picture</span>
+            }
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ProfileDescription)
@@ -49,6 +50,12 @@
 
         @if ((bool)ViewData["IsOwnProfile"])
         {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
             <dt class="col-sm-2">
                 Wallet Balance
             </dt>
