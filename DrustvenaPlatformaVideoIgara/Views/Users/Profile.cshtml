@@ -10,45 +10,58 @@
     <h4>@Html.DisplayFor(model => model.NickName)</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FirstName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FirstName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.LastName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.LastName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Email)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Email)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ProfilePicture)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ProfilePicture)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ProfileDescription)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ProfileDescription)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Country)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Country.CountryId)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Country.CountryName)
         </dd>
+
+        @if ((bool)ViewData["IsOwnProfile"])
+        {
+            <dt class="col-sm-2">
+                Wallet Balance
+            </dt>
+            <dd class="col-sm-10">
+                @ViewData["WalletBalance"] €
+            </dd>
+        }
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.UserId">Edit</a> |
+    @if ((bool)ViewData["IsOwnProfile"])
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.UserId">Edit</a>
+    }
     <a asp-action="Index">Back to List</a>
 </div>

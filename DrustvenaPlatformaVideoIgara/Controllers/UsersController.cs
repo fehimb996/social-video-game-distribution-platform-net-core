@@ -24,33 +24,54 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        // GET: Users
         public async Task<IActionResult> Index()
         {
             var steamContext = _context.Users.Include(u => u.Country);
             return View(await steamContext.ToListAsync());
         }
 
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile(int? id)
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
-            if (userId == null)
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
             {
                 return RedirectToAction("Login", "Users");
             }
 
-            var user = _context.Users.Find(userId);
+            if (id == null)
+            {
+                id = loggedInUserId;
+            }
+
+            var user = await _context.Users
+                .Include(u => u.Country)
+                .FirstOrDefaultAsync(u => u.UserId == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (id == loggedInUserId)
+            {
+                var wallet = await _context.Wallets
+                    .FirstOrDefaultAsync(w => w.UserId == loggedInUserId);
+
+                ViewData["WalletBalance"] = wallet?.Balance ?? 0;
+            }
+
+            ViewData["IsOwnProfile"] = id == loggedInUserId;
+
             return View(user);
         }
 
-        // GET: Users/Register
+
         public IActionResult Register()
         {
             ViewData["CountryId"] = new SelectList(_context.Countries, "CountryId", "CountryName");
             return View();
         }
 
-        // POST: Users/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register([Bind("UserId,NickName,FirstName,LastName,Email,Password,ProfileDescription,CountryId")] User user, IFormFile profilePicture)
@@ -73,13 +94,11 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(user);
         }
 
-        // GET: Users/Login
         public IActionResult Login()
         {
             return View();
         }
 
-        // POST: Users/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(string email, string password)
@@ -98,14 +117,12 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View();
         }
 
-        // GET: Users/Logout
         public IActionResult Logout()
         {
             HttpContext.Session.Clear(); // Clear the session
             return RedirectToAction("Login");
         }
 
-        // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -122,7 +139,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(user);
         }
 
-        // POST: User/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("UserId,NickName,FirstName,LastName,Email,Password,ProfileDescription,CountryId")] User user, IFormFile ProfilePicture)
@@ -171,7 +187,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(user);
         }
 
-        // Method to save profile picture
         private async Task<string> SaveProfilePicture(IFormFile profilePicture)
         {
             var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "images");
@@ -199,7 +214,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return "/images/" + uniqueFileName;
         }
 
-        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -218,7 +232,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(user);
         }
 
-        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -238,7 +251,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return _context.Users.Any(e => e.UserId == id);
         }
 
-        // GET: Users/Library
         public async Task<IActionResult> Library()
         {
             var userId = HttpContext.Session.GetInt32("UserId");
