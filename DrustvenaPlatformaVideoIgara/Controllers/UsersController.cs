@@ -52,29 +52,26 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 return NotFound();
             }
 
-            if (id == loggedInUserId)
-            {
-                var wallet = await _context.Wallets
-                    .FirstOrDefaultAsync(w => w.UserId == loggedInUserId);
+            var gamesCount = await _context.Invoices
+                .Where(i => i.UserId == id)
+                .SelectMany(i => i.InvoiceDetails)
+                .Select(id => id.Product)
+                .Distinct()
+                .CountAsync();
 
-                ViewData["WalletBalance"] = wallet?.Balance ?? 0;
+            var reviewsCount = await _context.Reviews
+                .Where(r => r.UserId == id)
+                .CountAsync();
 
-                var gamesCount = await _context.Invoices
-                    .Where(i => i.UserId == loggedInUserId)
-                    .SelectMany(i => i.InvoiceDetails)
-                    .Select(id => id.Product)
-                    .Distinct()
-                    .CountAsync();
-
-                var reviewsCount = await _context.Reviews
-                    .Where(r => r.UserId == loggedInUserId)
-                    .CountAsync();
-
-                ViewData["GamesCount"] = gamesCount;
-                ViewData["ReviewsCount"] = reviewsCount;
-            }
-
+            ViewData["GamesCount"] = gamesCount;
+            ViewData["ReviewsCount"] = reviewsCount;
             ViewData["IsOwnProfile"] = id == loggedInUserId;
+
+            // Fetch wallet balance for the user
+            var wallet = await _context.Wallets
+                .FirstOrDefaultAsync(w => w.UserId == id);
+
+            ViewData["WalletBalance"] = wallet?.Balance ?? 0;
 
             return View(user);
         }
@@ -82,10 +79,10 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         public async Task<IActionResult> Games(int id)
         {
             var user = await _context.Users
-                .Include(u => u.Invoices)
-                .ThenInclude(i => i.InvoiceDetails)
-                .ThenInclude(id => id.Product)
-                .FirstOrDefaultAsync(u => u.UserId == id);
+        .Include(u => u.Invoices)
+        .ThenInclude(i => i.InvoiceDetails)
+        .ThenInclude(id => id.Product)
+        .FirstOrDefaultAsync(u => u.UserId == id);
 
             if (user == null)
             {
@@ -104,9 +101,9 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         public async Task<IActionResult> Reviews(int id)
         {
             var reviews = await _context.Reviews
-                .Include(r => r.Product)
-                .Where(r => r.UserId == id)
-                .ToListAsync();
+               .Include(r => r.Product)
+               .Where(r => r.UserId == id)
+               .ToListAsync();
 
             return View(reviews);
         }
