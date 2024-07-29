@@ -25,6 +25,10 @@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ProfilePicture)
         </dt>
+        <div>
+            <a asp-action="Games" asp-route-id="@Model.UserId">Games (@ViewData["GamesCount"])</a> <br />
+            <a asp-action="Reviews" asp-route-id="@Model.UserId">Reviews (@ViewData["ReviewsCount"])</a>
+        </div>
         <dd class="col-sm-10">
             @if (!string.IsNullOrEmpty(Model.ProfilePicture))
             {

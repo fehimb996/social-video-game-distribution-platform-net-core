@@ -1,0 +1,25 @@
+﻿@model IEnumerable<DrustvenaPlatformaVideoIgara.Models.Review>
+
+<h1>User Reviews</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Review ID</th>
+            <th>Product Name</th>
+            <th>Rating</th>
+            <th>Comment</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var review in Model)
+        {
+            <tr>
+                <td>@review.ReviewId</td>
+                <td>@review.Product.ProductName</td>
+                <td>@(review.Rating ? "Positive" : "Negative")</td>
+                <td>@review.Comment</td>
+            </tr>
+        }
+    </tbody>
+</table>

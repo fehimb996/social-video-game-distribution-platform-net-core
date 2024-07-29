@@ -58,6 +58,20 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                     .FirstOrDefaultAsync(w => w.UserId == loggedInUserId);
 
                 ViewData["WalletBalance"] = wallet?.Balance ?? 0;
+
+                var gamesCount = await _context.Invoices
+                    .Where(i => i.UserId == loggedInUserId)
+                    .SelectMany(i => i.InvoiceDetails)
+                    .Select(id => id.Product)
+                    .Distinct()
+                    .CountAsync();
+
+                var reviewsCount = await _context.Reviews
+                    .Where(r => r.UserId == loggedInUserId)
+                    .CountAsync();
+
+                ViewData["GamesCount"] = gamesCount;
+                ViewData["ReviewsCount"] = reviewsCount;
             }
 
             ViewData["IsOwnProfile"] = id == loggedInUserId;
@@ -65,6 +79,37 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(user);
         }
 
+        public async Task<IActionResult> Games(int id)
+        {
+            var user = await _context.Users
+                .Include(u => u.Invoices)
+                .ThenInclude(i => i.InvoiceDetails)
+                .ThenInclude(id => id.Product)
+                .FirstOrDefaultAsync(u => u.UserId == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var products = user.Invoices
+                .SelectMany(i => i.InvoiceDetails)
+                .Select(id => id.Product)
+                .Distinct()
+                .ToList();
+
+            return View(products);
+        }
+
+        public async Task<IActionResult> Reviews(int id)
+        {
+            var reviews = await _context.Reviews
+                .Include(r => r.Product)
+                .Where(r => r.UserId == id)
+                .ToListAsync();
+
+            return View(reviews);
+        }
 
         public IActionResult Register()
         {
