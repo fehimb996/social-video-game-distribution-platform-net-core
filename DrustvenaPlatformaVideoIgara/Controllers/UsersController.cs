@@ -108,6 +108,28 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(reviews);
         }
 
+        public async Task<IActionResult> Wishlist(int id)
+        {
+            var user = await _context.Users
+                .Include(u => u.Wishlists)
+                .ThenInclude(w => w.WishlistItems)
+                .ThenInclude(wi => wi.Product)
+                .FirstOrDefaultAsync(u => u.UserId == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the user has any wishlists
+            var wishlistItems = user.Wishlists
+                .SelectMany(w => w.WishlistItems)
+                .Select(wi => wi.Product)
+                .ToList();
+
+            return View(wishlistItems);
+        }
+
         public IActionResult Register()
         {
             ViewData["CountryId"] = new SelectList(_context.Countries, "CountryId", "CountryName");

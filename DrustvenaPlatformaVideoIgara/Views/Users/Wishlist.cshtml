@@ -1,0 +1,27 @@
+﻿@model IEnumerable<DrustvenaPlatformaVideoIgara.Models.Product>
+
+@{
+    ViewData["Title"] = "Wishlist";
+}
+
+<h1>Wishlist</h1>
+
+<div>
+    @if (Model.Any())
+    {
+        <ul class="list-group">
+            @foreach (var product in Model)
+            {
+                <li class="list-group-item">
+                    <h4>@product.ProductName</h4>
+                    <p>@product.ProductDetails</p>
+                    <p>Price: @product.Price €</p>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No items in your wishlist.</p>
+    }
+</div>
