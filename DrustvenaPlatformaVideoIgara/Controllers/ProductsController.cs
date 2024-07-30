@@ -20,7 +20,32 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Products.ToListAsync());
+            // Fetch 10 random products
+            var randomProducts = await _context.Products
+                .OrderBy(r => Guid.NewGuid())
+                .Take(10)
+                .ToListAsync();
+
+            // Fetch top-selling products
+            var topSellingProducts = await _context.InvoiceItems
+                .GroupBy(ii => new { ii.Product.ProductId, ii.Product.ProductName, ii.Product.Price })
+                .Select(g => new TopSellingProduct
+                {
+                    ProductId = g.Key.ProductId,
+                    ProductName = g.Key.ProductName,
+                    Price = g.Key.Price
+                })
+                .OrderByDescending(g => g.Price)
+                .Take(10)
+                .ToListAsync();
+
+            var viewModel = new ProductsViewModel
+            {
+                RandomProducts = randomProducts,
+                TopSellingProducts = topSellingProducts
+            };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> Details(int? id)

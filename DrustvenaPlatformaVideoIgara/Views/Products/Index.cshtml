@@ -1,53 +1,47 @@
-﻿@model IEnumerable<DrustvenaPlatformaVideoIgara.Models.Product>
+﻿@model DrustvenaPlatformaVideoIgara.Models.ProductsViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Products";
 }
 
-<h1>Index</h1>
+<h1>Random Products</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductDetails)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReleaseDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductDetails)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReleaseDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div>
+    @if (Model.RandomProducts.Any())
+    {
+        <ul class="list-group">
+            @foreach (var product in Model.RandomProducts)
+            {
+                <li class="list-group-item">
+                    <h4><a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a></h4>
+                    <p>Price: @product.Price €</p>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No random products available.</p>
+    }
+</div>
+
+<h1>Top Selling Products</h1>
+
+<div>
+    @if (Model.TopSellingProducts.Any())
+    {
+        <ul class="list-group">
+            @foreach (var product in Model.TopSellingProducts)
+            {
+                <li class="list-group-item">
+                    <h4><a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a></h4>
+                    <p>Price: @product.Price €</p>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No top selling products available.</p>
+    }
+</div>
