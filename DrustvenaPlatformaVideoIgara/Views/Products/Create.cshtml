@@ -19,7 +19,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProductDetails" class="control-label"></label>
-                <input asp-for="ProductDetails" class="form-control" />
+                <textarea asp-for="ProductDetails" class="form-control"></textarea>
                 <span asp-validation-for="ProductDetails" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -44,5 +44,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
