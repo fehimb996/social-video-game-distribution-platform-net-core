@@ -1,0 +1,54 @@
+﻿@model DrustvenaPlatformaVideoIgara.Models.Cart
+
+@{
+    ViewData["Title"] = "Your Cart";
+}
+
+<h1>Your Cart</h1>
+
+@if (Model.CartItems != null && Model.CartItems.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CartItems)
+            {
+                <tr>
+                    <td>@item.Product.ProductName</td>
+                    <td>@item.Price €</td>
+                    <td>1</td> <!-- Assuming quantity is 1 for simplicity -->
+                    <td>@item.Price €</td>
+                    <td>
+                        <form asp-action="RemoveItem" method="post">
+                            <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+                            <input type="submit" value="Remove" class="btn btn-danger" />
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">Total</td>
+                <td>@Model.TotalPrice €</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+}
+else
+{
+    <p>Your cart is empty.</p>
+}
+
+<div>
+    <a asp-action="Checkout" class="btn btn-primary">Checkout</a>
+</div>

@@ -62,7 +62,60 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 return NotFound();
             }
 
-            return View(product);
+            bool isInCart = false;
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId.HasValue)
+            {
+                isInCart = await _context.CartItems
+                    .AnyAsync(ci => ci.Cart.UserId == userId.Value && ci.ProductId == id.Value);
+            }
+
+            var viewModel = new ProductDetailsViewModel
+            {
+                Product = product,
+                IsInCart = isInCart,
+                IsUserLoggedIn = userId.HasValue
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddToCart(int productId)
+        {
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (!userId.HasValue)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            var cart = await _context.Carts
+                .FirstOrDefaultAsync(c => c.UserId == userId.Value);
+
+            if (cart == null)
+            {
+                cart = new Cart
+                {
+                    UserId = userId.Value,
+                    TotalPrice = 0
+                };
+                _context.Carts.Add(cart);
+                await _context.SaveChangesAsync();
+            }
+
+            var cartItem = new CartItem
+            {
+                CartId = cart.CartId,
+                ProductId = productId,
+                Price = (await _context.Products.FindAsync(productId)).Price
+            };
+
+            _context.CartItems.Add(cartItem);
+            cart.TotalPrice += cartItem.Price;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = productId });
         }
 
         public IActionResult Create()

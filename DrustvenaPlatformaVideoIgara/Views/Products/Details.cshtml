@@ -1,4 +1,4 @@
-﻿@model DrustvenaPlatformaVideoIgara.Models.Product
+﻿@model DrustvenaPlatformaVideoIgara.Models.ProductDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -11,32 +11,52 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductName)
+            @Html.DisplayNameFor(model => model.Product.ProductName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProductName)
+            @Html.DisplayFor(model => model.Product.ProductName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductDetails)
+            @Html.DisplayNameFor(model => model.Product.ProductDetails)
         </dt>
         <dd class="col-sm-10">
-            @Html.Raw(Model.ProductDetails.Replace(Environment.NewLine, "<br />"))
+            @Html.Raw(Model.Product.ProductDetails.Replace(Environment.NewLine, "<br />"))
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ReleaseDate)
+            @Html.DisplayNameFor(model => model.Product.ReleaseDate)
         </dt>
         <dd class="col-sm-10">
-            @Model.ReleaseDate.ToString("dd-MMM-yyyy")
+            @Model.Product.ReleaseDate.ToString("dd-MMM-yyyy")
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
+            @Html.DisplayNameFor(model => model.Product.Price)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Price) €
+            @Html.DisplayFor(model => model.Product.Price) €
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.ProductId">Edit</a> |
+    @if (Model.IsUserLoggedIn)
+    {
+        if (Model.IsInCart)
+        {
+            <span class="btn btn-success disabled">Added to Cart</span>
+        }
+        else
+        {
+            <form asp-action="AddToCart" method="post">
+                <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+                <button type="submit" class="btn btn-primary">Add to Cart</button>
+            </form>
+        }
+    }
+    else
+    {
+        <span class="btn btn-primary disabled">Add to Cart (Login Required)</span>
+    }
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Product.ProductId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
