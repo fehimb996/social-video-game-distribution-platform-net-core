@@ -54,7 +54,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
             var gamesCount = await _context.Invoices
                 .Where(i => i.UserId == id)
-                .SelectMany(i => i.InvoiceDetails)
+                .SelectMany(i => i.InvoiceItems)
                 .Select(id => id.Product)
                 .Distinct()
                 .CountAsync();
@@ -80,7 +80,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         {
             var user = await _context.Users
         .Include(u => u.Invoices)
-        .ThenInclude(i => i.InvoiceDetails)
+        .ThenInclude(i => i.InvoiceItems)
         .ThenInclude(id => id.Product)
         .FirstOrDefaultAsync(u => u.UserId == id);
 
@@ -90,7 +90,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             }
 
             var products = user.Invoices
-                .SelectMany(i => i.InvoiceDetails)
+                .SelectMany(i => i.InvoiceItems)
                 .Select(id => id.Product)
                 .Distinct()
                 .ToList();
@@ -111,7 +111,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         public async Task<IActionResult> Wishlist(int id)
         {
             var user = await _context.Users
-                .Include(u => u.Wishlists)
+                .Include(u => u.Wishlist)
                 .ThenInclude(w => w.WishlistItems)
                 .ThenInclude(wi => wi.Product)
                 .FirstOrDefaultAsync(u => u.UserId == id);
@@ -121,11 +121,10 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 return NotFound();
             }
 
-            // Check if the user has any wishlists
-            var wishlistItems = user.Wishlists
-                .SelectMany(w => w.WishlistItems)
+            // Retrieve the wishlist items directly from the WishlistItems collection
+            var wishlistItems = user.Wishlist?.WishlistItems
                 .Select(wi => wi.Product)
-                .ToList();
+                .ToList() ?? new List<Product>();
 
             return View(wishlistItems);
         }
@@ -325,14 +324,14 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
             // Fetch the invoice details for the logged-in user
             var userInvoices = await _context.Invoices
-                .Include(i => i.InvoiceDetails)
+                .Include(i => i.InvoiceItems)
                 .ThenInclude(id => id.Product)
                 .Where(i => i.UserId == userId)
                 .ToListAsync();
 
             // Extract the products from the invoice details
             var products = userInvoices
-                .SelectMany(i => i.InvoiceDetails)
+                .SelectMany(i => i.InvoiceItems)
                 .Select(id => id.Product)
                 .ToList();
 

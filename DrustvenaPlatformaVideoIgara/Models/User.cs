@@ -23,6 +23,8 @@ public partial class User
 
     public int? CountryId { get; set; }
 
+    public virtual Cart? Cart { get; set; }
+
     public virtual Country? Country { get; set; }
 
     public virtual ICollection<Friend> FriendUserId1Navigations { get; set; } = new List<Friend>();
@@ -37,7 +39,7 @@ public partial class User
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
-    public virtual ICollection<Wallet> Wallets { get; set; } = new List<Wallet>();
+    public virtual Wallet? Wallet { get; set; }
 
-    public virtual ICollection<Wishlist> Wishlists { get; set; } = new List<Wishlist>();
+    public virtual Wishlist? Wishlist { get; set; }
 }

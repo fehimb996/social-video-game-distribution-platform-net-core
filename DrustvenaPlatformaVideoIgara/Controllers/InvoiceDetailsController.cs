@@ -21,7 +21,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         // GET: InvoiceDetails
         public async Task<IActionResult> Index()
         {
-            var steamContext = _context.InvoiceDetails.Include(i => i.Invoice).Include(i => i.Product);
+            var steamContext = _context.InvoiceItems.Include(i => i.Invoice).Include(i => i.Product);
             return View(await steamContext.ToListAsync());
         }
 
@@ -33,10 +33,10 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 return NotFound();
             }
 
-            var invoiceDetail = await _context.InvoiceDetails
+            var invoiceDetail = await _context.InvoiceItems
                 .Include(i => i.Invoice)
                 .Include(i => i.Product)
-                .FirstOrDefaultAsync(m => m.InvoiceDetailsId == id);
+                .FirstOrDefaultAsync(m => m.InvoiceItemId == id);
             if (invoiceDetail == null)
             {
                 return NotFound();
@@ -79,7 +79,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 return NotFound();
             }
 
-            var invoiceDetail = await _context.InvoiceDetails.FindAsync(id);
+            var invoiceDetail = await _context.InvoiceItems.FindAsync(id);
             if (invoiceDetail == null)
             {
                 return NotFound();
@@ -134,10 +134,10 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 return NotFound();
             }
 
-            var invoiceDetail = await _context.InvoiceDetails
+            var invoiceDetail = await _context.InvoiceItems
                 .Include(i => i.Invoice)
                 .Include(i => i.Product)
-                .FirstOrDefaultAsync(m => m.InvoiceDetailsId == id);
+                .FirstOrDefaultAsync(m => m.InvoiceItemId == id);
             if (invoiceDetail == null)
             {
                 return NotFound();
@@ -151,10 +151,10 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var invoiceDetail = await _context.InvoiceDetails.FindAsync(id);
+            var invoiceDetail = await _context.InvoiceItems.FindAsync(id);
             if (invoiceDetail != null)
             {
-                _context.InvoiceDetails.Remove(invoiceDetail);
+                _context.InvoiceItems.Remove(invoiceDetail);
             }
 
             await _context.SaveChangesAsync();
@@ -163,7 +163,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
         private bool InvoiceDetailExists(int id)
         {
-            return _context.InvoiceDetails.Any(e => e.InvoiceDetailsId == id);
+            return _context.InvoiceItems.Any(e => e.InvoiceItemId == id);
         }
     }
 }

@@ -15,13 +15,15 @@ public partial class Product
 
     public decimal Price { get; set; }
 
-    public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; } = new List<InvoiceDetail>();
+    public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 
-    public virtual ICollection<Picture> Pictures { get; set; } = new List<Picture>();
+    public virtual ICollection<InvoiceItem> InvoiceItems { get; set; } = new List<InvoiceItem>();
 
     public virtual ICollection<ProductDeveloper> ProductDevelopers { get; set; } = new List<ProductDeveloper>();
 
     public virtual ICollection<ProductGenre> ProductGenres { get; set; } = new List<ProductGenre>();
+
+    public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 
     public virtual ICollection<ProductPlatform> ProductPlatforms { get; set; } = new List<ProductPlatform>();
 

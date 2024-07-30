@@ -21,7 +21,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         // GET: Pictures
         public async Task<IActionResult> Index()
         {
-            var steamContext = _context.Pictures.Include(p => p.Product);
+            var steamContext = _context.ProductImages.Include(p => p.Product);
             return View(await steamContext.ToListAsync());
         }
 
@@ -33,9 +33,9 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 return NotFound();
             }
 
-            var picture = await _context.Pictures
+            var picture = await _context.ProductImages
                 .Include(p => p.Product)
-                .FirstOrDefaultAsync(m => m.PictureId == id);
+                .FirstOrDefaultAsync(m => m.ImageId == id);
             if (picture == null)
             {
                 return NotFound();
@@ -76,7 +76,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 return NotFound();
             }
 
-            var picture = await _context.Pictures.FindAsync(id);
+            var picture = await _context.ProductImages.FindAsync(id);
             if (picture == null)
             {
                 return NotFound();
@@ -129,9 +129,9 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 return NotFound();
             }
 
-            var picture = await _context.Pictures
+            var picture = await _context.ProductImages
                 .Include(p => p.Product)
-                .FirstOrDefaultAsync(m => m.PictureId == id);
+                .FirstOrDefaultAsync(m => m.ImageId == id);
             if (picture == null)
             {
                 return NotFound();
@@ -145,10 +145,10 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var picture = await _context.Pictures.FindAsync(id);
+            var picture = await _context.ProductImages.FindAsync(id);
             if (picture != null)
             {
-                _context.Pictures.Remove(picture);
+                _context.ProductImages.Remove(picture);
             }
 
             await _context.SaveChangesAsync();
@@ -157,7 +157,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
         private bool PictureExists(int id)
         {
-            return _context.Pictures.Any(e => e.PictureId == id);
+            return _context.ProductImages.Any(e => e.ImageId == id);
         }
     }
 }
