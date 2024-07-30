@@ -50,5 +50,5 @@ else
 }
 
 <div>
-    <a asp-action="Checkout" class="btn btn-primary">Checkout</a>
+    <a asp-action="Checkout" class="btn btn-primary @(Model.CartItems == null || !Model.CartItems.Any() ? "disabled" : "")">Checkout</a>
 </div>

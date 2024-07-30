@@ -21,8 +21,33 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         // GET: Wishlists
         public async Task<IActionResult> Index()
         {
-            var steamContext = _context.Wishlists.Include(w => w.User);
-            return View(await steamContext.ToListAsync());
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            var wishlist = await _context.Wishlists
+                .Include(w => w.WishlistItems)
+                .ThenInclude(wi => wi.Product)
+                .FirstOrDefaultAsync(w => w.UserId == userId.Value);
+
+            return View(wishlist);
+        }
+
+        // POST: Wishlists/RemoveItem
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveItem(int wishlistItemId)
+        {
+            var wishlistItem = await _context.WishlistItems.FindAsync(wishlistItemId);
+            if (wishlistItem != null)
+            {
+                _context.WishlistItems.Remove(wishlistItem);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Wishlists/Details/5

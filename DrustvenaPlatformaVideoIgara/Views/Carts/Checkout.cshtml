@@ -1,0 +1,43 @@
+﻿@model DrustvenaPlatformaVideoIgara.Models.CheckoutViewModel
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<h1>Checkout</h1>
+
+<div>
+    <h3>Wallet Balance: @Model.WalletBalance €</h3>
+</div>
+
+<form asp-action="Purchase" method="post">
+    <div class="form-group">
+        <label for="paymentMethod">Select Payment Method</label>
+        <select asp-for="SelectedPaymentMethod" asp-items="@(new SelectList(Model.PaymentMethods, "PaymentMethodId", "Method"))" class="form-control"></select>
+    </div>
+
+    <h3>Cart Items:</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Cart.CartItems)
+            {
+                <tr>
+                    <td>@item.Product.ProductName</td>
+                    <td>@item.Price €</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div>
+        <strong>Total Price: @Model.Cart.TotalPrice €</strong>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Buy</button>
+</form>

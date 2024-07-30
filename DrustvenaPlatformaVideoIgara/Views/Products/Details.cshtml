@@ -39,16 +39,35 @@
 <div>
     @if (Model.IsUserLoggedIn)
     {
-        if (Model.IsInCart)
+        if (Model.IsOwned)
         {
-            <span class="btn btn-success disabled">Added to Cart</span>
+            <span class="btn btn-success disabled">Already in Library</span>
         }
         else
         {
-            <form asp-action="AddToCart" method="post">
-                <input type="hidden" name="productId" value="@Model.Product.ProductId" />
-                <button type="submit" class="btn btn-primary">Add to Cart</button>
-            </form>
+            if (Model.IsInCart)
+            {
+                <span class="btn btn-success disabled">Added to Cart</span>
+            }
+            else
+            {
+                <form asp-action="AddToCart" method="post">
+                    <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+                    <button type="submit" class="btn btn-primary">Add to Cart</button>
+                </form>
+            }
+
+            if (Model.IsInWishlist)
+            {
+                <span class="btn btn-warning disabled">Added to Wishlist</span>
+            }
+            else
+            {
+                <form asp-action="AddToWishlist" method="post">
+                    <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+                    <button type="submit" class="btn btn-warning">Add to Wishlist</button>
+                </form>
+            }
         }
     }
     else

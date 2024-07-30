@@ -63,56 +63,81 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             }
 
             bool isInCart = false;
+            bool isOwned = false;
+            bool isInWishlist = false;
             int? userId = HttpContext.Session.GetInt32("UserId");
             if (userId.HasValue)
             {
                 isInCart = await _context.CartItems
                     .AnyAsync(ci => ci.Cart.UserId == userId.Value && ci.ProductId == id.Value);
+
+                isOwned = await _context.InvoiceItems
+                    .AnyAsync(ii => ii.Invoice.UserId == userId.Value && ii.ProductId == id.Value);
+
+                isInWishlist = await _context.WishlistItems
+                    .AnyAsync(wi => wi.Wishlist.UserId == userId.Value && wi.ProductId == id.Value);
             }
 
             var viewModel = new ProductDetailsViewModel
             {
                 Product = product,
                 IsInCart = isInCart,
-                IsUserLoggedIn = userId.HasValue
+                IsUserLoggedIn = userId.HasValue,
+                IsOwned = isOwned,
+                IsInWishlist = isInWishlist
             };
 
             return View(viewModel);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToCart(int productId)
         {
             int? userId = HttpContext.Session.GetInt32("UserId");
-            if (!userId.HasValue)
+            if (userId == null)
             {
                 return RedirectToAction("Login", "Users");
             }
 
             var cart = await _context.Carts
+                .Include(c => c.CartItems)
                 .FirstOrDefaultAsync(c => c.UserId == userId.Value);
 
             if (cart == null)
             {
-                cart = new Cart
-                {
-                    UserId = userId.Value,
-                    TotalPrice = 0
-                };
+                cart = new Cart { UserId = userId.Value };
                 _context.Carts.Add(cart);
                 await _context.SaveChangesAsync();
             }
 
-            var cartItem = new CartItem
-            {
-                CartId = cart.CartId,
-                ProductId = productId,
-                Price = (await _context.Products.FindAsync(productId)).Price
-            };
-
+            var cartItem = new CartItem { CartId = cart.CartId, ProductId = productId, Price = await _context.Products.Where(p => p.ProductId == productId).Select(p => p.Price).FirstOrDefaultAsync() };
             _context.CartItems.Add(cartItem);
-            cart.TotalPrice += cartItem.Price;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = productId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToWishlist(int productId)
+        {
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            var wishlist = await _context.Wishlists
+                .FirstOrDefaultAsync(w => w.UserId == userId.Value);
+
+            if (wishlist == null)
+            {
+                wishlist = new Wishlist { UserId = userId.Value };
+                _context.Wishlists.Add(wishlist);
+                await _context.SaveChangesAsync();
+            }
+
+            var wishlistItem = new WishlistItem { WishlistId = wishlist.WishlistId, ProductId = productId };
+            _context.WishlistItems.Add(wishlistItem);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Details", new { id = productId });

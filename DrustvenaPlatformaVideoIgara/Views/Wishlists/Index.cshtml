@@ -1,35 +1,39 @@
-﻿@model IEnumerable<DrustvenaPlatformaVideoIgara.Models.Wishlist>
+﻿@model DrustvenaPlatformaVideoIgara.Models.Wishlist
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Your Wishlist";
 }
 
-<h1>Index</h1>
+<h1>Your Wishlist</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.WishlistId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.WishlistId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.WishlistId">Delete</a>
-            </td>
-        </tr>
+@if (Model != null && Model.WishlistItems.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.WishlistItems)
+            {
+                <tr>
+                    <td>@item.Product.ProductName</td>
+                    <td>@item.Product.Price €</td>
+                    <td>
+                        <form asp-action="RemoveItem" method="post">
+                            <input type="hidden" name="wishlistItemId" value="@item.WishlistItemId" />
+                            <input type="submit" value="Remove" class="btn btn-danger" />
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>
+else
+{
+    <p>Your wishlist is empty.</p>
+}
