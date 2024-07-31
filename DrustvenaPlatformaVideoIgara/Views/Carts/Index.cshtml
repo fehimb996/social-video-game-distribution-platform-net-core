@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Your Cart";
+    var totalPrice = Model.CartItems.Sum(item => item.Price);
 }
 
 <h1>Your Cart</h1>
@@ -38,7 +39,7 @@
         <tfoot>
             <tr>
                 <td colspan="3">Total</td>
-                <td>@Model.TotalPrice €</td>
+                <td>@totalPrice €</td>
                 <td></td>
             </tr>
         </tfoot>

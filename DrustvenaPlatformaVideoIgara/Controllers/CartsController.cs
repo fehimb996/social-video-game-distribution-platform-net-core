@@ -67,11 +67,14 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
             var paymentMethods = await _context.PaymentMethods.ToListAsync();
 
+            var totalPrice = cart?.CartItems.Sum(ci => ci.Price) ?? 0;
+
             var viewModel = new CheckoutViewModel
             {
                 Cart = cart,
                 WalletBalance = wallet.Balance,
-                PaymentMethods = paymentMethods
+                PaymentMethods = paymentMethods,
+                TotalPrice = totalPrice // Add TotalPrice to the ViewModel
             };
 
             return View(viewModel);
@@ -144,6 +147,5 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
             return RedirectToAction("Index", "Invoices", new { id = invoice.InvoiceId });
         }
-
     }
 }
