@@ -15,6 +15,8 @@ public partial class Product
 
     public decimal Price { get; set; }
 
+    public string? ImagePath { get; set; }
+
     public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 
     public virtual ICollection<InvoiceItem> InvoiceItems { get; set; } = new List<InvoiceItem>();

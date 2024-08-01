@@ -378,7 +378,7 @@ public partial class SteamContext : DbContext
         {
             entity.HasKey(e => e.UserId).HasName("PK__User__1788CCAC79E17EF3");
 
-            entity.ToTable("User", tb => tb.HasTrigger("TRG_AfterUserInsert_AddWallet"));
+            entity.ToTable("User", tb => tb.HasTrigger("TRG_AfterUserInsert_AddWalletCartWishlist"));
 
             entity.HasIndex(e => e.Email, "UQ__User__A9D10534CFA446D1").IsUnique();
 
