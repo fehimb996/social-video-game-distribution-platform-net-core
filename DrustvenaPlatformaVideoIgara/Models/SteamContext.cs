@@ -77,14 +77,8 @@ public partial class SteamContext : DbContext
             entity.HasIndex(e => e.UserId, "UQ__Cart__1788CCAD3EE1B380").IsUnique();
 
             entity.Property(e => e.CartId).HasColumnName("CartID");
-            entity.Property(e => e.InvoiceId).HasColumnName("InvoiceID");
             entity.Property(e => e.TotalPrice).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.UserId).HasColumnName("UserID");
-
-            entity.HasOne(d => d.Invoice).WithMany(p => p.Carts)
-                .HasForeignKey(d => d.InvoiceId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("FK_Cart_Invoice");
 
             entity.HasOne(d => d.User).WithOne(p => p.Cart)
                 .HasForeignKey<Cart>(d => d.UserId)
@@ -384,7 +378,7 @@ public partial class SteamContext : DbContext
         {
             entity.HasKey(e => e.UserId).HasName("PK__User__1788CCAC79E17EF3");
 
-            entity.ToTable("User");
+            entity.ToTable("User", tb => tb.HasTrigger("TRG_AfterUserInsert_AddWallet"));
 
             entity.HasIndex(e => e.Email, "UQ__User__A9D10534CFA446D1").IsUnique();
 

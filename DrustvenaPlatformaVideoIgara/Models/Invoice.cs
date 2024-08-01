@@ -15,8 +15,6 @@ public partial class Invoice
 
     public decimal TotalPrice { get; set; }
 
-    public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
-
     public virtual ICollection<InvoiceItem> InvoiceItems { get; set; } = new List<InvoiceItem>();
 
     public virtual PaymentMethod PaymentMethod { get; set; } = null!;
