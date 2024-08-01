@@ -10,11 +10,16 @@
     <h3>Wallet Balance: @Model.WalletBalance €</h3>
 </div>
 
-<form asp-action="Purchase" method="post">
-    <div class="form-group">
-        <label for="paymentMethod">Select Payment Method</label>
-        <select asp-for="SelectedPaymentMethod" asp-items="@(new SelectList(Model.PaymentMethods, "PaymentMethodId", "Method"))" class="form-control"></select>
+@if (Model.WalletBalance < Model.TotalPrice)
+{
+    <div class="alert alert-warning" role="alert">
+        Insufficient funds. Please add more money to your wallet before proceeding.
     </div>
+}
+
+<form asp-action="Purchase" method="post">
+    <!-- Hidden input to specify Wallet as the payment method -->
+    <input type="hidden" asp-for="SelectedPaymentMethod" value="1" />
 
     <h3>Cart Items:</h3>
     <table class="table">
@@ -36,8 +41,11 @@
     </table>
 
     <div>
-        <strong>Total Price: @Model.TotalPrice €</strong> <!-- Use TotalPrice from the ViewModel -->
+        <strong>Total Price: @Model.TotalPrice €</strong>
     </div>
 
-    <button type="submit" class="btn btn-primary">Buy</button>
+    @if (Model.WalletBalance >= Model.TotalPrice)
+    {
+        <button type="submit" class="btn btn-primary">Buy</button>
+    }
 </form>

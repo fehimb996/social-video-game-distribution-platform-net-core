@@ -119,13 +119,13 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             {
                 UserId = userId.Value,
                 DateIssued = DateTime.Now,
-                PaymentMethodId = viewModel.SelectedPaymentMethod,
+                PaymentMethodId = 1, // Assuming 1 is the ID for Wallet
                 TotalPrice = totalPrice
             };
             _context.Invoices.Add(invoice);
             await _context.SaveChangesAsync();
 
-            // Create InvoiceItems
+            // Create InvoiceItems and remove corresponding wishlist items
             foreach (var cartItem in cart.CartItems)
             {
                 var invoiceItem = new InvoiceItem
@@ -138,6 +138,14 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
                 // Remove CartItem
                 _context.CartItems.Remove(cartItem);
+
+                // Remove the product from the wishlist
+                var wishlistItem = await _context.WishlistItems
+                    .FirstOrDefaultAsync(wi => wi.ProductId == cartItem.ProductId && wi.Wishlist.UserId == userId.Value);
+                if (wishlistItem != null)
+                {
+                    _context.WishlistItems.Remove(wishlistItem);
+                }
             }
 
             // Clear the cart
