@@ -203,7 +203,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
         private async Task<string> SaveProfilePicture(IFormFile profilePicture)
         {
-            var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+            var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "ProductCover");
             if (!Directory.Exists(uploadPath))
             {
                 Directory.CreateDirectory(uploadPath);
@@ -225,7 +225,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 throw;
             }
 
-            return "/images/" + uniqueFileName;
+            return "/images/ProductCover/" + uniqueFileName;
         }
 
         public async Task<IActionResult> Edit(int? id)
