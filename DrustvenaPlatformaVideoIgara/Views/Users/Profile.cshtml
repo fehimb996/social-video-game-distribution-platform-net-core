@@ -87,8 +87,12 @@
             }
             else
             {
+                <form asp-action="Unfriend" method="post">
+                    <input type="hidden" name="friendId" value="@Model.UserId" />
+                    <button type="submit" class="btn btn-danger">Unfriend</button>
+                </form>
                 <a asp-action="SendMessage" asp-route-id="@Model.UserId" class="btn btn-secondary">Send a Message</a>
             }
         }
-    <a asp-action="Index">Back to List</a>
-</div>
+        <a asp-action="Index">Back to List</a>
+    </div>

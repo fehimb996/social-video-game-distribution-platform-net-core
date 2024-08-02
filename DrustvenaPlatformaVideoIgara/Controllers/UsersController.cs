@@ -135,6 +135,29 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return RedirectToAction("Profile", new { id = friendId });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Unfriend(int friendId)
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            var friendship = await _context.Friends.FirstOrDefaultAsync(f =>
+                (f.UserId1 == loggedInUserId && f.UserId2 == friendId) ||
+                (f.UserId1 == friendId && f.UserId2 == loggedInUserId));
+
+            if (friendship != null)
+            {
+                _context.Friends.Remove(friendship);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Profile", new { id = friendId });
+        }
+
         public async Task<IActionResult> Games(int id)
         {
             var user = await _context.Users
