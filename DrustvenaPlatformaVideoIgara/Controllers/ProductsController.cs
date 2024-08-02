@@ -6,16 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DrustvenaPlatformaVideoIgara.Models;
+using Microsoft.AspNetCore.Hosting;
 
 namespace DrustvenaPlatformaVideoIgara.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly SteamContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductsController(SteamContext context)
+        public ProductsController(SteamContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> Index()
@@ -150,15 +153,79 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductDetails,ReleaseDate,Price")] Product product)
+        public async Task<IActionResult> Create(Product product, IFormFile imageFile)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    try
+                    {
+                        product.ImagePath = await SaveProfilePicture(imageFile);
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", $"Image upload failed: {ex.Message}");
+                        return View(product); // Return view with model to retain input
+                    }
+                }
+                else
+                {
+                    // Assign a default image path if no image is uploaded
+                    product.ImagePath = "images/default.png";
+                }
+
+                try
+                {
+                    _context.Add(product);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"Product creation failed: {ex.Message}");
+                }
             }
-            return View(product);
+            else
+            {
+                // Log the validation errors
+                foreach (var state in ModelState)
+                {
+                    foreach (var error in state.Value.Errors)
+                    {
+                        Console.WriteLine($"Property: {state.Key}, Error: {error.ErrorMessage}");
+                    }
+                }
+            }
+
+            return View(product); // Return view with model to retain input
+        }
+
+        private async Task<string> SaveProfilePicture(IFormFile profilePicture)
+        {
+            var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+            }
+
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + profilePicture.FileName;
+            var filePath = Path.Combine(uploadPath, uniqueFileName);
+
+            try
+            {
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await profilePicture.CopyToAsync(fileStream);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving profile picture: {ex.Message}");
+                throw;
+            }
+
+            return "/images/" + uniqueFileName;
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -178,7 +245,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductDetails,ReleaseDate,Price")] Product product)
+        public async Task<IActionResult> Edit(int id, Product product, IFormFile imageFile)
         {
             if (id != product.ProductId)
             {
@@ -189,6 +256,11 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             {
                 try
                 {
+                    if (imageFile != null && imageFile.Length > 0)
+                    {
+                        product.ImagePath = await SaveProfilePicture(imageFile);
+                    }
+
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                 }

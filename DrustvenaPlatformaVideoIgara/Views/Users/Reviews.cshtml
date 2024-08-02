@@ -17,7 +17,23 @@
             <tr>
                 <td>@review.ReviewId</td>
                 <td>@review.Product.ProductName</td>
-                <td>@(review.Rating ? "Positive" : "Negative")</td>
+                <td>
+                    @if (review.Rating.HasValue)
+                    {
+                        @if (review.Rating.Value)
+                        {
+                            <text>Positive</text>
+                        }
+                        else
+                        {
+                            <text>Negative</text>
+                        }
+                    }
+                    else
+                    {
+                        <text>Not Rated</text>
+                    }
+                </td>
                 <td>@review.Comment</td>
             </tr>
         }

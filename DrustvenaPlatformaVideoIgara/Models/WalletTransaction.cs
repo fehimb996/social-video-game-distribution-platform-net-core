@@ -7,7 +7,7 @@ public partial class WalletTransaction
 {
     public int TransactionId { get; set; }
 
-    public int WalletId { get; set; }
+    public int? WalletId { get; set; }
 
     public decimal Amount { get; set; }
 
@@ -15,5 +15,5 @@ public partial class WalletTransaction
 
     public DateTime TransactionDate { get; set; }
 
-    public virtual Wallet Wallet { get; set; } = null!;
+    public virtual Wallet? Wallet { get; set; }
 }

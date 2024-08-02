@@ -9,34 +9,36 @@
 <h4>Product</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ProductName" class="control-label"></label>
-                <input asp-for="ProductName" class="form-control" />
-                <span asp-validation-for="ProductName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProductDetails" class="control-label"></label>
-                <textarea asp-for="ProductDetails" class="form-control"></textarea>
-                <span asp-validation-for="ProductDetails" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ReleaseDate" class="control-label"></label>
-                <input asp-for="ReleaseDate" class="form-control" />
-                <span asp-validation-for="ReleaseDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+    <form asp-action="Create" enctype="multipart/form-data" method="post">
+        <div class="form-group">
+            <label asp-for="ProductName" class="control-label"></label>
+            <input asp-for="ProductName" class="form-control" />
+            <span asp-validation-for="ProductName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ProductDetails" class="control-label"></label>
+            <input asp-for="ProductDetails" class="form-control" />
+            <span asp-validation-for="ProductDetails" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ReleaseDate" class="control-label"></label>
+            <input asp-for="ReleaseDate" class="form-control" type="date" />
+            <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Price" class="control-label"></label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="imageFile" class="control-label">Product Image</label>
+            <input id="imageFile" name="imageFile" type="file" class="form-control" />
+            <span asp-validation-for="ImagePath" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
 </div>
 
 <div>

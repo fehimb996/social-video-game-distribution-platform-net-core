@@ -104,22 +104,29 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
             var totalPrice = cart.CartItems.Sum(ci => ci.Price);
 
-            if (wallet.Balance < totalPrice)
+            if (viewModel.SelectedPaymentMethod == 1) // Wallet payment
             {
-                ModelState.AddModelError("", "Insufficient wallet balance.");
-                return RedirectToAction("Checkout");
-            }
+                if (wallet.Balance < totalPrice)
+                {
+                    ModelState.AddModelError("", "Insufficient wallet balance.");
+                    return RedirectToAction("Checkout");
+                }
 
-            // Deduct wallet balance
-            wallet.Balance -= totalPrice;
-            _context.Update(wallet);
+                // Deduct wallet balance
+                wallet.Balance -= totalPrice;
+                _context.Update(wallet);
+            }
+            else
+            {
+                // Handle other payment methods here if needed
+            }
 
             // Create Invoice
             var invoice = new Invoice
             {
                 UserId = userId.Value,
                 DateIssued = DateTime.Now,
-                PaymentMethodId = 1, // Assuming 1 is the ID for Wallet
+                PaymentMethodId = viewModel.SelectedPaymentMethod,
                 TotalPrice = totalPrice
             };
             _context.Invoices.Add(invoice);

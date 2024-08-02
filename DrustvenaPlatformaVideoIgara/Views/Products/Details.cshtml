@@ -17,6 +17,12 @@
             @Html.DisplayFor(model => model.Product.ProductName)
         </dd>
         <dt class="col-sm-2">
+            Product Image
+        </dt>
+        <dd class="col-sm-10">
+            <img src="@Model.Product.ImagePath" alt="@Model.Product.ProductName" class="img-fluid" />
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Product.ProductDetails)
         </dt>
         <dd class="col-sm-10">

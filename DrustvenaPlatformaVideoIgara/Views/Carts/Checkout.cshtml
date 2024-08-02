@@ -18,8 +18,10 @@
 }
 
 <form asp-action="Purchase" method="post">
-    <!-- Hidden input to specify Wallet as the payment method -->
-    <input type="hidden" asp-for="SelectedPaymentMethod" value="1" />
+    <div class="form-group">
+        <label for="paymentMethod">Select Payment Method</label>
+        <select asp-for="SelectedPaymentMethod" asp-items="@(new SelectList(Model.PaymentMethods, "PaymentMethodId", "Method"))" class="form-control"></select>
+    </div>
 
     <h3>Cart Items:</h3>
     <table class="table">
@@ -44,7 +46,11 @@
         <strong>Total Price: @Model.TotalPrice €</strong>
     </div>
 
-    @if (Model.WalletBalance >= Model.TotalPrice)
+    @if (Model.SelectedPaymentMethod == 1 && Model.WalletBalance < Model.TotalPrice)
+    {
+        <button type="submit" class="btn btn-primary" disabled>Buy</button>
+    }
+    else
     {
         <button type="submit" class="btn btn-primary">Buy</button>
     }

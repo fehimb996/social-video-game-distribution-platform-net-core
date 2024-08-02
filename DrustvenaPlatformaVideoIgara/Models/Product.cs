@@ -13,9 +13,9 @@ public partial class Product
 
     public DateOnly ReleaseDate { get; set; }
 
-    public decimal Price { get; set; }
+    public string? ImagePath { get; set; } = null!;
 
-    public string? ImagePath { get; set; }
+    public decimal Price { get; set; }
 
     public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
 
