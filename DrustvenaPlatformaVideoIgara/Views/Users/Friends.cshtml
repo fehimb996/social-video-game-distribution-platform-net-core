@@ -1,0 +1,29 @@
+﻿@model IEnumerable<DrustvenaPlatformaVideoIgara.Models.User>
+
+@{
+    ViewData["Title"] = "Friends";
+}
+
+<h1>Friends</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>NickName</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var friend in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Profile" asp-route-id="@friend.UserId">@friend.NickName</a>
+                </td>
+                <td>@friend.FirstName</td>
+                <td>@friend.LastName</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -45,6 +45,8 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
             var user = await _context.Users
                 .Include(u => u.Country)
+                .Include(u => u.FriendUserId1Navigations)
+                .Include(u => u.FriendUserId2Navigations)
                 .FirstOrDefaultAsync(u => u.UserId == id);
 
             if (user == null)
@@ -63,8 +65,11 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 .Where(r => r.UserId == id)
                 .CountAsync();
 
+            var friendsCount = user.FriendUserId1Navigations.Count + user.FriendUserId2Navigations.Count;
+
             ViewData["GamesCount"] = gamesCount;
             ViewData["ReviewsCount"] = reviewsCount;
+            ViewData["FriendsCount"] = friendsCount;
             ViewData["IsOwnProfile"] = id == loggedInUserId;
 
             // Fetch wallet balance for the user
@@ -73,10 +78,30 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
             ViewData["WalletBalance"] = wallet?.Balance ?? 0;
 
-            // Check if the viewed user is already a friend
-            ViewData["IsFriend"] = await IsFriend(loggedInUserId.Value, id.Value);
-
             return View(user);
+        }
+
+
+        public async Task<IActionResult> Friends(int id)
+        {
+            var user = await _context.Users
+                .Include(u => u.FriendUserId1Navigations)
+                .ThenInclude(f => f.UserId2Navigation)
+                .Include(u => u.FriendUserId2Navigations)
+                .ThenInclude(f => f.UserId1Navigation)
+                .FirstOrDefaultAsync(u => u.UserId == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var friends = user.FriendUserId1Navigations
+                .Select(f => f.UserId2Navigation)
+                .Union(user.FriendUserId2Navigations.Select(f => f.UserId1Navigation))
+                .ToList();
+
+            return View(friends);
         }
 
         private async Task<bool> IsFriend(int loggedInUserId, int viewedUserId)
