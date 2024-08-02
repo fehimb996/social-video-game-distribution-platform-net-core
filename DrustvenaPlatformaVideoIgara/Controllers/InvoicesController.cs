@@ -18,14 +18,12 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             _context = context;
         }
 
-        // GET: Invoices
         public async Task<IActionResult> Index()
         {
             var steamContext = _context.Invoices.Include(i => i.PaymentMethod).Include(i => i.User);
             return View(await steamContext.ToListAsync());
         }
 
-        // GET: Invoices/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,6 +34,8 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             var invoice = await _context.Invoices
                 .Include(i => i.PaymentMethod)
                 .Include(i => i.User)
+                .Include(i => i.InvoiceItems)
+                    .ThenInclude(ii => ii.Product)
                 .FirstOrDefaultAsync(m => m.InvoiceId == id);
             if (invoice == null)
             {
@@ -45,7 +45,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(invoice);
         }
 
-        // GET: Invoices/Create
         public IActionResult Create()
         {
             ViewData["PaymentMethodId"] = new SelectList(_context.PaymentMethods, "PaymentMethodId", "PaymentMethodId");
@@ -53,9 +52,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View();
         }
 
-        // POST: Invoices/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("InvoiceId,UserId,DateIssued,PaymentMethodId,TotalPrice")] Invoice invoice)
@@ -71,7 +67,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(invoice);
         }
 
-        // GET: Invoices/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,9 +84,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(invoice);
         }
 
-        // POST: Invoices/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("InvoiceId,UserId,DateIssued,PaymentMethodId,TotalPrice")] Invoice invoice)
@@ -126,7 +118,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(invoice);
         }
 
-        // GET: Invoices/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -146,7 +137,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(invoice);
         }
 
-        // POST: Invoices/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
