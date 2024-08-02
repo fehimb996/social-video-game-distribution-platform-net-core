@@ -258,6 +258,17 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 {
                     if (imageFile != null && imageFile.Length > 0)
                     {
+                        // Delete the old image file
+                        if (!string.IsNullOrEmpty(product.ImagePath))
+                        {
+                            var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, product.ImagePath.TrimStart('/'));
+                            if (System.IO.File.Exists(oldImagePath))
+                            {
+                                System.IO.File.Delete(oldImagePath);
+                            }
+                        }
+
+                        // Save the new image file
                         product.ImagePath = await SaveProfilePicture(imageFile);
                     }
 
