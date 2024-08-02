@@ -73,7 +73,39 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
             ViewData["WalletBalance"] = wallet?.Balance ?? 0;
 
+            // Check if the viewed user is already a friend
+            ViewData["IsFriend"] = await IsFriend(loggedInUserId.Value, id.Value);
+
             return View(user);
+        }
+
+        private async Task<bool> IsFriend(int loggedInUserId, int viewedUserId)
+        {
+            return await _context.Friends.AnyAsync(f =>
+                (f.UserId1 == loggedInUserId && f.UserId2 == viewedUserId) ||
+                (f.UserId1 == viewedUserId && f.UserId2 == loggedInUserId));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddFriend(int friendId)
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            var friend = new Friend
+            {
+                UserId1 = loggedInUserId.Value,
+                UserId2 = friendId
+            };
+
+            _context.Friends.Add(friend);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Profile", new { id = friendId });
         }
 
         public async Task<IActionResult> Games(int id)
