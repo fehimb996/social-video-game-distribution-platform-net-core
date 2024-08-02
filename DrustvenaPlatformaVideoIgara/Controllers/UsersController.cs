@@ -78,6 +78,8 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
             ViewData["WalletBalance"] = wallet?.Balance ?? 0;
 
+            ViewData["IsFriend"] = await IsFriend(loggedInUserId.Value, id.Value);
+
             return View(user);
         }
 

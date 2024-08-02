@@ -71,9 +71,24 @@
     </dl>
 </div>
 <div>
-    @if ((bool)ViewData["IsOwnProfile"])
-    {
-        <a asp-action="Edit" asp-route-id="@Model?.UserId">Edit</a>
-    }
+    <div>
+        @if ((bool)ViewData["IsOwnProfile"])
+        {
+            <a asp-action="Edit" asp-route-id="@Model?.UserId">Edit</a>
+        }
+        else
+        {
+            @if (!(bool)ViewData["IsFriend"])
+            {
+                <form asp-action="AddFriend" method="post">
+                    <input type="hidden" name="friendId" value="@Model.UserId" />
+                    <button type="submit" class="btn btn-primary">Add Friend</button>
+                </form>
+            }
+            else
+            {
+                <a asp-action="SendMessage" asp-route-id="@Model.UserId" class="btn btn-secondary">Send a Message</a>
+            }
+        }
     <a asp-action="Index">Back to List</a>
 </div>
