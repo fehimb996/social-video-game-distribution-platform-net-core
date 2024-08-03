@@ -69,6 +69,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             bool isOwned = false;
             bool isInWishlist = false;
             int? userId = HttpContext.Session.GetInt32("UserId");
+            Review userReview = null;
             if (userId.HasValue)
             {
                 isInCart = await _context.CartItems
@@ -79,7 +80,15 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
                 isInWishlist = await _context.WishlistItems
                     .AnyAsync(wi => wi.Wishlist.UserId == userId.Value && wi.ProductId == id.Value);
+
+                userReview = await _context.Reviews
+                    .FirstOrDefaultAsync(r => r.UserId == userId.Value && r.ProductId == id.Value);
             }
+
+            var reviews = await _context.Reviews
+                .Include(r => r.User) // Include the User navigation property
+                .Where(r => r.ProductId == id.Value)
+                .ToListAsync();
 
             var viewModel = new ProductDetailsViewModel
             {
@@ -87,7 +96,10 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 IsInCart = isInCart,
                 IsUserLoggedIn = userId.HasValue,
                 IsOwned = isOwned,
-                IsInWishlist = isInWishlist
+                IsInWishlist = isInWishlist,
+                Reviews = reviews,
+                UserReview = userReview,
+                UserId = userId
             };
 
             return View(viewModel);
@@ -144,6 +156,65 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Details", new { id = productId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddReview(int productId, string comment, bool rating)
+        {
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            var existingReview = await _context.Reviews
+                .FirstOrDefaultAsync(r => r.UserId == userId.Value && r.ProductId == productId);
+
+            if (existingReview == null)
+            {
+                var review = new Review
+                {
+                    UserId = userId.Value,
+                    ProductId = productId,
+                    Comment = comment,
+                    Rating = rating
+                };
+                _context.Reviews.Add(review);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Details", new { id = productId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditReview(int reviewId, string comment, bool rating)
+        {
+            var review = await _context.Reviews.FindAsync(reviewId);
+            if (review == null)
+            {
+                return NotFound();
+            }
+
+            review.Comment = comment;
+            review.Rating = rating;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = review.ProductId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteReview(int reviewId)
+        {
+            var review = await _context.Reviews.FindAsync(reviewId);
+            if (review == null)
+            {
+                return NotFound();
+            }
+
+            _context.Reviews.Remove(review);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = review.ProductId });
         }
 
         public IActionResult Create()

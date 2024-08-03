@@ -85,3 +85,101 @@
     <a asp-action="Edit" asp-route-id="@Model?.Product.ProductId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+<h3>Reviews</h3>
+@if (Model.Reviews == null || !Model.Reviews.Any())
+{
+    <p>No reviews yet</p>
+}
+else
+{
+    <ul>
+        @foreach (var review in Model.Reviews)
+        {
+            <li>
+                <strong>
+                    <a asp-controller="Users" asp-action="Profile" asp-route-id="@review.User.UserId">
+                        @review.User?.NickName
+                    </a>
+                </strong> -
+                @if (review.Rating == true)
+                {
+                    <span>Recommended</span>
+                }
+                else
+                {
+                    <span>Not recommended</span>
+                }
+                <br />
+                @review.Comment
+                @if (review.UserId == Model.UserId)
+                {
+                    <form asp-action="EditReview" method="post" style="display:inline;">
+                        <input type="hidden" name="reviewId" value="@review.ReviewId" />
+                        <input type="hidden" name="comment" value="@review.Comment" />
+                        <input type="hidden" name="rating" value="@review.Rating" />
+                        <button type="submit" class="btn btn-link">Edit</button>
+                    </form>
+                    <form asp-action="DeleteReview" method="post" style="display:inline;">
+                        <input type="hidden" name="reviewId" value="@review.ReviewId" />
+                        <button type="submit" class="btn btn-link">Delete</button>
+                    </form>
+                }
+            </li>
+        }
+    </ul>
+}
+
+@if (Model.IsUserLoggedIn && Model.IsOwned)
+{
+    @if (Model.UserReview == null)
+    {
+        <form asp-action="AddReview" method="post">
+            <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+            <div class="form-group">
+                <label for="comment">Comment:</label>
+                <textarea class="form-control" id="comment" name="comment"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Do you recommend this game?</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="rating" id="yes" value="true" />
+                    <label class="form-check-label" for="yes">Yes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="rating" id="no" value="false" />
+                    <label class="form-check-label" for="no">No</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Post Review</button>
+        </form>
+    }
+    else
+    {
+        <form asp-action="EditReview" method="post">
+            <input type="hidden" name="reviewId" value="@Model.UserReview.ReviewId" />
+            <div class="form-group">
+                <label for="comment">Comment:</label>
+                <textarea class="form-control" id="comment" name="comment">@Model.UserReview.Comment</textarea>
+            </div>
+            <div class="form-group">
+                <label>Do you recommend this game?</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="rating" id="yes" value="true" @(Model.UserReview.Rating == true ? "checked" : "") />
+                    <label class="form-check-label" for="yes">Yes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="rating" id="no" value="false" @(Model.UserReview.Rating == false ? "checked" : "") />
+                    <label class="form-check-label" for="no">No</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Review</button>
+        </form>
+    }
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
