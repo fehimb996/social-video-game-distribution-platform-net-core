@@ -359,6 +359,82 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return "/images/ProfilePictures/" + uniqueFileName;
         }
 
+        public async Task<IActionResult> Wallet()
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            var wallet = await _context.Wallets
+                .FirstOrDefaultAsync(w => w.UserId == userId);
+
+            if (wallet == null)
+            {
+                return NotFound();
+            }
+
+            var paymentMethods = await _context.PaymentMethods
+                .Where(pm => pm.PaymentMethodId != 1) // Exclude Wallet as a payment method
+                .ToListAsync();
+
+            var model = new WalletViewModel
+            {
+                Balance = wallet.Balance,
+                PaymentMethods = paymentMethods
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddFunds(decimal amount, int paymentMethod)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            var wallet = await _context.Wallets
+                .FirstOrDefaultAsync(w => w.UserId == userId);
+
+            if (wallet == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the payment method is valid
+            var paymentMethodExists = await _context.PaymentMethods
+                .AnyAsync(pm => pm.PaymentMethodId == paymentMethod && pm.PaymentMethodId != 1);
+
+            if (!paymentMethodExists)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid payment method.");
+                return RedirectToAction("Wallet");
+            }
+
+            // Add funds to the wallet
+            wallet.Balance += amount;
+            _context.Update(wallet);
+
+            // Record the transaction
+            var transaction = new WalletTransaction
+            {
+                WalletId = wallet.WalletId,
+                Amount = amount,
+                TransactionType = "Credit",
+                TransactionDate = DateTime.Now
+            };
+            _context.WalletTransactions.Add(transaction);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Wallet");
+        }
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
