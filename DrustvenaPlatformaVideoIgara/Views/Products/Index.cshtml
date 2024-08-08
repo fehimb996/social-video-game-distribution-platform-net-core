@@ -5,33 +5,51 @@
 }
 
 <h1>Random Products</h1>
-
 <div>
     @if (Model.RandomProducts.Any())
     {
         <ul class="list-group">
-            @foreach (var product in Model.RandomProducts)
+                @foreach (var product in Model.RandomProducts)
             {
                 <li class="list-group-item">
-                    <h4><a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a></h4>
-                    <p>Price: @product.Price €</p>
-                </li>
-            }
-        </ul>
-    }
-    else
+                            <h4><a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a></h4>
+                            <p>Price: @product.Price €</p>
+                  </li      >
+                 }
+           </ul>
+       }
+     else
     {
         <p>No random products available.</p>
-    }
+        }
 </div>
 
 <h1>Top Selling Products</h1>
-
 <div>
     @if (Model.TopSellingProducts.Any())
     {
         <ul class="list-group">
             @foreach (var product in Model.TopSellingProducts)
+                {
+                <li class="list-group-item">
+                    <h4><a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a></h4>
+                            <p>Price: @product.Price €</p>
+                     </li   >
+              }
+                   </ul>
+       }
+       else 
+    {
+        <p>No top selling products available.</p>
+    }
+    </div>
+
+<h1>Products Under 10 Bucks</h1>
+<div>
+    @if (Model.ProductsUnder10Bucks.Any())
+    {
+        <ul class="list-group">
+            @foreach (var product in Model.ProductsUnder10Bucks)
             {
                 <li class="list-group-item">
                     <h4><a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a></h4>
@@ -42,6 +60,45 @@
     }
     else
     {
-        <p>No top selling products available.</p>
+        <p>No products under 10 bucks available.</p>
+    }
+</div>
+
+<h1>Products Under 5 Bucks</h1>
+<div>
+    @if (Model.ProductsUnder5Bucks.Any())
+    {
+        <ul class="list-group">
+            @foreach (var product in Model.ProductsUnder5Bucks)
+            {
+                <li class="list-group-item">
+                    <h4><a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a></h4>
+                    <p>Price: @product.Price €</p>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No products under 5 bucks available.</p>
+    }
+</div>
+
+<h1>Free Products</h1>
+<div>
+    @if (Model.FreeProducts.Any())
+    {
+        <ul class="list-group">
+            @foreach (var product in Model.FreeProducts)
+            {
+                <li class="list-group-item">
+                    <h4><a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a></h4>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No free products available.</p>
     }
 </div>

@@ -47,6 +47,28 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 .Take(10)
                 .ToListAsync();
 
+            // Fetch products under 10 bucks but greater than 5 that have never been sold
+            var productsUnder10Bucks = await _context.Products
+                .Where(p => p.Price > 5.00m && p.Price < 10.00m &&
+                            !_context.InvoiceItems.Any(ii => ii.ProductId == p.ProductId))
+                .OrderBy(p => p.Price)
+                .ToListAsync();
+
+            // Fetch products under 5 bucks but greater than 0.01 that have never been sold
+            var productsUnder5Bucks = await _context.Products
+                .Where(p => p.Price > 0.01m && p.Price < 5.00m &&
+                            !_context.InvoiceItems.Any(ii => ii.ProductId == p.ProductId))
+                .OrderBy(p => p.Price)
+                .ToListAsync();
+
+            // Fetch free products that have never been sold
+            var freeProducts = await _context.Products
+                .Where(p => p.Price == 0.00m &&
+                            !_context.InvoiceItems.Any(ii => ii.ProductId == p.ProductId))
+                .OrderBy(p => p.ProductName)
+                .ToListAsync();
+
+            // Prepare the view model
             var viewModel = new ProductsViewModel
             {
                 RandomProducts = randomProducts,
@@ -55,7 +77,10 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                     ProductId = p.ProductId,
                     ProductName = p.ProductName,
                     Price = p.Price
-                })
+                }),
+                ProductsUnder10Bucks = productsUnder10Bucks,
+                ProductsUnder5Bucks = productsUnder5Bucks,
+                FreeProducts = freeProducts
             };
 
             return View(viewModel);
