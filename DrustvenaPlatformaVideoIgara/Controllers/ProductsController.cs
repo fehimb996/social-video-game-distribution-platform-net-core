@@ -29,23 +29,33 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 .Take(10)
                 .ToListAsync();
 
-            // Fetch top-selling products
+            // Fetch top-selling products by unique users who bought the product
             var topSellingProducts = await _context.InvoiceItems
-                .GroupBy(ii => new { ii.Product.ProductId, ii.Product.ProductName, ii.Product.Price })
-                .Select(g => new TopSellingProduct
+                .Join(_context.Invoices,
+                      ii => ii.InvoiceId,
+                      i => i.InvoiceId,
+                      (ii, i) => new { ii.Product, i.UserId })
+                .GroupBy(x => new { x.Product.ProductId, x.Product.ProductName, x.Product.Price })
+                .Select(g => new
                 {
                     ProductId = g.Key.ProductId,
                     ProductName = g.Key.ProductName,
-                    Price = g.Key.Price
+                    Price = g.Key.Price,
+                    TimesSold = g.Select(x => x.UserId).Distinct().Count() // Count of unique users who bought the product
                 })
-                .OrderByDescending(g => g.Price)
+                .OrderByDescending(g => g.TimesSold) // Order by the number of unique users
                 .Take(10)
                 .ToListAsync();
 
             var viewModel = new ProductsViewModel
             {
                 RandomProducts = randomProducts,
-                TopSellingProducts = topSellingProducts
+                TopSellingProducts = topSellingProducts.Select(p => new TopSellingProduct
+                {
+                    ProductId = p.ProductId,
+                    ProductName = p.ProductName,
+                    Price = p.Price
+                })
             };
 
             return View(viewModel);
