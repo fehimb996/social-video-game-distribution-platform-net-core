@@ -86,7 +86,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(user);
         }
 
-
         public async Task<IActionResult> Friends(int id)
         {
             var user = await _context.Users
@@ -251,29 +250,45 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(string email, string password)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
-
-            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
+            // Check if both fields are filled out
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
-                // Add user info to session
-                HttpContext.Session.SetInt32("UserId", user.UserId);
-                HttpContext.Session.SetString("NickName", user.NickName);
-
-                // Set authentication cookie
-                var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, user.Email),
-            new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-            new Claim("NickName", user.NickName) // Add NickName claim
-        };
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-                return RedirectToAction("Index", "Home"); // Redirect to home page after login
+                ModelState.AddModelError(string.Empty, "Please enter both email and password.");
+                return View(new User { Email = email }); // Pass the email back to the view
             }
 
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-            return View();
+            // Find the user by email
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
+
+            // Check if the user exists
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "The email address does not exist.");
+                return View(new User { Email = email }); // Pass the email back to the view
+            }
+
+            // Check if the password is correct
+            if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
+            {
+                ModelState.AddModelError(string.Empty, "Incorrect password.");
+                return View(new User { Email = email }); // Pass the email back to the view
+            }
+
+            // If both the email and password are correct, log the user in
+            HttpContext.Session.SetInt32("UserId", user.UserId);
+            HttpContext.Session.SetString("NickName", user.NickName);
+
+            // Set authentication cookie
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Name, user.Email),
+        new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+        new Claim("NickName", user.NickName)
+    };
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+            return RedirectToAction("Index", "Home"); // Redirect to home page after login
         }
 
         public IActionResult Logout()
