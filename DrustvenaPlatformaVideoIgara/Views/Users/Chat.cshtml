@@ -1,0 +1,45 @@
+﻿@model DrustvenaPlatformaVideoIgara.Models.User
+
+@{
+    ViewData["Title"] = "Chat";
+    var friends = Model.FriendUserId1Navigations
+        .Select(f => f.UserId2Navigation)
+        .Union(Model.FriendUserId2Navigations.Select(f => f.UserId1Navigation))
+        .ToList();
+}
+
+<div class="container">
+    <div class="row p-1">
+        <div class="col-1">Recipient</div>
+        <div class="col-5">
+            <select id="recipientUserId" class="form-select">
+                @foreach (var friend in friends)
+                {
+                    <option value="@friend.UserId">@friend.NickName</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="row p-1">
+        <div class="col-1">Message</div>
+        <div class="col-5"><input type="text" class="form-control" id="messageInput" /></div>
+    </div>
+    <div class="row p-1">
+        <div class="col-6 text-end">
+            <input type="button" id="sendButton" value="Send Message" class="btn btn-primary" />
+        </div>
+    </div>
+    <div class="row p-1">
+        <div class="col-6">
+            <hr />
+        </div>
+    </div>
+    <div class="row p-1">
+        <div class="col-6">
+            <ul id="messagesList" class="list-group" style="max-height: 400px; overflow-y: auto;"></ul>
+        </div>
+    </div>
+    <input type="hidden" id="nickName" value="@ViewBag.NickName" />
+</div>
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>

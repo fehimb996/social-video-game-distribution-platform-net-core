@@ -1,11 +1,18 @@
-using DrustvenaPlatformaVideoIgara.Models;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
+using DrustvenaPlatformaVideoIgara.Hubs;
+using DrustvenaPlatformaVideoIgara.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<SteamContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -17,8 +24,25 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// Add IHttpContextAccessor service
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("http://localhost:5000") // Replace with your client URL
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials();
+    });
+});
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login"; // Update as needed
+        options.LogoutPath = "/Account/Logout"; // Update as needed
+    });
 
 var app = builder.Build();
 
@@ -32,10 +56,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Add this line to use the session middleware
 app.UseSession();
 
+app.UseCors();
+
+app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHub<ChatHub>("/chatHub");
 
 app.MapControllerRoute(
     name: "default",

@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DrustvenaPlatformaVideoIgara.Models;
 using BCrypt.Net;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace DrustvenaPlatformaVideoIgara.Controllers
 {
@@ -255,6 +258,17 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 // Add user info to session
                 HttpContext.Session.SetInt32("UserId", user.UserId);
                 HttpContext.Session.SetString("NickName", user.NickName);
+
+                // Set authentication cookie
+                var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.Email),
+            new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+            new Claim("NickName", user.NickName) // Add NickName claim
+        };
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
                 return RedirectToAction("Index", "Home"); // Redirect to home page after login
             }
 
@@ -265,6 +279,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Clear(); // Clear the session
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).Wait(); // Sign out from authentication
             return RedirectToAction("Login");
         }
 
@@ -433,6 +448,52 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Wallet");
+        }
+
+        public async Task<IActionResult> Chat()
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            var nickName = HttpContext.Session.GetString("NickName");
+
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            var user = await _context.Users
+                .Include(u => u.FriendUserId1Navigations)
+                .ThenInclude(f => f.UserId2Navigation)
+                .Include(u => u.FriendUserId2Navigations)
+                .ThenInclude(f => f.UserId1Navigation)
+                .FirstOrDefaultAsync(u => u.UserId == loggedInUserId);
+
+            ViewBag.NickName = nickName;
+
+            return View(user);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetChatHistory(int recipientUserId)
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return Unauthorized();
+            }
+
+            var messages = await _context.Messages
+                .Where(m => (m.UserId1 == loggedInUserId && m.UserId2 == recipientUserId) ||
+                            (m.UserId1 == recipientUserId && m.UserId2 == loggedInUserId))
+                .OrderBy(m => m.Timestamp)
+                .Select(m => new
+                {
+                    m.MessageContent,
+                    SenderNickName = (m.UserId1 == loggedInUserId) ? _context.Users.Where(u => u.UserId == m.UserId1).Select(u => u.NickName).FirstOrDefault()
+                                                                     : _context.Users.Where(u => u.UserId == m.UserId2).Select(u => u.NickName).FirstOrDefault()
+                })
+                .ToListAsync();
+
+            return Json(messages);
         }
 
         public async Task<IActionResult> Delete(int? id)
