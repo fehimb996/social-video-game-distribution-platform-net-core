@@ -42,6 +42,7 @@
         </dd>
     </dl>
 </div>
+
 <div>
     @if (Model.IsUserLoggedIn)
     {
@@ -81,10 +82,41 @@
         <span class="btn btn-primary disabled">Add to Cart (Login Required)</span>
     }
 </div>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Product.ProductId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+<h3>Genres</h3>
+@if (Model.Genres == null || !Model.Genres.Any())
+{
+    <p>No genres associated with this product</p>
+}
+else
+{
+    <ul>
+        @foreach (var genre in Model.Genres)
+        {
+            <li>@genre.GenreName</li>
+        }
+    </ul>
+}
+
+<h3>Platforms</h3>
+@if (Model.Platforms == null || !Model.Platforms.Any())
+{
+    <p>No platforms associated with this product</p>
+}
+else
+{
+    <ul>
+        @foreach (var platform in Model.Platforms)
+        {
+            <li>@platform.PlatformName</li>
+        }
+    </ul>
+}
 
 <h3>Reviews</h3>
 @if (Model.Reviews == null || !Model.Reviews.Any())

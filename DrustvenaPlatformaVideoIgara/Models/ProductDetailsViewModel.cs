@@ -12,5 +12,7 @@
         public string NewComment { get; set; }
         public bool? NewRating { get; set; }
         public int? UserId { get; set; }
+        public List<Genre> Genres { get; set; }
+        public List<Platform> Platforms { get; set; }
     }
 }

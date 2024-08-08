@@ -94,7 +94,12 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             }
 
             var product = await _context.Products
+                .Include(p => p.ProductGenres)
+                .ThenInclude(pg => pg.Genre)
+                .Include(p => p.ProductPlatforms)
+                .ThenInclude(pp => pp.Platform)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
+
             if (product == null)
             {
                 return NotFound();
@@ -134,7 +139,9 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 IsInWishlist = isInWishlist,
                 Reviews = reviews,
                 UserReview = userReview,
-                UserId = userId
+                UserId = userId,
+                Genres = product.ProductGenres.Select(pg => pg.Genre).ToList(),
+                Platforms = product.ProductPlatforms.Select(pp => pp.Platform).ToList()
             };
 
             return View(viewModel);
