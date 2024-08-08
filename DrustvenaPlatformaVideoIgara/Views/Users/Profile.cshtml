@@ -74,7 +74,7 @@
     <div>
         @if ((bool)ViewData["IsOwnProfile"])
         {
-            <a asp-action="Edit" asp-route-id="@Model?.UserId">Edit</a>
+            <a asp-action="Edit" asp-route-id="@Model?.UserId">Edit Profile</a>
         }
         else
         {
@@ -94,5 +94,4 @@
                 <a asp-action="SendMessage" asp-route-id="@Model.UserId" class="btn btn-secondary">Send a Message</a>
             }
         }
-        <a asp-action="Index">Back to List</a>
     </div>
