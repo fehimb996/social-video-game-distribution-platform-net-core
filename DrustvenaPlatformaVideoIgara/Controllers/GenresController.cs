@@ -20,7 +20,24 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Genres.ToListAsync());
+            // Get Genres and Platforms with associated Products
+            var genres = await _context.Genres
+                .Include(g => g.ProductGenres)
+                .ThenInclude(pg => pg.Product)
+                .ToListAsync();
+
+            var platforms = await _context.Platforms
+                .Include(p => p.ProductPlatforms)
+                .ThenInclude(pp => pp.Product)
+                .ToListAsync();
+
+            var model = new GenreAndPlatformViewModel
+            {
+                Genres = genres,
+                Platforms = platforms
+            };
+
+            return View(model);
         }
 
         public async Task<IActionResult> Details(int? id)

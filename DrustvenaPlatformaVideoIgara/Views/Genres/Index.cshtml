@@ -1,35 +1,47 @@
-﻿@model IEnumerable<DrustvenaPlatformaVideoIgara.Models.Genre>
+﻿@model GenreAndPlatformViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Categories";
 }
 
-<h1>Index</h1>
+<h1>Categories</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.GenreName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.GenreName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.GenreId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.GenreId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.GenreId">Delete</a>
-            </td>
-        </tr>
+<!-- Platforms Section -->
+<h2>Platforms</h2>
+@foreach (var platform in Model.Platforms)
+{
+    <div>
+        <h3>@platform.PlatformName</h3>
+        <ul>
+            @foreach (var productPlatform in platform.ProductPlatforms)
+            {
+                var product = productPlatform.Product;
+                <li>
+                    <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId">
+                        @product.ProductName
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
 }
-    </tbody>
-</table>
+
+<!-- Genres Section -->
+<h2>Genres</h2>
+@foreach (var genre in Model.Genres)
+{
+    <div>
+        <h3>@genre.GenreName</h3>
+        <ul>
+            @foreach (var productGenre in genre.ProductGenres)
+            {
+                var product = productGenre.Product;
+                <li>
+                    <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId">
+                        @product.ProductName
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+}
