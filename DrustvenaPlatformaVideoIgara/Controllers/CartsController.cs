@@ -160,7 +160,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             _context.Carts.Update(cart);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Invoices", new { id = invoice.InvoiceId });
+            return RedirectToAction("Details", "Invoices", new { id = invoice.InvoiceId });
         }
     }
 }
