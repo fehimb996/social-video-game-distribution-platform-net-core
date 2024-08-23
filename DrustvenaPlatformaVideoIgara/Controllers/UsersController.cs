@@ -280,11 +280,11 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
             // Set authentication cookie
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.Name, user.Email),
-        new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-        new Claim("NickName", user.NickName)
-    };
+            {
+                new Claim(ClaimTypes.Name, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim("NickName", user.NickName)
+            };
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 

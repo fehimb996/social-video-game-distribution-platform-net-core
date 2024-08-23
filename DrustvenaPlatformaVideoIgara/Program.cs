@@ -30,7 +30,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        builder.WithOrigins("http://localhost:5000") // Replace with your client URL
+        builder.WithOrigins("http://localhost:5044")
                .AllowAnyHeader()
                .AllowAnyMethod()
                .AllowCredentials();
@@ -40,8 +40,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Account/Login"; // Update as needed
-        options.LogoutPath = "/Account/Logout"; // Update as needed
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Account/Logout";
     });
 
 var app = builder.Build();
