@@ -98,6 +98,10 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 .ThenInclude(pg => pg.Genre)
                 .Include(p => p.ProductPlatforms)
                 .ThenInclude(pp => pp.Platform)
+                .Include(p => p.ProductPublishers)
+                .ThenInclude(pp => pp.Publisher)
+                .Include(p => p.ProductDevelopers)
+                .ThenInclude(pd => pd.Developer)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
 
             if (product == null)
@@ -141,7 +145,9 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 UserReview = userReview,
                 UserId = userId,
                 Genres = product.ProductGenres.Select(pg => pg.Genre).ToList(),
-                Platforms = product.ProductPlatforms.Select(pp => pp.Platform).ToList()
+                Platforms = product.ProductPlatforms.Select(pp => pp.Platform).ToList(),
+                Publishers = product.ProductPublishers.Select(pp => pp.Publisher).ToList(),
+                Developers = product.ProductDevelopers.Select(pd => pd.Developer).ToList()
             };
 
             return View(viewModel);

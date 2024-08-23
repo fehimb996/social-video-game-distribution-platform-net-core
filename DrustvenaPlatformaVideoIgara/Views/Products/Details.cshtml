@@ -83,10 +83,35 @@
     }
 </div>
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Product.ProductId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<h3>Developers</h3>
+@if (Model.Developers == null || !Model.Developers.Any())
+{
+    <p>No developers associated with this product</p>
+}
+else
+{
+    <ul>
+        @foreach (var developer in Model.Developers)
+        {
+            <li>@developer.DeveloperName</li>
+        }
+    </ul>
+}
+
+<h3>Publishers</h3>
+@if (Model.Publishers == null || !Model.Publishers.Any())
+{
+    <p>No publishers associated with this product</p>
+}
+else
+{
+    <ul>
+        @foreach (var publisher in Model.Publishers)
+        {
+            <li>@publisher.PublisherName</li>
+        }
+    </ul>
+}
 
 <h3>Genres</h3>
 @if (Model.Genres == null || !Model.Genres.Any())
@@ -209,6 +234,11 @@ else
         </form>
     }
 }
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Product.ProductId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
 
 @section Scripts {
     @{

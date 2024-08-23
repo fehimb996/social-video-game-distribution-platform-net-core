@@ -14,5 +14,7 @@
         public int? UserId { get; set; }
         public List<Genre> Genres { get; set; }
         public List<Platform> Platforms { get; set; }
+        public List<Publisher> Publishers { get; set; }
+        public List<Developer> Developers { get; set; }
     }
 }
