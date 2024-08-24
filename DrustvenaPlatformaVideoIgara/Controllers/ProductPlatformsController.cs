@@ -18,14 +18,12 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             _context = context;
         }
 
-        // GET: ProductPlatforms
         public async Task<IActionResult> Index()
         {
             var steamContext = _context.ProductPlatforms.Include(p => p.Platform).Include(p => p.Product);
             return View(await steamContext.ToListAsync());
         }
 
-        // GET: ProductPlatforms/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,17 +43,13 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(productPlatform);
         }
 
-        // GET: ProductPlatforms/Create
         public IActionResult Create()
         {
-            ViewData["PlatformId"] = new SelectList(_context.Platforms, "PlatformId", "PlatformId");
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId");
+            ViewData["PlatformId"] = new SelectList(_context.Platforms, "PlatformId", "PlatformName");
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName");
             return View();
         }
 
-        // POST: ProductPlatforms/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductPlatformId,PlatformId,ProductId")] ProductPlatform productPlatform)
@@ -66,12 +60,11 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PlatformId"] = new SelectList(_context.Platforms, "PlatformId", "PlatformId", productPlatform.PlatformId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", productPlatform.ProductId);
+            ViewData["PlatformId"] = new SelectList(_context.Platforms, "PlatformId", "PlatformName", productPlatform.PlatformId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", productPlatform.ProductId);
             return View(productPlatform);
         }
 
-        // GET: ProductPlatforms/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,14 +77,11 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             {
                 return NotFound();
             }
-            ViewData["PlatformId"] = new SelectList(_context.Platforms, "PlatformId", "PlatformId", productPlatform.PlatformId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", productPlatform.ProductId);
+            ViewData["PlatformId"] = new SelectList(_context.Platforms, "PlatformId", "PlatformName", productPlatform.PlatformId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", productPlatform.ProductId);
             return View(productPlatform);
         }
 
-        // POST: ProductPlatforms/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductPlatformId,PlatformId,ProductId")] ProductPlatform productPlatform)
@@ -121,12 +111,11 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PlatformId"] = new SelectList(_context.Platforms, "PlatformId", "PlatformId", productPlatform.PlatformId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", productPlatform.ProductId);
+            ViewData["PlatformId"] = new SelectList(_context.Platforms, "PlatformId", "PlatformName", productPlatform.PlatformId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", productPlatform.ProductId);
             return View(productPlatform);
         }
 
-        // GET: ProductPlatforms/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -146,7 +135,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(productPlatform);
         }
 
-        // POST: ProductPlatforms/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
