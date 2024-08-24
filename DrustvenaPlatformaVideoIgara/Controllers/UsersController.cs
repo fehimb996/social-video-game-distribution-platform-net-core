@@ -288,7 +288,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-            return RedirectToAction("Index", "Home"); // Redirect to home page after login
+            return RedirectToAction("Index", "Products"); // Redirect to home page after login
         }
 
         public IActionResult Logout()
