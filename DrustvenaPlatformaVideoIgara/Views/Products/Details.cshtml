@@ -4,32 +4,22 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>@Html.DisplayFor(model => model.Product.ProductName)</h1>
+<dd class="col-sm-10">
+    <img src="@Model.Product.ImagePath" alt="@Model.Product.ProductName" class="img-fluid" />
+</dd>
 
 <div>
-    <h4>Product</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product.ProductName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Product.ProductName)
-        </dd>
-        <dt class="col-sm-2">
-            Product Image
-        </dt>
-        <dd class="col-sm-10">
-            <img src="@Model.Product.ImagePath" alt="@Model.Product.ProductName" class="img-fluid" />
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product.ProductDetails)
+            Product Details
         </dt>
         <dd class="col-sm-10">
             @Html.Raw(Model.Product.ProductDetails.Replace(Environment.NewLine, "<br />"))
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product.ReleaseDate)
+            Release date
         </dt>
         <dd class="col-sm-10">
             @Model.Product.ReleaseDate.ToString("dd-MMM-yyyy")

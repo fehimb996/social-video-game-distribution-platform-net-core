@@ -4,48 +4,44 @@
     ViewData["Title"] = "Profile";
 }
 
-<h1>Profile</h1>
+<h1>@Html.DisplayFor(model => model.NickName)</h1>
+<dd class="col-sm-10">
+    @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+    {
+        <img src="@Model.ProfilePicture" alt="Profile Picture" style="max-width: 184px; max-height: 184px;" />
+    }
+    else
+    {
+        <span>No Profile Picture</span>
+    }
+</dd>
 
 <div>
-    <h4>@Html.DisplayFor(model => model.NickName)</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
+            First Name
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FirstName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
+            Last Name
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.LastName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProfilePicture)
-        </dt>
-        <div>
-            <a asp-action="Games" asp-route-id="@Model.UserId">Games (@ViewData["GamesCount"])</a> <br />
-            <a asp-action="Reviews" asp-route-id="@Model.UserId">Reviews (@ViewData["ReviewsCount"])</a> <br />
-            <a asp-action="Friends" asp-route-id="@Model.UserId">Friends (@ViewData["FriendsCount"])</a> <br />
-        </div>
-        <dd class="col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.ProfilePicture))
-            {
-                <img src="@Model.ProfilePicture" alt="Profile Picture" style="max-width: 184px; max-height: 184px;" />
-            }
-            else
-            {
-                <span>No Profile Picture</span>
-            }
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProfileDescription)
+            Description
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ProfileDescription)
         </dd>
+        <div class="CustomProfileAttributes">
+            <a asp-action="Games" asp-route-id="@Model.UserId">Games (@ViewData["GamesCount"])</a> <br />
+            <a asp-action="Reviews" asp-route-id="@Model.UserId">Reviews (@ViewData["ReviewsCount"])</a> <br />
+            <a asp-action="Friends" asp-route-id="@Model.UserId">Friends (@ViewData["FriendsCount"])</a> <br />
+        </div>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Country)
         </dt>
