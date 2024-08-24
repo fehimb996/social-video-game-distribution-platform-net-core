@@ -18,14 +18,12 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             _context = context;
         }
 
-        // GET: ProductGenres
         public async Task<IActionResult> Index()
         {
             var steamContext = _context.ProductGenres.Include(p => p.Genre).Include(p => p.Product);
             return View(await steamContext.ToListAsync());
         }
 
-        // GET: ProductGenres/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,17 +43,13 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(productGenre);
         }
 
-        // GET: ProductGenres/Create
         public IActionResult Create()
         {
-            ViewData["GenreId"] = new SelectList(_context.Genres, "GenreId", "GenreId");
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId");
+            ViewData["GenreId"] = new SelectList(_context.Genres, "GenreId", "GenreName");
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName");
             return View();
         }
 
-        // POST: ProductGenres/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductGenreId,GenreId,ProductId")] ProductGenre productGenre)
@@ -66,12 +60,11 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GenreId"] = new SelectList(_context.Genres, "GenreId", "GenreId", productGenre.GenreId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", productGenre.ProductId);
+            ViewData["GenreId"] = new SelectList(_context.Genres, "GenreId", "GenreName", productGenre.GenreId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", productGenre.ProductId);
             return View(productGenre);
         }
 
-        // GET: ProductGenres/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,14 +77,11 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             {
                 return NotFound();
             }
-            ViewData["GenreId"] = new SelectList(_context.Genres, "GenreId", "GenreId", productGenre.GenreId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", productGenre.ProductId);
+            ViewData["GenreId"] = new SelectList(_context.Genres, "GenreId", "GenreName", productGenre.GenreId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", productGenre.ProductId);
             return View(productGenre);
         }
 
-        // POST: ProductGenres/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductGenreId,GenreId,ProductId")] ProductGenre productGenre)
@@ -121,12 +111,11 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GenreId"] = new SelectList(_context.Genres, "GenreId", "GenreId", productGenre.GenreId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", productGenre.ProductId);
+            ViewData["GenreId"] = new SelectList(_context.Genres, "GenreId", "GenreName", productGenre.GenreId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", productGenre.ProductId);
             return View(productGenre);
         }
 
-        // GET: ProductGenres/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -146,7 +135,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(productGenre);
         }
 
-        // POST: ProductGenres/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
