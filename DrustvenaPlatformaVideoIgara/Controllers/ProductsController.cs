@@ -68,7 +68,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 .OrderBy(p => p.ProductName)
                 .ToListAsync();
 
-            // Prepare the view model
             var viewModel = new ProductsViewModel
             {
                 RandomProducts = randomProducts,
@@ -130,7 +129,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             }
 
             var reviews = await _context.Reviews
-                .Include(r => r.User) // Include the User navigation property
+                .Include(r => r.User)
                 .Where(r => r.ProductId == id.Value)
                 .ToListAsync();
 
