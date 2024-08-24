@@ -161,22 +161,20 @@ else
                 </strong> -
                 @if (review.Rating == true)
                 {
-                    <span>Recommended</span>
+                    <span>
+                        <img src="~/images/icon_thumbsUp_v6.png" alt="Thumbs Up" /> Recommended
+                    </span>
                 }
                 else
                 {
-                    <span>Not recommended</span>
+                    <span>
+                        <img src="~/images/icon_thumbsDown_v6.png" alt="Thumbs Down" /> Not recommended
+                    </span>
                 }
                 <br />
                 @review.Comment
                 @if (review.UserId == Model.UserId)
                 {
-                    <form asp-action="EditReview" method="post" style="display:inline;">
-                        <input type="hidden" name="reviewId" value="@review.ReviewId" />
-                        <input type="hidden" name="comment" value="@review.Comment" />
-                        <input type="hidden" name="rating" value="@review.Rating" />
-                        <button type="submit" class="btn btn-link">Edit</button>
-                    </form>
                     <form asp-action="DeleteReview" method="post" style="display:inline;">
                         <input type="hidden" name="reviewId" value="@review.ReviewId" />
                         <button type="submit" class="btn btn-link">Delete</button>

@@ -5,7 +5,6 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Review ID</th>
             <th>Product Name</th>
             <th>Rating</th>
             <th>Comment</th>
@@ -15,8 +14,11 @@
         @foreach (var review in Model)
         {
             <tr>
-                <td>@review.ReviewId</td>
-                <td>@review.Product.ProductName</td>
+                <td>
+                    <a href="@Url.Action("Details", "Products", new { id = review.Product.ProductId })">
+                        @review.Product.ProductName
+                    </a>
+                </td>
                 <td>
                     @if (review.Rating.HasValue)
                     {

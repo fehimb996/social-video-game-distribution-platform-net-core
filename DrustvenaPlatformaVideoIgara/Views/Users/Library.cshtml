@@ -11,7 +11,12 @@
     <ul>
         @foreach (var product in Model)
         {
-            <li>@product.ProductName</li>
+            <li>
+                <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
+                    <img src="@product.ImagePath" alt="@product.ProductName" style="img-fluid" />
+                    @product.ProductName
+                </a>
+            </li>
         }
     </ul>
 }
