@@ -1,34 +1,105 @@
-﻿@model DrustvenaPlatformaVideoIgara.Models.Wishlist
+﻿@model DrustvenaPlatformaVideoIgara.Models.WishlistViewModel
 
 @{
     ViewData["Title"] = "Wishlist";
 }
 
-<h1>Wishlist</h1>
+<h1>My Wishlist</h1>
 
-<div>
-    @if (Model?.WishlistItems != null && Model.WishlistItems.Any())
-    {
-        <ul class="list-group">
-            @foreach (var wishlistItem in Model.WishlistItems)
-            {
-                var product = wishlistItem.Product;
-                <li class="list-group-item">
+@if (Model?.Wishlist?.WishlistItems != null && Model.Wishlist.WishlistItems.Any())
+{
+    <div class="wishlist-container">
+        @foreach (var wishlistItem in Model.Wishlist.WishlistItems)
+        {
+            var product = wishlistItem.Product;
+            var isInCart = Model.CartItems.Any(ci => ci.ProductId == product.ProductId);
+
+            <div class="wishlist-item @(wishlistItem.WishlistItemId == 1 ? "full-width" : "")">
+                <div class="wishlist-image">
+                    <a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductId">
+                        <img src="@product.ImagePath" alt="@product.ProductName Cover Image" class="img-fluid" />
+                    </a>
+                </div>
+                <div class="wishlist-details">
                     <h4>
-                        <a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductId">
-                            <img src="@product.ImagePath" alt="@product.ProductName Cover Image" style="img-fluid" />
-                        </a>
                         <a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductId">
                             @product.ProductName
                         </a>
                     </h4>
-                    <p>Price: @product.Price €</p>
-                </li>
-            }
-        </ul>
+                    <p>Price: <strong>@product.Price €</strong></p>
+
+                    @if (isInCart)
+                    {
+                        <a href="/Carts/Index/@Model.UserId" class="btn btn-success">In Cart</a>
+                    }
+                    else
+                    {
+                        <form asp-action="AddToCart" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="wishlistItemId" value="@wishlistItem.WishlistItemId" />
+                            <button class="btn btn-primary">Add to Cart</button>
+                        </form>
+                    }
+
+                    <form asp-action="RemoveItem" method="post" style="display:inline;">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="wishlistItemId" value="@wishlistItem.WishlistItemId" />
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No items in your wishlist.</p>
+}
+
+<style>
+    .wishlist-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
     }
-    else
-    {
-        <p>No items in your wishlist.</p>
+
+    .wishlist-item {
+        display: flex;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        width: 100%;
+        max-width: 600px;
+        box-sizing: border-box;
     }
-</div>
+
+        .wishlist-item.full-width {
+            flex-direction: column;
+            max-width: 100%;
+        }
+
+    .wishlist-image img {
+        width: 100%; /* Full-width image for full-width item */
+        height: auto;
+        border-radius: 5px;
+    }
+
+    .wishlist-details {
+        margin-left: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+        .wishlist-details h4 {
+            margin-bottom: 10px;
+        }
+
+        .wishlist-details p {
+            margin-bottom: 10px;
+        }
+
+        .wishlist-details button {
+            margin-right: 5px;
+        }
+</style>

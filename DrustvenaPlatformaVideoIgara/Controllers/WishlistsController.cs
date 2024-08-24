@@ -18,7 +18,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             _context = context;
         }
 
-        // GET: Wishlists
         public async Task<IActionResult> Index()
         {
             int? userId = HttpContext.Session.GetInt32("UserId");
@@ -32,10 +31,67 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 .ThenInclude(wi => wi.Product)
                 .FirstOrDefaultAsync(w => w.UserId == userId.Value);
 
-            return View(wishlist);
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .Where(c => c.UserId == userId.Value)
+                .FirstOrDefaultAsync();
+
+            var viewModel = new WishlistViewModel
+            {
+                Wishlist = wishlist,
+                CartItems = cart?.CartItems ?? new List<CartItem>(), // If cart is null, pass an empty list
+                UserId = userId.Value // Pass the user ID to the view
+            };
+
+            return View(viewModel);
         }
 
-        // POST: Wishlists/RemoveItem
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddToCart(int wishlistItemId)
+        {
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            var wishlistItem = await _context.WishlistItems
+                .Include(wi => wi.Product)
+                .FirstOrDefaultAsync(wi => wi.WishlistItemId == wishlistItemId);
+
+            if (wishlistItem != null)
+            {
+                // Add product to the cart
+                var cart = await _context.Carts
+                    .Include(c => c.CartItems)
+                    .FirstOrDefaultAsync(c => c.UserId == userId.Value);
+
+                if (cart == null)
+                {
+                    cart = new Cart { UserId = userId.Value };
+                    _context.Carts.Add(cart);
+                    await _context.SaveChangesAsync();
+                }
+
+                var cartItem = new CartItem
+                {
+                    CartId = cart.CartId,
+                    ProductId = wishlistItem.Product.ProductId,
+                    Price = wishlistItem.Product.Price
+                };
+
+                // Check if item already exists in cart
+                if (!_context.CartItems.Any(ci => ci.CartId == cart.CartId && ci.ProductId == wishlistItem.Product.ProductId))
+                {
+                    _context.CartItems.Add(cartItem);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            return RedirectToAction("Index");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveItem(int wishlistItemId)
@@ -50,7 +106,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Wishlists/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -69,16 +124,12 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(wishlist);
         }
 
-        // GET: Wishlists/Create
         public IActionResult Create()
         {
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
             return View();
         }
 
-        // POST: Wishlists/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("WishlistId,UserId")] Wishlist wishlist)
@@ -93,7 +144,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(wishlist);
         }
 
-        // GET: Wishlists/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -110,9 +160,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(wishlist);
         }
 
-        // POST: Wishlists/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("WishlistId,UserId")] Wishlist wishlist)
@@ -146,7 +193,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(wishlist);
         }
 
-        // GET: Wishlists/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -165,7 +211,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(wishlist);
         }
 
-        // POST: Wishlists/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
