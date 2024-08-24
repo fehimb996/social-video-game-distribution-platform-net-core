@@ -14,8 +14,6 @@
             <tr>
                 <th>Product</th>
                 <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
                 <th></th>
             </tr>
         </thead>
@@ -24,8 +22,6 @@
             {
                 <tr>
                     <td>@item.Product.ProductName</td>
-                    <td>@item.Price €</td>
-                    <td>1</td> <!-- Assuming quantity is 1 for simplicity -->
                     <td>@item.Price €</td>
                     <td>
                         <form asp-action="RemoveItem" method="post">
@@ -38,7 +34,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="3">Total</td>
+                <td colspan="1">Total</td>
                 <td>@totalPrice €</td>
                 <td></td>
             </tr>

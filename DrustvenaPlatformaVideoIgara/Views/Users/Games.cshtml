@@ -8,23 +8,23 @@
 
 @if (Model.Any())
 {
-    <div class="games-container">
+        <div class="games-container">
         @foreach (var product in Model)
         {
-            <div class="game-item">
-                <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
-                    <img src="@product.ImagePath" alt="@product.ProductName" class="img-fluid" />
-                    <div class="game-item-name">
+                    <div class="game-item">
+                        <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
+                            <img src="@product.ImagePath" alt="@product.ProductName" class="img-fluid" />
+                            <div class="game-item-name">
                         @product.ProductName
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
         }
-    </div>
+        </div>
 }
 else
 {
-    <p>No games owned.</p>
+        <p>No games owned.</p>
 }
 
 <style>
