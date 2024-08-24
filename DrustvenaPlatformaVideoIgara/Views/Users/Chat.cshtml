@@ -13,6 +13,7 @@
         <div class="col-1">Recipient</div>
         <div class="col-5">
             <select id="recipientUserId" class="form-select">
+                <option value="" selected>Select a friend</option>
                 @foreach (var friend in friends)
                 {
                     <option value="@friend.UserId">@friend.NickName</option>

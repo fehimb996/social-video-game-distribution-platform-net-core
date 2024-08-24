@@ -53,7 +53,7 @@ document.getElementById("recipientUserId").addEventListener("change", function (
             data.forEach(message => {
                 var li = document.createElement("li");
                 li.className = "list-group-item";
-                li.textContent = `${message.senderNickName} says ${message.messageContent}`;
+                li.textContent = `${message.senderNickName}: ${message.messageContent}`;
                 messagesList.appendChild(li);
             });
 
