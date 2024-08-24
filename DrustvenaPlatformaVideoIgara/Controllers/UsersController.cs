@@ -504,7 +504,8 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 {
                     m.MessageContent,
                     SenderNickName = (m.UserId1 == loggedInUserId) ? _context.Users.Where(u => u.UserId == m.UserId1).Select(u => u.NickName).FirstOrDefault()
-                                                                     : _context.Users.Where(u => u.UserId == m.UserId2).Select(u => u.NickName).FirstOrDefault()
+                                                                     : _context.Users.Where(u => u.UserId == m.UserId2).Select(u => u.NickName).FirstOrDefault(),
+                    Timestamp = m.Timestamp // Include Timestamp in the response
                 })
                 .ToListAsync();
 

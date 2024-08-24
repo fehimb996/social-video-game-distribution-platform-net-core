@@ -40,8 +40,9 @@ namespace DrustvenaPlatformaVideoIgara.Hubs
             _logger.LogInformation($"Message from {senderNickName} (ID: {senderUserId}) to {recipientUserId}: {message}");
 
             // Ensure recipientUserId is a valid connection
-            await Clients.User(recipientUserId.ToString()).SendAsync("ReceiveMessage", senderNickName, message);
-            await Clients.User(senderUserId).SendAsync("ReceiveMessage", senderNickName, message); // Also send to sender
+            var timestamp = chatMessage.Timestamp.ToString("yyyy-MM-ddTHH:mm:ssZ"); // ISO 8601 format
+            await Clients.User(recipientUserId.ToString()).SendAsync("ReceiveMessage", senderNickName, message, timestamp);
+            await Clients.User(senderUserId).SendAsync("ReceiveMessage", senderNickName, message, timestamp); // Also send to sender
         }
     }
 }
