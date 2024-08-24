@@ -4,23 +4,61 @@
     ViewData["Title"] = "Library";
 }
 
-<h2>Library</h2>
+<h2>Your Library</h2>
 
 @if (Model.Any())
 {
-    <ul>
+        <div class="library-container">
         @foreach (var product in Model)
         {
-            <li>
-                <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
-                    <img src="@product.ImagePath" alt="@product.ProductName" style="img-fluid" />
-                    @product.ProductName
-                </a>
-            </li>
+                    <div class="library-item">
+                        <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
+                            <img src="@product.ImagePath" alt="@product.ProductName" class="img-fluid" />
+                            <div class="library-item-name">
+                        @product.ProductName
+                            </div>
+                        </a>
+                    </div>
         }
-    </ul>
+        </div>
 }
 else
 {
-    <p>You have not purchased any games yet.</p>
+        <p>You have not purchased any games yet.</p>
 }
+
+<style>
+    .library-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .library-item {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #f5f5f5;
+        text-align: center;
+        transition: background 0.3s ease;
+    }
+
+    .library-item:hover {
+        background: #e0e0e0;
+    }
+
+    .library-item img {
+        width: 100%;
+        height: auto;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .library-item-name {
+        padding: 10px;
+        font-weight: bold;
+        color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
