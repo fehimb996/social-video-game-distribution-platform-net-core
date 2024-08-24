@@ -48,8 +48,8 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         // GET: ProductPublishers/Create
         public IActionResult Create()
         {
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId");
-            ViewData["PublisherId"] = new SelectList(_context.Publishers, "PublisherId", "PublisherId");
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName");
+            ViewData["PublisherId"] = new SelectList(_context.Publishers, "PublisherId", "PublisherName");
             return View();
         }
 
@@ -66,8 +66,8 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", productPublisher.ProductId);
-            ViewData["PublisherId"] = new SelectList(_context.Publishers, "PublisherId", "PublisherId", productPublisher.PublisherId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName");
+            ViewData["PublisherId"] = new SelectList(_context.Publishers, "PublisherId", "PublisherName");
             return View(productPublisher);
         }
 
@@ -84,8 +84,8 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", productPublisher.ProductId);
-            ViewData["PublisherId"] = new SelectList(_context.Publishers, "PublisherId", "PublisherId", productPublisher.PublisherId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName");
+            ViewData["PublisherId"] = new SelectList(_context.Publishers, "PublisherId", "PublisherName");
             return View(productPublisher);
         }
 

@@ -10,17 +10,17 @@
     <h4>ProductDeveloper</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Developer)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Developer.DeveloperId)
+        <dd class="col-sm-10">
+            @Model.Developer.DeveloperName
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Product)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Product.ProductId)
+        <dd class="col-sm-10">
+            @Model.Product.ProductName
         </dd>
     </dl>
 </div>

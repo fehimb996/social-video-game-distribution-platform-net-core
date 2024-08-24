@@ -48,8 +48,8 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         // GET: ProductDevelopers/Create
         public IActionResult Create()
         {
-            ViewData["DeveloperId"] = new SelectList(_context.Developers, "DeveloperId", "DeveloperId");
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId");
+            ViewData["DeveloperId"] = new SelectList(_context.Developers, "DeveloperId", "DeveloperName");
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName");
             return View();
         }
 
@@ -66,8 +66,8 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DeveloperId"] = new SelectList(_context.Developers, "DeveloperId", "DeveloperId", productDeveloper.DeveloperId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", productDeveloper.ProductId);
+            ViewData["DeveloperId"] = new SelectList(_context.Developers, "DeveloperId", "DeveloperName", productDeveloper.DeveloperId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", productDeveloper.ProductId);
             return View(productDeveloper);
         }
 
@@ -84,8 +84,8 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             {
                 return NotFound();
             }
-            ViewData["DeveloperId"] = new SelectList(_context.Developers, "DeveloperId", "DeveloperId", productDeveloper.DeveloperId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", productDeveloper.ProductId);
+            ViewData["DeveloperId"] = new SelectList(_context.Developers, "DeveloperId", "DeveloperName", productDeveloper.DeveloperId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", productDeveloper.ProductId);
             return View(productDeveloper);
         }
 
@@ -121,8 +121,8 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DeveloperId"] = new SelectList(_context.Developers, "DeveloperId", "DeveloperId", productDeveloper.DeveloperId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductId", productDeveloper.ProductId);
+            ViewData["DeveloperId"] = new SelectList(_context.Developers, "DeveloperId", "DeveloperName", productDeveloper.DeveloperId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", productDeveloper.ProductId);
             return View(productDeveloper);
         }
 
