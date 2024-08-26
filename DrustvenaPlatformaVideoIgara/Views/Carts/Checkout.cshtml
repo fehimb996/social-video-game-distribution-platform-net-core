@@ -6,52 +6,156 @@
 
 <h1>Checkout</h1>
 
-<div>
-    <h3>Wallet Balance: @Model.WalletBalance €</h3>
+<div class="checkout-container">
+    <div class="wallet-balance">
+        <h3>Wallet Balance: <span>@Model.WalletBalance €</span></h3>
+    </div>
+
+    @if (Model.WalletBalance < Model.TotalPrice)
+    {
+        <div class="alert alert-warning" role="alert">
+            <strong>Insufficient funds.</strong> Please add more money to your wallet before proceeding or choose a different payment method.
+        </div>
+    }
+
+    <form asp-action="Purchase" method="post" class="checkout-form">
+        <div class="form-group">
+            <label for="paymentMethod" class="form-label">Select Payment Method</label>
+            <select asp-for="SelectedPaymentMethod" asp-items="@(new SelectList(Model.PaymentMethods, "PaymentMethodId", "Method"))" class="form-select">
+            </select>
+        </div>
+
+        <h3>Cart Items:</h3>
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Cart.CartItems)
+                {
+                    <tr>
+                        <td class="checkout-image">
+                            <a asp-action="Details" asp-controller="Products" asp-route-id="@item.Product.ProductId">
+                                <img src="@item.Product.ImagePath" alt="@item.Product.ProductName" class="img-fluid rounded" />
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-controller="Products" asp-route-id="@item.Product.ProductId" class="text-light">
+                                @item.Product.ProductName
+                            </a>
+                        </td>
+                        <td>@item.Price €</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="total-price">
+            <strong>Total Price: <span>@Model.TotalPrice €</span></strong>
+        </div>
+
+        <div class="checkout-button-container">
+            @if (Model.SelectedPaymentMethod == 1 && Model.WalletBalance < Model.TotalPrice)
+            {
+                <button type="submit" class="btn btn-primary" disabled>Buy</button>
+            }
+            else
+            {
+                <button type="submit" class="btn btn-primary">Buy</button>
+            }
+        </div>
+    </form>
 </div>
 
-@if (Model.WalletBalance < Model.TotalPrice)
-{
-    <div class="alert alert-warning" role="alert">
-        Insufficient funds. Please add more money to your wallet before proceeding.
-    </div>
-}
-
-<form asp-action="Purchase" method="post">
-    <div class="form-group">
-        <label for="paymentMethod">Select Payment Method</label>
-        <select asp-for="SelectedPaymentMethod" asp-items="@(new SelectList(Model.PaymentMethods, "PaymentMethodId", "Method"))" class="form-control"></select>
-    </div>
-
-    <h3>Cart Items:</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Cart.CartItems)
-            {
-                <tr>
-                    <td>@item.Product.ProductName</td>
-                    <td>@item.Price €</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <div>
-        <strong>Total Price: @Model.TotalPrice €</strong>
-    </div>
-
-    @if (Model.SelectedPaymentMethod == 1 && Model.WalletBalance < Model.TotalPrice)
-    {
-        <button type="submit" class="btn btn-primary" disabled>Buy</button>
+<style>
+    .checkout-container {
+        background-color: #2a2a2a;
+        padding: 20px;
+        border-radius: 10px;
+        color: #e5e5e5;
+        max-width: 800px;
+        margin: auto;
     }
-    else
-    {
-        <button type="submit" class="btn btn-primary">Buy</button>
+
+    .wallet-balance h3 {
+        color: #3ac37a;
+        font-weight: bold;
     }
-</form>
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        color: #c0c0c0;
+    }
+
+    .form-select {
+        background-color: #444;
+        color: #e5e5e5;
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .table thead th {
+        border-bottom: 2px solid #444;
+        color: #c0c0c0;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #333;
+    }
+
+    .checkout-image img {
+        max-width: 100px;
+        border-radius: 5px;
+    }
+
+    .text-light {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+        .text-light:hover {
+            text-decoration: underline;
+        }
+
+    .total-price {
+        margin-top: 20px;
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #3ac37a;
+        text-align: right;
+    }
+
+    .checkout-button-container {
+        text-align: right;
+        margin-top: 20px;
+    }
+
+    .btn-primary {
+        background-color: #5bc0de;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1.2rem;
+    }
+
+        .btn-primary:disabled {
+            background-color: #888;
+            cursor: not-allowed;
+        }
+
+    .alert-warning {
+        background-color: #d9534f;
+        border: none;
+        color: #ffffff;
+        font-weight: bold;
+    }
+</style>
