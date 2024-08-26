@@ -4,86 +4,78 @@
     ViewData["Title"] = "Profile";
 }
 
-<h1>@Html.DisplayFor(model => model.NickName)</h1>
-<dd class="col-sm-10">
-    @if (!string.IsNullOrEmpty(Model.ProfilePicture))
-    {
-        <img src="@Model.ProfilePicture" alt="Profile Picture" style="max-width: 184px; max-height: 184px;" />
-    }
-    else
-    {
-        <span>No Profile Picture</span>
-    }
-</dd>
-
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            First Name
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class="col-sm-2">
-            Last Name
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class="col-sm-2">
-            Description
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProfileDescription)
-        </dd>
-        <div class="CustomProfileAttributes">
-            <a asp-action="Games" asp-route-id="@Model.UserId">Games (@ViewData["GamesCount"])</a> <br />
-            <a asp-action="Reviews" asp-route-id="@Model.UserId">Reviews (@ViewData["ReviewsCount"])</a> <br />
-            <a asp-action="Friends" asp-route-id="@Model.UserId">Friends (@ViewData["FriendsCount"])</a> <br />
+<div class="profile-container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="profile-picture">
+            @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+            {
+                <img src="@Model.ProfilePicture" alt="Profile Picture" class="profile-img" />
+            }
+            else
+            {
+                <div class="placeholder-picture">
+                    <span>No Profile Picture</span>
+                </div>
+            }
         </div>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Country.CountryName)
-        </dd>
+        <div class="profile-info">
+            <h1>@Html.DisplayFor(model => model.NickName)</h1>
+            <p>@Html.DisplayFor(model => model.ProfileDescription)</p>
+        </div>
+    </div>
 
+    <!-- Profile Details Section -->
+    <div class="profile-details">
+        <h3>Profile Details</h3>
+        <div class="details-grid">
+            <div>
+                @Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)
+            </div>
+ 
+            <div>
+                <strong>Country:</strong> @Html.DisplayFor(model => model.Country.CountryName)
+            </div>
+            @if ((bool)ViewData["IsOwnProfile"])
+            {
+                <div>
+                    <strong>Email:</strong> @Html.DisplayFor(model => model.Email)
+                </div>
+                <div>
+                    <strong>Wallet Balance:</strong> @ViewData["WalletBalance"] €
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Profile Links Section -->
+    <div class="profile-links">
+        <h3>Activities</h3>
+        <ul>
+            <li><a asp-action="Games" asp-route-id="@Model.UserId">Games (@ViewData["GamesCount"])</a></li>
+            <li><a asp-action="Reviews" asp-route-id="@Model.UserId">Reviews (@ViewData["ReviewsCount"])</a></li>
+            <li><a asp-action="Friends" asp-route-id="@Model.UserId">Friends (@ViewData["FriendsCount"])</a></li>
+        </ul>
+    </div>
+
+    <!-- Profile Actions -->
+    <div class="profile-actions">
         @if ((bool)ViewData["IsOwnProfile"])
         {
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Email)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Email)
-            </dd>
-            <dt class="col-sm-2">
-                Wallet Balance
-            </dt>
-            <dd class="col-sm-10">
-                @ViewData["WalletBalance"] €
-            </dd>
-        }
-    </dl>
-</div>
-<div>
-    <div>
-        @if ((bool)ViewData["IsOwnProfile"])
-        {
-            <a asp-action="Edit" asp-route-id="@Model?.UserId">Edit Profile</a>
+            <a asp-action="Edit" asp-route-id="@Model?.UserId" class="btn btn-primary">Edit Profile</a>
         }
         else
         {
             @if (!(bool)ViewData["IsFriend"])
             {
-                <form asp-action="AddFriend" method="post">
+                <form asp-action="AddFriend" method="post" class="inline-form">
                     <input type="hidden" name="friendId" value="@Model.UserId" />
                     <button type="submit" class="btn btn-primary">Add Friend</button>
                 </form>
             }
             else
             {
-                <form asp-action="Unfriend" method="post">
+                <form asp-action="Unfriend" method="post" class="inline-form">
                     <input type="hidden" name="friendId" value="@Model.UserId" />
                     <button type="submit" class="btn btn-danger">Unfriend</button>
                 </form>
@@ -91,3 +83,95 @@
             }
         }
     </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<style>
+    .profile-container {
+        max-width: 900px;
+        margin: auto;
+        background-color: #2a2a2a;
+        padding: 20px;
+        border-radius: 10px;
+        color: #e5e5e5;
+    }
+
+    .profile-header {
+        display: flex;
+        margin-bottom: 20px;
+        align-items: center;
+    }
+
+    .profile-picture {
+        margin-right: 20px;
+    }
+
+    .profile-img {
+        width: 184px;
+        height: 184px;
+        object-fit: cover;
+    }
+
+    .placeholder-picture {
+        width: 184px;
+        height: 184px;
+        border-radius: 50%;
+        background-color: #444;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #ccc;
+    }
+
+    .profile-info {
+        flex: 1;
+    }
+
+        .profile-info h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+    .profile-details {
+        margin-bottom: 20px;
+    }
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .profile-links ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+        .profile-links ul li {
+            margin-bottom: 5px;
+        }
+
+            .profile-links ul li a {
+                color: #5bc0de;
+                text-decoration: none;
+            }
+
+                .profile-links ul li a:hover {
+                    text-decoration: underline;
+                }
+
+    .profile-actions {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .inline-form {
+        display: inline-block;
+        margin-right: 10px;
+    }
+</style>
