@@ -34,7 +34,7 @@ connection.on("ReceiveMessage", function (user, message, timestamp, profilePictu
     var messageContainer = document.createElement("div");
 
     var userSpan = document.createElement("strong");
-    userSpan.textContent = `@${user}:`;
+    userSpan.textContent = `${user}:`;
 
     var messageContent = document.createElement("p");
     messageContent.className = "message-content mb-0";
@@ -83,32 +83,27 @@ document.getElementById("recipientUserId").addEventListener("change", function (
     var messagesList = document.getElementById("messagesList");
 
     if (recipientUserId === "") {
-        // Clear the chat history when the blank option is selected
         messagesList.innerHTML = "";
-        return; // Exit early as no need to fetch chat history
+        return;
     }
 
     fetch(`/Users/GetChatHistory?recipientUserId=${recipientUserId}`)
         .then(response => response.json())
         .then(data => {
-            messagesList.innerHTML = ""; // Clear the current messages
+            messagesList.innerHTML = "";
 
             data.forEach(message => {
-                console.log("Message data:", message); // Debugging line
-
                 var li = document.createElement("li");
                 li.className = "list-group-item d-flex align-items-start";
 
-                // Profile picture
                 var img = document.createElement("img");
-                img.src = message.profilePicture || "/images/default-profile.png"; // Fallback image if profilePicture is empty
+                img.src = message.profilePicture || "/images/default-profile.png";
                 img.alt = `${message.senderNickName}'s profile picture`;
 
-                // Message content container
                 var messageContainer = document.createElement("div");
 
                 var userSpan = document.createElement("strong");
-                userSpan.textContent = `@${message.senderNickName}:`;
+                userSpan.textContent = `${message.senderNickName}:`;
 
                 var messageContent = document.createElement("p");
                 messageContent.className = "message-content mb-0";
@@ -116,22 +111,7 @@ document.getElementById("recipientUserId").addEventListener("change", function (
 
                 var messageTimestamp = document.createElement("small");
                 messageTimestamp.className = "message-timestamp";
-
-                // Format timestamp
-                var timestamp = message.timestamp;
-                if (timestamp === undefined) {
-                    console.error("Timestamp is undefined for message:", message);
-                    messageTimestamp.textContent = "Unknown time"; // Fallback text
-                } else {
-                    var date = new Date(timestamp);
-                    if (isNaN(date.getTime())) { // Check for invalid date
-                        console.error("Invalid date:", timestamp);
-                        messageTimestamp.textContent = "Invalid time"; // Fallback text
-                    } else {
-                        var options = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
-                        messageTimestamp.textContent = date.toLocaleDateString('en-GB', options);
-                    }
-                }
+                messageTimestamp.textContent = message.timestamp; // Already formatted from the backend
 
                 messageContainer.appendChild(userSpan);
                 messageContainer.appendChild(messageContent);
