@@ -4,85 +4,119 @@
     ViewData["Title"] = "Categories";
 }
 
-<h1>Categories</h1>
+<div class="container py-4">
+    <h1 class="text-light">Categories</h1>
 
-<!-- Platforms Section -->
-<h2>Platforms</h2>
-@foreach (var platform in Model.Platforms)
-{
-    <div>
-        <h3>@platform.PlatformName</h3>
-        <ul>
-            @foreach (var productPlatform in platform.ProductPlatforms)
+    <!-- Platforms Section -->
+    <h2 class="text-light">Platforms</h2>
+    @foreach (var platform in Model.Platforms)
+    {
+        <div class="mb-4">
+            <h3 class="text-light">@platform.PlatformName</h3>
+            @if (platform.ProductPlatforms.Any())
             {
-                var product = productPlatform.Product;
-                <li>
-                    <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId">
-                        @product.ProductName
-                    </a>
-                </li>
+                <ul class="list-unstyled text-light">
+                    @foreach (var productPlatform in platform.ProductPlatforms)
+                    {
+                        var product = productPlatform.Product;
+                        <li class="d-flex align-items-center mb-2">
+                            <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="d-flex align-items-center text-decoration-none text-light">
+                                <img src="@product.ImagePath" alt="@product.ProductName" class="img-thumbnail me-2" style="max-width: 80px; max-height: 80px;">
+                                @product.ProductName
+                            </a>
+                        </li>
+                    }
+                </ul>
             }
-        </ul>
-    </div>
-}
-
-<!-- Genres Section -->
-<h2>Genres</h2>
-@foreach (var genre in Model.Genres)
-{
-    <div>
-        <h3>@genre.GenreName</h3>
-        <ul>
-            @foreach (var productGenre in genre.ProductGenres)
+            else
             {
-                var product = productGenre.Product;
-                <li>
-                    <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId">
-                        @product.ProductName
-                    </a>
-                </li>
+                <p class="text-light">No products available for this platform.</p>
             }
-        </ul>
-    </div>
-}
+        </div>
+    }
 
-<!-- Developers Section -->
-<h2>Developers</h2>
-@foreach (var developer in Model.Developers)
-{
-    <div>
-        <h3>@developer.DeveloperName</h3>
-        <ul>
-            @foreach (var productDeveloper in developer.ProductDevelopers)
+
+    <!-- Genres Section -->
+    <h2 class="text-light">Genres</h2>
+    @foreach (var genre in Model.Genres)
+    {
+        <div class="mb-4">
+            <h3 class="text-light">@genre.GenreName</h3>
+            @if (genre.ProductGenres.Any())
             {
-                var product = productDeveloper.Product;
-                <li>
-                    <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId">
-                        @product.ProductName
-                    </a>
-                </li>
+                <ul class="list-unstyled text-light">
+                    @foreach (var productGenre in genre.ProductGenres)
+                    {
+                        var product = productGenre.Product;
+                        <li class="d-flex align-items-center mb-2">
+                            <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="d-flex align-items-center text-decoration-none text-light">
+                                <img src="@product.ImagePath" alt="@product.ProductName" class="img-thumbnail me-2" style="max-width: 80px; max-height: 80px;">
+                                @product.ProductName
+                            </a>
+                        </li>
+                    }
+                </ul>
             }
-        </ul>
-    </div>
-}
-
-<!-- Publishers Section -->
-<h2>Publishers</h2>
-@foreach (var publisher in Model.Publishers)
-{
-    <div>
-        <h3>@publisher.PublisherName</h3>
-        <ul>
-            @foreach (var productPublisher in publisher.ProductPublishers)
+            else
             {
-                var product = productPublisher.Product;
-                <li>
-                    <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId">
-                        @product.ProductName
-                    </a>
-                </li>
+                <p class="text-light">No products available for this genre.</p>
             }
-        </ul>
-    </div>
-}
+        </div>
+    }
 
+    <!-- Developers Section -->
+    <h2 class="text-light">Developers</h2>
+    @foreach (var developer in Model.Developers)
+    {
+        <div class="mb-4">
+            <h3 class="text-light">@developer.DeveloperName</h3>
+            @if (developer.ProductDevelopers.Any())
+            {
+                <ul class="list-unstyled text-light">
+                    @foreach (var productDeveloper in developer.ProductDevelopers)
+                    {
+                        var product = productDeveloper.Product;
+                        <li class="d-flex align-items-center mb-2">
+                            <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="d-flex align-items-center text-decoration-none text-light">
+                                <img src="@product.ImagePath" alt="@product.ProductName" class="img-thumbnail me-2" style="max-width: 80px; max-height: 80px;">
+                                @product.ProductName
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-light">No products available for this developer.</p>
+            }
+        </div>
+    }
+
+    <!-- Publishers Section -->
+    <h2 class="text-light">Publishers</h2>
+    @foreach (var publisher in Model.Publishers)
+    {
+        <div class="mb-4">
+            <h3 class="text-light">@publisher.PublisherName</h3>
+            @if (publisher.ProductPublishers.Any())
+            {
+                <ul class="list-unstyled text-light">
+                    @foreach (var productPublisher in publisher.ProductPublishers)
+                    {
+                        var product = productPublisher.Product;
+                        <li class="d-flex align-items-center mb-2">
+                            <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="d-flex align-items-center text-decoration-none text-light">
+                                <img src="@product.ImagePath" alt="@product.ProductName" class="img-thumbnail me-2" style="max-width: 80px; max-height: 80px;">
+                                @product.ProductName
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-light">No products available for this publisher.</p>
+            }
+        </div>
+    }
+</div>
