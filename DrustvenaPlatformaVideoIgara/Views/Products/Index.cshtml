@@ -4,7 +4,7 @@
     ViewData["Title"] = "Products";
 }
 
-<h1>Random Products</h1>
+<h1 class="text-center pt-5 pb-2">Featured & Recommended</h1>
 <div id="randomProductsCarousel" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
         @if (Model.RandomProducts.Any())
@@ -32,7 +32,7 @@
         }
         else
         {
-            <p>No random products available.</p>
+            <p>No featured products available.</p>
         }
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#randomProductsCarousel" data-bs-slide="prev">
@@ -49,12 +49,10 @@
     #randomProductsCarousel .carousel-control-prev,
     #randomProductsCarousel .carousel-control-next {
         width: 5%;
-       /*  color: white; */
     }
 
     #randomProductsCarousel .carousel-control-prev-icon,
     #randomProductsCarousel .carousel-control-next-icon {
-        /* background-color: white; */
         width: 30px;
         height: 30px;
     }
@@ -69,28 +67,81 @@
 </style>
 
 
-<h1>Top Selling Products</h1>
-<div>
+<h1 class="text-center pt-5 pb-2">Top Sellers</h1>
+<div class="top-sellers-container">
     @if (Model.TopSellingProducts.Any())
     {
-        <ul class="list-group">
+        <div class="top-sellers-grid">
             @foreach (var product in Model.TopSellingProducts)
             {
-                <li class="list-group-item d-flex align-items-center">
-                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })" class="d-flex align-items-center">
-                        <img src="@Model.RandomProducts.FirstOrDefault(p => p.ProductId == product.ProductId)?.ImagePath" class="img-thumbnail mr-2" style="width: fit-content; height: 120px;" alt="@product.ProductName">
-                        @product.ProductName
+                <div class="top-seller-item">
+                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
+                        <img src="@Model.RandomProducts.FirstOrDefault(p => p.ProductId == product.ProductId)?.ImagePath" class="img-thumbnail" alt="@product.ProductName">
+                        <div class="top-seller-info">
+                            <span class="top-seller-name">@product.ProductName</span>
+                            <span class="badge bg-success rounded-pill top-seller-price">@product.Price €</span>
+                        </div>
                     </a>
-                    <span class="badge bg-success rounded-pill ms-2">@product.Price €</span>
-                </li>
+                </div>
             }
-        </ul>
+        </div>
     }
     else
     {
         <p>No top selling products available.</p>
     }
 </div>
+
+<style>
+    .top-sellers-container {
+        padding: 20px;
+    }
+
+    .top-sellers-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .top-seller-item {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #f5f5f5;
+        transition: background 0.3s ease;
+        text-align: center;
+    }
+
+        .top-seller-item:hover {
+            background: #e0e0e0;
+        }
+
+        .top-seller-item img {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #ddd;
+        }
+
+    .top-seller-info {
+        padding: 10px;
+    }
+
+    .top-seller-name {
+        display: block;
+        font-weight: bold;
+        color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-bottom: 10px;
+    }
+
+    .top-seller-price {
+        font-size: 1.2em;
+        padding: 5px 10px;
+    }
+</style>
+
 
 <h1>Products Under 10 Bucks</h1>
 <div class="row">
