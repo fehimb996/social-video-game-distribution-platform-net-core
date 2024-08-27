@@ -4,30 +4,97 @@
     ViewData["Title"] = "Login";
 }
 
-<h1>Login</h1>
-
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Login">
-            <div class="form-group">
-                <label asp-for="Email">Email</label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password">Password</label>
-                <input asp-for="Password" type="password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Login</button>
-            </div>
-            <div asp-validation-summary="All" class="text-danger"></div>
-        </form>
+<div class="login-container">
+    <div class="login-header">
+        <h1>Login</h1>
+        <hr />
+    </div>
+    <form asp-action="Login">
+        <div class="form-group">
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password" type="password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+        <div asp-validation-summary="All" class="text-danger"></div>
+    </form>
+    <div class="login-links">
+        <a asp-action="Register" class="btn btn-success text-white">Register</a>
     </div>
 </div>
 
-<div>
-    <a asp-action="Register">Register</a>
-</div>
+<style>
+    .login-container {
+        max-width: 500px;
+        margin: auto;
+        background-color: #2a2a2a;
+        padding: 20px;
+        border-radius: 10px;
+        color: #e5e5e5;
+    }
+
+    .login-header {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+        .login-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+        .form-group label {
+            color: #e5e5e5;
+        }
+
+        .form-group input {
+            background-color: #444;
+            border: 1px solid #666;
+            color: #e5e5e5;
+        }
+
+            .form-group input::placeholder {
+                color: #888;
+            }
+
+    .btn-primary {
+        background-color: #5bc0de;
+        border: none;
+        color: #fff;
+        padding: 10px 15px;
+        border-radius: 5px;
+    }
+
+        .btn-primary:hover {
+            background-color: #31b0d5;
+        }
+
+    .text-danger {
+        color: #ff6f6f;
+    }
+
+    .login-links {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+        .login-links a {
+            color: #5bc0de;
+            text-decoration: none;
+        }
+
+            .login-links a:hover {
+                text-decoration: underline;
+            }
+</style>
