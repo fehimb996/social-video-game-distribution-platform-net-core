@@ -143,7 +143,7 @@
 </style>
 
 
-<h1>Products Under 10 Bucks</h1>
+<h1 class="text-center pt-5 pb-2">Products Under 10 Bucks</h1>
 <div class="row">
     @if (Model.ProductsUnder10Bucks.Any())
     {
@@ -151,7 +151,8 @@
         {
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
+                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })"><img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title">
                             <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a>
@@ -168,7 +169,7 @@
     }
 </div>
 
-<h1>Products Under 5 Bucks</h1>
+<h1 class="text-center pt-5 pb-2">Products Under 5 Bucks</h1>
 <div class="row">
     @if (Model.ProductsUnder5Bucks.Any())
     {
@@ -176,7 +177,8 @@
         {
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
+                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })"><img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title">
                             <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a>
@@ -193,7 +195,7 @@
     }
 </div>
 
-<h1>Free Products</h1>
+<h1 class="text-center pt-5 pb-2">Free Products</h1>
 <div class="row">
     @if (Model.FreeProducts.Any())
     {
