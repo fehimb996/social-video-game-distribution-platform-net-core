@@ -23,7 +23,7 @@
                                 <h5 class="card-title">
                                     <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a>
                                 </h5>
-                                <p class="card-text">Price: @product.Price €</p>
+                                <p class="card-text badge bg-success rounded-pill ms-2">Price: @product.Price €</p>
                             </div>
                         </div>
                     </div>
@@ -45,6 +45,30 @@
     </button>
 </div>
 
+<style>
+    #randomProductsCarousel .carousel-control-prev,
+    #randomProductsCarousel .carousel-control-next {
+        width: 5%;
+       /*  color: white; */
+    }
+
+    #randomProductsCarousel .carousel-control-prev-icon,
+    #randomProductsCarousel .carousel-control-next-icon {
+        /* background-color: white; */
+        width: 30px;
+        height: 30px;
+    }
+
+    #randomProductsCarousel .carousel-control-prev {
+        left: 20%;
+    }
+
+    #randomProductsCarousel .carousel-control-next {
+        right: 20%;
+    }
+</style>
+
+
 <h1>Top Selling Products</h1>
 <div>
     @if (Model.TopSellingProducts.Any())
@@ -57,7 +81,7 @@
                         <img src="@Model.RandomProducts.FirstOrDefault(p => p.ProductId == product.ProductId)?.ImagePath" class="img-thumbnail mr-2" style="width: fit-content; height: 120px;" alt="@product.ProductName">
                         @product.ProductName
                     </a>
-                    <span class="badge bg-primary rounded-pill ms-2">@product.Price €</span>
+                    <span class="badge bg-success rounded-pill ms-2">@product.Price €</span>
                 </li>
             }
         </ul>
@@ -126,7 +150,8 @@
         {
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
+                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })"><img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title">
                             <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a>
