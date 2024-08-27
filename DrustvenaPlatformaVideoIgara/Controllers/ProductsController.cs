@@ -324,23 +324,28 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 Directory.CreateDirectory(uploadPath);
             }
 
-            var uniqueFileName = Guid.NewGuid().ToString() + "_" + profilePicture.FileName;
-            var filePath = Path.Combine(uploadPath, uniqueFileName);
+            // Use the original file name
+            var fileName = profilePicture.FileName;
+            var filePath = Path.Combine(uploadPath, fileName);
 
-            try
+            // Check if the file already exists
+            if (!System.IO.File.Exists(filePath))
             {
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                try
                 {
-                    await profilePicture.CopyToAsync(fileStream);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await profilePicture.CopyToAsync(fileStream);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error saving profile picture: {ex.Message}");
+                    throw;
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error saving profile picture: {ex.Message}");
-                throw;
-            }
 
-            return "/images/ProductCover/" + uniqueFileName;
+            return "/images/ProductCover/" + fileName;
         }
 
         public async Task<IActionResult> Edit(int? id)
