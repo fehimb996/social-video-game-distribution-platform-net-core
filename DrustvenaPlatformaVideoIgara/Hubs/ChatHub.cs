@@ -25,7 +25,13 @@ namespace DrustvenaPlatformaVideoIgara.Hubs
                 return;
             }
 
-            // Store message in database
+            // Fetch sender's profile picture
+            var senderProfilePicture = _context.Users
+                .Where(u => u.UserId == int.Parse(senderUserId))
+                .Select(u => u.ProfilePicture)
+                .FirstOrDefault();
+
+            // Store message in the database
             var chatMessage = new Message
             {
                 UserId1 = int.Parse(senderUserId),
@@ -39,10 +45,11 @@ namespace DrustvenaPlatformaVideoIgara.Hubs
 
             _logger.LogInformation($"Message from {senderNickName} (ID: {senderUserId}) to {recipientUserId}: {message}");
 
-            // Ensure recipientUserId is a valid connection
             var timestamp = chatMessage.Timestamp.ToString("yyyy-MM-ddTHH:mm:ssZ"); // ISO 8601 format
-            await Clients.User(recipientUserId.ToString()).SendAsync("ReceiveMessage", senderNickName, message, timestamp);
-            await Clients.User(senderUserId).SendAsync("ReceiveMessage", senderNickName, message, timestamp); // Also send to sender
+
+            // Send message to both recipient and sender
+            await Clients.User(recipientUserId.ToString()).SendAsync("ReceiveMessage", senderNickName, message, timestamp, senderProfilePicture);
+            await Clients.User(senderUserId).SendAsync("ReceiveMessage", senderNickName, message, timestamp, senderProfilePicture);
         }
     }
 }

@@ -5,7 +5,7 @@ var connection = new signalR.HubConnectionBuilder()
     .configureLogging(signalR.LogLevel.Debug)
     .build();
 
-connection.on("ReceiveMessage", function (user, message, timestamp) {
+connection.on("ReceiveMessage", function (user, message, timestamp, profilePicture) {
     console.log(`Received message from ${user} at ${timestamp}: ${message}`); // Debugging line
     if (!user || !message || !timestamp) {
         console.error("Received invalid message:", { user, message, timestamp });
@@ -23,8 +23,34 @@ connection.on("ReceiveMessage", function (user, message, timestamp) {
     }
 
     var li = document.createElement("li");
-    li.className = "list-group-item";
-    li.textContent = `${timestamp} @${user}: ${message}`;
+    li.className = "list-group-item d-flex align-items-start";
+
+    // Profile picture
+    var img = document.createElement("img");
+    img.src = profilePicture || "/images/default-profile.png"; // Fallback image if profilePicture is empty
+    img.alt = `${user}'s profile picture`;
+
+    // Message content container
+    var messageContainer = document.createElement("div");
+
+    var userSpan = document.createElement("strong");
+    userSpan.textContent = `@${user}:`;
+
+    var messageContent = document.createElement("p");
+    messageContent.className = "message-content mb-0";
+    messageContent.textContent = message;
+
+    var messageTimestamp = document.createElement("small");
+    messageTimestamp.className = "message-timestamp";
+    messageTimestamp.textContent = timestamp;
+
+    messageContainer.appendChild(userSpan);
+    messageContainer.appendChild(messageContent);
+    messageContainer.appendChild(messageTimestamp);
+
+    li.appendChild(img);
+    li.appendChild(messageContainer);
+
     document.getElementById("messagesList").appendChild(li);
 
     var messagesList = document.getElementById("messagesList");
@@ -71,27 +97,49 @@ document.getElementById("recipientUserId").addEventListener("change", function (
                 console.log("Message data:", message); // Debugging line
 
                 var li = document.createElement("li");
-                li.className = "list-group-item";
+                li.className = "list-group-item d-flex align-items-start";
 
-                // Use timestamp directly
+                // Profile picture
+                var img = document.createElement("img");
+                img.src = message.profilePicture || "/images/default-profile.png"; // Fallback image if profilePicture is empty
+                img.alt = `${message.senderNickName}'s profile picture`;
+
+                // Message content container
+                var messageContainer = document.createElement("div");
+
+                var userSpan = document.createElement("strong");
+                userSpan.textContent = `@${message.senderNickName}:`;
+
+                var messageContent = document.createElement("p");
+                messageContent.className = "message-content mb-0";
+                messageContent.textContent = message.messageContent;
+
+                var messageTimestamp = document.createElement("small");
+                messageTimestamp.className = "message-timestamp";
+
+                // Format timestamp
                 var timestamp = message.timestamp;
-
                 if (timestamp === undefined) {
                     console.error("Timestamp is undefined for message:", message);
-                    timestamp = "Unknown time"; // Fallback text
+                    messageTimestamp.textContent = "Unknown time"; // Fallback text
                 } else {
-                    // Format timestamp
                     var date = new Date(timestamp);
                     if (isNaN(date.getTime())) { // Check for invalid date
                         console.error("Invalid date:", timestamp);
-                        timestamp = "Invalid time"; // Fallback text
+                        messageTimestamp.textContent = "Invalid time"; // Fallback text
                     } else {
                         var options = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
-                        timestamp = date.toLocaleDateString('en-GB', options);
+                        messageTimestamp.textContent = date.toLocaleDateString('en-GB', options);
                     }
                 }
 
-                li.textContent = `${timestamp} @${message.senderNickName}: ${message.messageContent}`;
+                messageContainer.appendChild(userSpan);
+                messageContainer.appendChild(messageContent);
+                messageContainer.appendChild(messageTimestamp);
+
+                li.appendChild(img);
+                li.appendChild(messageContainer);
+
                 messagesList.appendChild(li);
             });
 
