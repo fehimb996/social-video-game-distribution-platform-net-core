@@ -12,10 +12,19 @@ connection.on("ReceiveMessage", function (user, message, timestamp) {
         return;
     }
 
-    // Directly use the timestamp without parsing
+    // Convert the timestamp to a human-readable format
+    var date = new Date(timestamp);
+    if (!isNaN(date.getTime())) { // Check if the date is valid
+        var options = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
+        timestamp = date.toLocaleDateString('en-GB', options);
+    } else {
+        console.error("Invalid timestamp format:", timestamp);
+        timestamp = "Invalid time";
+    }
+
     var li = document.createElement("li");
     li.className = "list-group-item";
-    li.textContent = `${timestamp} ${user}: ${message}`;
+    li.textContent = `${timestamp} @${user}: ${message}`;
     document.getElementById("messagesList").appendChild(li);
 
     var messagesList = document.getElementById("messagesList");
@@ -82,7 +91,7 @@ document.getElementById("recipientUserId").addEventListener("change", function (
                     }
                 }
 
-                li.textContent = `${timestamp} ${message.senderNickName}: ${message.messageContent}`;
+                li.textContent = `${timestamp} @${message.senderNickName}: ${message.messageContent}`;
                 messagesList.appendChild(li);
             });
 
