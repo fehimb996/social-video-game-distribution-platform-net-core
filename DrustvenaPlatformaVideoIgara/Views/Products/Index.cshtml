@@ -5,23 +5,42 @@
 }
 
 <h1>Random Products</h1>
-<div>
-    @if (Model.RandomProducts.Any())
-    {
-        <ul class="list-group">
-                @foreach (var product in Model.RandomProducts)
+<div id="randomProductsCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        @if (Model.RandomProducts.Any())
+        {
+            var productsList = Model.RandomProducts.ToList();
+            for (var i = 0; i < productsList.Count; i++)
             {
-                <li class="list-group-item">
-                            <h4><a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a></h4>
-                            <p>Price: @product.Price €</p>
-                  </li      >
-                 }
-           </ul>
-       }
-     else
-    {
-        <p>No random products available.</p>
+                var product = productsList[i];
+                <div class="carousel-item @(i == 0 ? "active" : "")">
+                    <div class="d-flex justify-content-center">
+                        <div class="card" style="width: 18rem;">
+                            <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a>
+                                </h5>
+                                <p class="card-text">Price: @product.Price €</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         }
+        else
+        {
+            <p>No random products available.</p>
+        }
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#randomProductsCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#randomProductsCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
 </div>
 
 <h1>Top Selling Products</h1>
@@ -30,33 +49,41 @@
     {
         <ul class="list-group">
             @foreach (var product in Model.TopSellingProducts)
-                {
-                <li class="list-group-item">
-                    <h4><a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a></h4>
-                            <p>Price: @product.Price €</p>
-                     </li   >
-              }
-                   </ul>
-       }
-       else 
-    {
-        <p>No top selling products available.</p>
-    }
-    </div>
-
-<h1>Products Under 10 Bucks</h1>
-<div>
-    @if (Model.ProductsUnder10Bucks.Any())
-    {
-        <ul class="list-group">
-            @foreach (var product in Model.ProductsUnder10Bucks)
             {
-                <li class="list-group-item">
-                    <h4><a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a></h4>
-                    <p>Price: @product.Price €</p>
+                <li class="list-group-item d-flex align-items-center">
+                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })" class="d-flex align-items-center">
+                        <img src="@Model.RandomProducts.FirstOrDefault(p => p.ProductId == product.ProductId)?.ImagePath" class="img-thumbnail mr-2" style="width: 50px; height: 50px;" alt="@product.ProductName">
+                        @product.ProductName
+                    </a>
+                    <span class="badge bg-primary rounded-pill ms-2">@product.Price €</span>
                 </li>
             }
         </ul>
+    }
+    else
+    {
+        <p>No top selling products available.</p>
+    }
+</div>
+
+<h1>Products Under 10 Bucks</h1>
+<div class="row">
+    @if (Model.ProductsUnder10Bucks.Any())
+    {
+        @foreach (var product in Model.ProductsUnder10Bucks)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a>
+                        </h5>
+                        <p class="card-text">Price: @product.Price €</p>
+                    </div>
+                </div>
+            </div>
+        }
     }
     else
     {
@@ -65,18 +92,23 @@
 </div>
 
 <h1>Products Under 5 Bucks</h1>
-<div>
+<div class="row">
     @if (Model.ProductsUnder5Bucks.Any())
     {
-        <ul class="list-group">
-            @foreach (var product in Model.ProductsUnder5Bucks)
-            {
-                <li class="list-group-item">
-                    <h4><a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a></h4>
-                    <p>Price: @product.Price €</p>
-                </li>
-            }
-        </ul>
+        @foreach (var product in Model.ProductsUnder5Bucks)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a>
+                        </h5>
+                        <p class="card-text">Price: @product.Price €</p>
+                    </div>
+                </div>
+            </div>
+        }
     }
     else
     {
@@ -85,17 +117,22 @@
 </div>
 
 <h1>Free Products</h1>
-<div>
+<div class="row">
     @if (Model.FreeProducts.Any())
     {
-        <ul class="list-group">
-            @foreach (var product in Model.FreeProducts)
-            {
-                <li class="list-group-item">
-                    <h4><a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a></h4>
-                </li>
-            }
-        </ul>
+        @foreach (var product in Model.FreeProducts)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        }
     }
     else
     {
