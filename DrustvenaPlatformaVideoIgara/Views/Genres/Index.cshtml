@@ -4,29 +4,33 @@
     ViewData["Title"] = "Categories";
 }
 
-<div class="container py-4">
-    <h1 class="text-light">Categories</h1>
+@* <div class="container py-4">
+    <h1 class="text-light">Categories</h1> *@
 
     <!-- Platforms Section -->
     <h2 class="text-light">Platforms</h2>
     @foreach (var platform in Model.Platforms)
     {
         <div class="mb-4">
-            <h3 class="text-light">@platform.PlatformName</h3>
+            <h4 class="text-light">@platform.PlatformName</h4>
             @if (platform.ProductPlatforms.Any())
             {
-                <ul class="list-unstyled text-light">
+                <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
                     @foreach (var productPlatform in platform.ProductPlatforms)
                     {
                         var product = productPlatform.Product;
-                        <li class="d-flex align-items-center mb-2">
-                            <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="d-flex align-items-center text-decoration-none text-light">
-                                <img src="@product.ImagePath" alt="@product.ProductName" class="img-thumbnail me-2" style="max-width: 80px; max-height: 80px;">
-                                @product.ProductName
-                            </a>
-                        </li>
+                        <div class="col">
+                            <div class="card text-light bg-dark border-0">
+                                <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="text-decoration-none text-light">
+                                    <img src="@product.ImagePath" alt="@product.ProductName" class="card-img-top" style="max-height: 180px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@product.ProductName</h5>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
                     }
-                </ul>
+                </div>
             }
             else
             {
@@ -35,27 +39,30 @@
         </div>
     }
 
-
     <!-- Genres Section -->
     <h2 class="text-light">Genres</h2>
     @foreach (var genre in Model.Genres)
     {
         <div class="mb-4">
-            <h3 class="text-light">@genre.GenreName</h3>
+            <h4 class="text-light">@genre.GenreName</h4>
             @if (genre.ProductGenres.Any())
             {
-                <ul class="list-unstyled text-light">
+                <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
                     @foreach (var productGenre in genre.ProductGenres)
                     {
                         var product = productGenre.Product;
-                        <li class="d-flex align-items-center mb-2">
-                            <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="d-flex align-items-center text-decoration-none text-light">
-                                <img src="@product.ImagePath" alt="@product.ProductName" class="img-thumbnail me-2" style="max-width: 80px; max-height: 80px;">
-                                @product.ProductName
-                            </a>
-                        </li>
+                        <div class="col">
+                            <div class="card text-light bg-dark border-0">
+                                <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="text-decoration-none text-light">
+                                    <img src="@product.ImagePath" alt="@product.ProductName" class="card-img-top" style="max-height: 180px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@product.ProductName</h5>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
                     }
-                </ul>
+                </div>
             }
             else
             {
@@ -69,21 +76,25 @@
     @foreach (var developer in Model.Developers)
     {
         <div class="mb-4">
-            <h3 class="text-light">@developer.DeveloperName</h3>
+            <h4 class="text-light">@developer.DeveloperName</h4>
             @if (developer.ProductDevelopers.Any())
             {
-                <ul class="list-unstyled text-light">
+                <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
                     @foreach (var productDeveloper in developer.ProductDevelopers)
                     {
                         var product = productDeveloper.Product;
-                        <li class="d-flex align-items-center mb-2">
-                            <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="d-flex align-items-center text-decoration-none text-light">
-                                <img src="@product.ImagePath" alt="@product.ProductName" class="img-thumbnail me-2" style="max-width: 80px; max-height: 80px;">
-                                @product.ProductName
-                            </a>
-                        </li>
+                        <div class="col">
+                            <div class="card text-light bg-dark border-0">
+                                <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="text-decoration-none text-light">
+                                    <img src="@product.ImagePath" alt="@product.ProductName" class="card-img-top" style="max-height: 180px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@product.ProductName</h5>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
                     }
-                </ul>
+                </div>
             }
             else
             {
@@ -97,21 +108,25 @@
     @foreach (var publisher in Model.Publishers)
     {
         <div class="mb-4">
-            <h3 class="text-light">@publisher.PublisherName</h3>
+            <h4 class="text-light">@publisher.PublisherName</h4>
             @if (publisher.ProductPublishers.Any())
             {
-                <ul class="list-unstyled text-light">
+                <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
                     @foreach (var productPublisher in publisher.ProductPublishers)
                     {
                         var product = productPublisher.Product;
-                        <li class="d-flex align-items-center mb-2">
-                            <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="d-flex align-items-center text-decoration-none text-light">
-                                <img src="@product.ImagePath" alt="@product.ProductName" class="img-thumbnail me-2" style="max-width: 80px; max-height: 80px;">
-                                @product.ProductName
-                            </a>
-                        </li>
+                        <div class="col">
+                            <div class="card text-light bg-dark border-0">
+                                <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="text-decoration-none text-light">
+                                    <img src="@product.ImagePath" alt="@product.ProductName" class="card-img-top" style="max-height: 180px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@product.ProductName</h5>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
                     }
-                </ul>
+                </div>
             }
             else
             {
