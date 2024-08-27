@@ -223,6 +223,11 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register([Bind("UserId,NickName,FirstName,LastName,Email,Password,ProfileDescription,CountryId")] User user, IFormFile profilePicture)
         {
+            if (_context.Users.Any(u => u.Email == user.Email))
+            {
+                ModelState.AddModelError("Email", "This email is already registered. Please use a different one.");
+            }
+
             if (ModelState.IsValid)
             {
                 // Hash the password
@@ -237,6 +242,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Login));
             }
+
             ViewData["CountryId"] = new SelectList(_context.Countries, "CountryId", "CountryName", user.CountryId);
             return View(user);
         }

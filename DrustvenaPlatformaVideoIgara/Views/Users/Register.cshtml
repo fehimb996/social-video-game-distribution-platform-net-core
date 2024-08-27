@@ -1,46 +1,75 @@
 ﻿@model DrustvenaPlatformaVideoIgara.Models.User
 
-<form asp-action="Register" enctype="multipart/form-data">
+<form asp-action="Register" enctype="multipart/form-data" class="steam-register-form">
     <div class="form-group">
-        <label asp-for="NickName" class="control-label"></label>
-        <input asp-for="NickName" class="form-control" />
+        <label asp-for="NickName" class="control-label">Nickname</label>
+        <input asp-for="NickName" class="form-control steam-input" placeholder="Enter your nickname" />
         <span asp-validation-for="NickName" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="FirstName" class="control-label"></label>
-        <input asp-for="FirstName" class="form-control" />
+        <label asp-for="FirstName" class="control-label">First Name</label>
+        <input asp-for="FirstName" class="form-control steam-input" placeholder="Enter your first name" />
         <span asp-validation-for="FirstName" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="LastName" class="control-label"></label>
-        <input asp-for="LastName" class="form-control" />
+        <label asp-for="LastName" class="control-label">Last Name</label>
+        <input asp-for="LastName" class="form-control steam-input" placeholder="Enter your last name" />
         <span asp-validation-for="LastName" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Email" class="control-label"></label>
-        <input asp-for="Email" class="form-control" />
+        <label asp-for="Email" class="control-label">Email</label>
+        <input asp-for="Email" class="form-control steam-input" placeholder="Enter your email" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Password" class="control-label"></label>
-        <input asp-for="Password" class="form-control" type="password" />
+        <label asp-for="Password" class="control-label">Password</label>
+        <input asp-for="Password" class="form-control steam-input" type="password" placeholder="Enter your password" />
         <span asp-validation-for="Password" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="ProfileDescription" class="control-label"></label>
-        <input asp-for="ProfileDescription" class="form-control" />
+        <label asp-for="ProfileDescription" class="control-label">Profile Description</label>
+        <input asp-for="ProfileDescription" class="form-control steam-input" placeholder="Describe yourself" />
         <span asp-validation-for="ProfileDescription" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="CountryId" class="control-label"></label>
-        <select asp-for="CountryId" class="form-control" asp-items="ViewBag.CountryId"></select>
+        <label asp-for="CountryId" class="control-label">Country</label>
+        <select asp-for="CountryId" class="form-control steam-select" asp-items="ViewBag.CountryId"></select>
         <span asp-validation-for="CountryId" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="ProfilePicture" class="control-label">Profile Picture</label>
-        <input asp-for="ProfilePicture" class="form-control" type="file" />
+        <input asp-for="ProfilePicture" class="form-control steam-input" type="file" />
     </div>
     <div class="form-group">
-        <input type="submit" value="Register" class="btn btn-primary" />
+        <input type="submit" value="Register" class="btn btn-steam-primary" />
     </div>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+    .steam-register-form {
+        background-color: #1b2838;
+        padding: 20px;
+        border-radius: 8px;
+        color: #c7d5e0;
+    }
+    .steam-input, .steam-select {
+        background-color: #2a475e;
+        border: 1px solid #66c0f4;
+        color: #c7d5e0;
+    }
+    .btn-steam-primary {
+        background-color: #66c0f4;
+        border: none;
+        padding: 10px 20px;
+        color: #1b2838;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    .btn-steam-primary:hover {
+        background-color: #417a9b;
+    }
+</style>
