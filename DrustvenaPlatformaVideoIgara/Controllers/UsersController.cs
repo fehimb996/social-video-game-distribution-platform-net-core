@@ -501,11 +501,11 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                             (m.UserId1 == recipientUserId && m.UserId2 == loggedInUserId))
                 .OrderBy(m => m.Timestamp)
                 .Select(m => new
-                {
-                    m.MessageContent,
-                    SenderNickName = (m.UserId1 == loggedInUserId) ? _context.Users.Where(u => u.UserId == m.UserId1).Select(u => u.NickName).FirstOrDefault()
-                                                                     : _context.Users.Where(u => u.UserId == m.UserId2).Select(u => u.NickName).FirstOrDefault(),
-                    Timestamp = m.Timestamp // Include Timestamp in the response
+    {
+            m.MessageContent,
+            SenderNickName = (m.UserId1 == loggedInUserId) ? _context.Users.Where(u => u.UserId == m.UserId1).Select(u => u.NickName).FirstOrDefault()
+                                                            : _context.Users.Where(u => u.UserId == m.UserId1).Select(u => u.NickName).FirstOrDefault(),
+            Timestamp = m.Timestamp // Include Timestamp in the response
                 })
                 .ToListAsync();
 

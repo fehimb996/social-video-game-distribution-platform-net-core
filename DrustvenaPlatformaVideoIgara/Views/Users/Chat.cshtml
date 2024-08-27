@@ -8,39 +8,97 @@
         .ToList();
 }
 
-<div class="container">
-    <div class="row p-1">
-        <div class="col-1">Recipient</div>
-        <div class="col-5">
-            <select id="recipientUserId" class="form-select">
-                <option value="" selected>Select a friend</option>
-                @foreach (var friend in friends)
-                {
-                    <option value="@friend.UserId">@friend.NickName</option>
-                }
-            </select>
+<div class="container chat-container">
+    <div class="row p-2">
+        <div class="col-12 mb-3">
+            <h4 class="text-light">Chat with Friends</h4>
         </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-1">Message</div>
-        <div class="col-5"><input type="text" class="form-control" id="messageInput" /></div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6 text-end">
-            <input type="button" id="sendButton" value="Send Message" class="btn btn-primary" />
+        <div class="col-12 mb-3">
+            <label for="recipientUserId" class="form-label text-light">Recipient</label>
+            <div class="input-group">
+                <select id="recipientUserId" class="form-select">
+                    <option value="" data-image="" selected>Select a friend</option>
+                    @foreach (var friend in friends)
+                    {
+                        <option value="@friend.UserId" data-image="@friend.ProfilePicture">@friend.NickName</option>
+                    }
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6">
-            <hr />
+        <div class="col-12 mb-3">
+            <label for="messageInput" class="form-label text-light">Message</label>
+            <input type="text" class="form-control" id="messageInput" />
         </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6">
+        <div class="col-12 text-end mb-3">
+            <button type="button" id="sendButton" class="btn btn-primary">Send Message</button>
+        </div>
+        <div class="col-12">
+            <hr class="text-light" />
+        </div>
+        <div class="col-12">
             <ul id="messagesList" class="list-group" style="max-height: 400px; overflow-y: auto;"></ul>
         </div>
     </div>
     <input type="hidden" id="nickName" value="@ViewBag.NickName" />
 </div>
+
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/chat.js"></script>
+
+<style>
+    .chat-container {
+        background-color: #2a2a2a;
+        color: #e5e5e5;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .form-label {
+        color: #e5e5e5;
+    }
+
+    .btn-primary {
+        background-color: #5bc0de;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #4a9fd4;
+        }
+
+    .list-group-item {
+        background-color: #333;
+        border: none;
+        color: #e5e5e5;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        padding: 10px;
+    }
+
+        .list-group-item:nth-child(even) {
+            background-color: #444;
+        }
+
+        .list-group-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+    .input-group select {
+        background-color: #333;
+        color: #e5e5e5;
+    }
+
+        .input-group select option {
+            color: #000;
+        }
+
+    .message-content {
+        flex: 1;
+    }
+</style>

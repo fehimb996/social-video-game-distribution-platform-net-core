@@ -106,4 +106,3 @@ function sendMessage() {
     document.getElementById("messageInput").value = ""; // Clear the input field
 }
 
-console.log("messagesList element:", document.getElementById("messagesList"));
