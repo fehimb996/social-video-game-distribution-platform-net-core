@@ -45,3 +45,44 @@
         </ul>
     </div>
 }
+
+<!-- Developers Section -->
+<h2>Developers</h2>
+@foreach (var developer in Model.Developers)
+{
+    <div>
+        <h3>@developer.DeveloperName</h3>
+        <ul>
+            @foreach (var productDeveloper in developer.ProductDevelopers)
+            {
+                var product = productDeveloper.Product;
+                <li>
+                    <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId">
+                        @product.ProductName
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+<!-- Publishers Section -->
+<h2>Publishers</h2>
+@foreach (var publisher in Model.Publishers)
+{
+    <div>
+        <h3>@publisher.PublisherName</h3>
+        <ul>
+            @foreach (var productPublisher in publisher.ProductPublishers)
+            {
+                var product = productPublisher.Product;
+                <li>
+                    <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId">
+                        @product.ProductName
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+}
+

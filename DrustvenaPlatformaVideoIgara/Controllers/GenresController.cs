@@ -31,10 +31,22 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 .ThenInclude(pp => pp.Product)
                 .ToListAsync();
 
+            var developers = await _context.Developers
+                .Include(d => d.ProductDevelopers)
+                .ThenInclude(pd => pd.Product)
+                .ToListAsync();
+
+            var publishers = await _context.Publishers
+                .Include(pb => pb.ProductPublishers)
+                .ThenInclude(pbd => pbd.Product)
+                .ToListAsync();
+
             var model = new GenreAndPlatformViewModel
             {
                 Genres = genres,
-                Platforms = platforms
+                Platforms = platforms,
+                Developers = developers,
+                Publishers = publishers
             };
 
             return View(model);
