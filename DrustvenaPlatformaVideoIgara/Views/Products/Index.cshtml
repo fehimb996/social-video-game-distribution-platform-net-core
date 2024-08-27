@@ -15,8 +15,10 @@
                 var product = productsList[i];
                 <div class="carousel-item @(i == 0 ? "active" : "")">
                     <div class="d-flex justify-content-center">
-                        <div class="card" style="width: 18rem;">
-                            <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
+                        <div class="card" style="width: fit-content;">
+                            <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
+                                <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName" style="object-fit: cover;">
+                            </a>
                             <div class="card-body">
                                 <h5 class="card-title">
                                     <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a>
@@ -52,7 +54,7 @@
             {
                 <li class="list-group-item d-flex align-items-center">
                     <a href="@Url.Action("Details", "Products", new { id = product.ProductId })" class="d-flex align-items-center">
-                        <img src="@Model.RandomProducts.FirstOrDefault(p => p.ProductId == product.ProductId)?.ImagePath" class="img-thumbnail mr-2" style="width: 50px; height: 50px;" alt="@product.ProductName">
+                        <img src="@Model.RandomProducts.FirstOrDefault(p => p.ProductId == product.ProductId)?.ImagePath" class="img-thumbnail mr-2" style="width: fit-content; height: 120px;" alt="@product.ProductName">
                         @product.ProductName
                     </a>
                     <span class="badge bg-primary rounded-pill ms-2">@product.Price €</span>
