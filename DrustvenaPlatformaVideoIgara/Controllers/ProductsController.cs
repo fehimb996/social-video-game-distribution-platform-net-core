@@ -47,24 +47,21 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 .Take(10)
                 .ToListAsync();
 
-            // Fetch products under 10 bucks but greater than 5 that have never been sold
+            // Fetch products under 10 bucks but greater than 5
             var productsUnder10Bucks = await _context.Products
-                .Where(p => p.Price > 5.00m && p.Price < 10.00m &&
-                            !_context.InvoiceItems.Any(ii => ii.ProductId == p.ProductId))
+                .Where(p => p.Price > 5.00m && p.Price < 10.00m)
                 .OrderBy(p => p.Price)
                 .ToListAsync();
 
-            // Fetch products under 5 bucks but greater than 0.01 that have never been sold
+            // Fetch products under 5 bucks but greater than 0.01
             var productsUnder5Bucks = await _context.Products
-                .Where(p => p.Price > 0.01m && p.Price < 5.00m &&
-                            !_context.InvoiceItems.Any(ii => ii.ProductId == p.ProductId))
+                .Where(p => p.Price > 0.01m && p.Price < 5.00m)
                 .OrderBy(p => p.Price)
                 .ToListAsync();
 
-            // Fetch free products that have never been sold
+            // Fetch free products
             var freeProducts = await _context.Products
-                .Where(p => p.Price == 0.00m &&
-                            !_context.InvoiceItems.Any(ii => ii.ProductId == p.ProductId))
+                .Where(p => p.Price == 0.00m)
                 .OrderBy(p => p.ProductName)
                 .ToListAsync();
 
