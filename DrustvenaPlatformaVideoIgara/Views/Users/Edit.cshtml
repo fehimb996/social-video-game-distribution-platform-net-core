@@ -28,12 +28,12 @@
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group visually-hidden">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group visually-hidden">
                 <label asp-for="Password" class="control-label"></label>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
@@ -42,11 +42,14 @@
                 <label asp-for="ProfilePicture" class="control-label"></label>
                 <input type="file" asp-for="ProfilePicture" class="form-control" />
                 <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+
                 @if (!string.IsNullOrEmpty(Model.ProfilePicture))
                 {
                     <div>
                         <img src="@Model.ProfilePicture" alt="Profile Picture" style="max-width: 200px; max-height: 200px;" />
                     </div>
+                    <!-- Hidden field to maintain the existing profile picture -->
+                    <input type="hidden" name="ExistingProfilePicture" value="@Model.ProfilePicture" />
                 }
             </div>
             <div class="form-group">

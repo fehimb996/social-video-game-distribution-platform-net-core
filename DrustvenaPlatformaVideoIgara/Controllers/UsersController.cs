@@ -322,30 +322,29 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,NickName,FirstName,LastName,Email,Password,ProfileDescription,CountryId")] User user, IFormFile ProfilePicture)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId,NickName,FirstName,LastName,Email,Password,ProfileDescription,CountryId,ProfilePicture")] User user, IFormFile ProfilePicture, string ExistingProfilePicture)
         {
             if (id != user.UserId)
             {
                 return NotFound();
             }
 
+            // Remove any existing validation errors for ProfilePicture
+            ModelState.Remove(nameof(user.ProfilePicture));
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    // Check if a new profile picture is provided
+                    // If a new profile picture is uploaded, save it
                     if (ProfilePicture != null)
                     {
                         user.ProfilePicture = await SaveProfilePicture(ProfilePicture);
                     }
                     else
                     {
-                        // Keep the existing profile picture value
-                        var existingUser = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.UserId == id);
-                        if (existingUser != null)
-                        {
-                            user.ProfilePicture = existingUser.ProfilePicture;
-                        }
+                        // If no new profile picture is uploaded, use the existing one
+                        user.ProfilePicture = ExistingProfilePicture;
                     }
 
                     _context.Update(user);
@@ -364,6 +363,8 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            // Repopulate the ViewData in case of an error
             ViewData["CountryId"] = new SelectList(_context.Countries, "CountryId", "CountryName", user.CountryId);
             return View(user);
         }
@@ -376,8 +377,8 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 Directory.CreateDirectory(uploadPath);
             }
 
-            var uniqueFileName = Guid.NewGuid().ToString() + "_" + profilePicture.FileName;
-            var filePath = Path.Combine(uploadPath, uniqueFileName);
+            var fileName = profilePicture.FileName;
+            var filePath = Path.Combine(uploadPath, fileName);
 
             try
             {
@@ -392,7 +393,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 throw;
             }
 
-            return "/images/ProfilePictures/" + uniqueFileName;
+            return "/images/ProfilePictures/" + fileName;
         }
 
         public async Task<IActionResult> Wallet()
