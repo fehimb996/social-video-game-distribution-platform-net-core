@@ -365,31 +365,29 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Product product, IFormFile imageFile)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductDetails,ReleaseDate,Price,ImagePath")] Product product, IFormFile ImagePath, string ExistingImagePath)
         {
             if (id != product.ProductId)
             {
                 return NotFound();
             }
 
+            // Remove any existing validation errors for ImagePath
+            ModelState.Remove(nameof(product.ImagePath));
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (imageFile != null && imageFile.Length > 0)
+                    // If a new profile picture is uploaded, save it
+                    if (ImagePath != null)
                     {
-                        // Delete the old image file
-                        if (!string.IsNullOrEmpty(product.ImagePath))
-                        {
-                            var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, product.ImagePath.TrimStart('/'));
-                            if (System.IO.File.Exists(oldImagePath))
-                            {
-                                System.IO.File.Delete(oldImagePath);
-                            }
-                        }
-
-                        // Save the new image file
-                        product.ImagePath = await SaveProfilePicture(imageFile);
+                        product.ImagePath = await SaveProfilePicture(ImagePath);
+                    }
+                    else
+                    {
+                        // If no new profile picture is uploaded, use the existing one
+                        product.ImagePath = ExistingImagePath;
                     }
 
                     _context.Update(product);
@@ -408,6 +406,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             return View(product);
         }
 

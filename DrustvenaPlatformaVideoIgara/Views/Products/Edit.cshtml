@@ -34,11 +34,17 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ImagePath" class="control-label">Product Image</label>
-                <input type="file" name="imageFile" class="form-control" />
-                @if (Model.ImagePath != null)
+                <label asp-for="ImagePath" class="control-label"></label>
+                <input type="file" asp-for="ImagePath" class="form-control" />
+                <span asp-validation-for="ImagePath" class="text-danger"></span>
+
+                @if (!string.IsNullOrEmpty(Model.ImagePath))
                 {
-                    <img src="@Model.ImagePath" alt="Product Image" style="max-width: 200px; max-height: 200px;" />
+                    <div>
+                        <img src="@Model.ImagePath" alt="Profile Picture" style="max-width: 200px; max-height: 200px;" />
+                    </div>
+                    <!-- Hidden field to maintain the existing profile picture -->
+                    <input type="hidden" name="ExistingImagePath" value="@Model.ImagePath" />
                 }
             </div>
             <div class="form-group">
@@ -46,10 +52,6 @@
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
