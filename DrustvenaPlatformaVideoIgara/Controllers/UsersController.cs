@@ -362,11 +362,10 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction("Profile", "Users", new { id = user.UserId });
             }
 
-            // Repopulate the ViewData in case of an error
-            ViewData["CountryId"] = new SelectList(_context.Countries, "CountryId", "CountryName", user.CountryId);
             return View(user);
         }
 
