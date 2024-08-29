@@ -4,31 +4,25 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Users list</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<table class="table table-hover align-middle">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NickName)
+                Nickname
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                First name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                Last name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                Email
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProfilePicture)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProfileDescription)
+                Profile picture
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Country)
@@ -40,7 +34,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.NickName)
+                    <a asp-action="Profile" asp-route-id="@item.UserId">@Html.DisplayFor(modelItem => item.NickName)</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
@@ -52,18 +46,10 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProfilePicture)
+                    <img src="@Html.DisplayFor(modelItem => item.ProfilePicture)" style="height: 80px; width: 80px;" alt="Profile Picture" />
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProfileDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country.CountryId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.UserId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
+                @Html.DisplayFor(modelItem => item.Country.CountryName)
             </td>
         </tr>
 }
