@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DrustvenaPlatformaVideoIgara.Models;
 using Microsoft.AspNetCore.Hosting;
+using System.Security.Claims;
 
 namespace DrustvenaPlatformaVideoIgara.Controllers
 {
@@ -41,9 +42,9 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                     ProductId = g.Key.ProductId,
                     ProductName = g.Key.ProductName,
                     Price = g.Key.Price,
-                    TimesSold = g.Select(x => x.UserId).Distinct().Count() // Count of unique users who bought the product
+                    TimesSold = g.Select(x => x.UserId).Distinct().Count()
                 })
-                .OrderByDescending(g => g.TimesSold) // Order by the number of unique users
+                .OrderByDescending(g => g.TimesSold)
                 .Take(10)
                 .ToListAsync();
 
@@ -65,6 +66,30 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 .OrderBy(p => p.ProductName)
                 .ToListAsync();
 
+            // Fetch user's owned products and wishlist products
+            var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+
+            // Fetch owned product IDs
+            var ownedProductIds = await _context.Invoices
+                .Where(i => i.UserId == userId)
+                .Join(_context.InvoiceItems,
+                      i => i.InvoiceId,
+                      ii => ii.InvoiceId,
+                      (i, ii) => ii.ProductId)
+                .Where(id => id.HasValue)
+                .Select(id => id.Value)
+                .Distinct()
+                .ToListAsync();
+
+            // Fetch wishlist product IDs
+            var wishlistProductIds = await _context.WishlistItems
+                .Where(wi => wi.Wishlist.UserId == userId)
+                .Select(wi => wi.ProductId)
+                .Where(id => id.HasValue)
+                .Select(id => id.Value)
+                .Distinct()
+                .ToListAsync();
+
             var viewModel = new ProductsViewModel
             {
                 RandomProducts = randomProducts,
@@ -76,7 +101,9 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 }),
                 ProductsUnder10Bucks = productsUnder10Bucks,
                 ProductsUnder5Bucks = productsUnder5Bucks,
-                FreeProducts = freeProducts
+                FreeProducts = freeProducts,
+                OwnedProductIds = ownedProductIds,
+                WishlistProductIds = wishlistProductIds
             };
 
             return View(viewModel);
