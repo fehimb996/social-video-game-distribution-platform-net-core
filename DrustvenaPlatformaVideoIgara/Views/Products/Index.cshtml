@@ -24,14 +24,14 @@
                                     <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a>
                                 </h5>
                                 <p class="card-text">
-                                    <span class="badge bg-success rounded-pill ms-2">@product.Price €</span>
+                                    <span class="badge bg-success rounded-pill">@product.Price €</span>
                                     @if (Model.OwnedProductIds.Contains(product.ProductId))
                                     {
-                                        <span class="badge bg-success rounded-pill ms-2">In Library</span>
+                                        <span class="badge bg-success rounded-pill">In Library</span>
                                     }
                                     else if (Model.WishlistProductIds.Contains(product.ProductId))
                                     {
-                                        <span class="badge bg-primary rounded-pill ms-2">On Wishlist</span>
+                                        <span class="badge bg-primary rounded-pill">On Wishlist</span>
                                     }
                                 </p>
                             </div>
@@ -197,7 +197,7 @@
                         <h5 class="card-title">
                             <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a>
                         </h5>
-                        <p class="card-text badge bg-success rounded-pill ms-2">@product.Price €</p>
+                        <p class="card-text badge bg-success rounded-pill">@product.Price €</p>
                         @if (Model.OwnedProductIds.Contains(product.ProductId))
                         {
                             <span class="badge bg-success rounded-pill">In Library</span>
@@ -231,7 +231,7 @@
                         <h5 class="card-title">
                             <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a>
                         </h5>
-                        <p class="card-text badge bg-success rounded-pill ms-2">@product.Price €</p>
+                        <p class="card-text badge bg-success rounded-pill">@product.Price €</p>
                         @if (Model.OwnedProductIds.Contains(product.ProductId))
                         {
                             <span class="badge bg-success rounded-pill">In Library</span>

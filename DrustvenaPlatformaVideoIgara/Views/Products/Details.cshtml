@@ -13,7 +13,7 @@
         <div class="product-info">
             <h1>@Model.Product.ProductName</h1>
             <p>Release Date: <strong>@Model.Product.ReleaseDate.ToString("dd MMM yyyy")</strong></p>
-            <p><strong class="price">@Model.Product.Price €</strong></p>
+            <p><strong class="badge bg-success rounded-pill">@Model.Product.Price €</strong></p>
             @if (Model.IsUserLoggedIn)
             {
                 if (Model.IsOwned)
