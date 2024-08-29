@@ -21,12 +21,13 @@
             <span asp-validation-for="Password" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn btn-success">Login</button>
         </div>
         <div asp-validation-summary="All" class="text-danger"></div>
     </form>
     <div class="login-links">
-        <a asp-action="Register" class="btn btn-success text-white">Register</a>
+        <p>Don't have an account?</p>
+        <a asp-action="Register" class="btn btn-outline-info text-white">Register</a>
     </div>
 </div>
 
