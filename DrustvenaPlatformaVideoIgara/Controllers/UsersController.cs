@@ -36,13 +36,14 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         public async Task<IActionResult> Profile(int? id)
         {
             var loggedInUserId = HttpContext.Session.GetInt32("UserId");
-            if (loggedInUserId == null)
-            {
-                return RedirectToAction("Login", "Users");
-            }
 
+            // If id is null, use the logged-in user's ID
             if (id == null)
             {
+                if (loggedInUserId == null)
+                {
+                    return RedirectToAction("Login", "Users");
+                }
                 id = loggedInUserId;
             }
 
@@ -81,7 +82,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
             ViewData["WalletBalance"] = wallet?.Balance ?? 0;
 
-            ViewData["IsFriend"] = await IsFriend(loggedInUserId.Value, id.Value);
+            ViewData["IsFriend"] = loggedInUserId.HasValue ? await IsFriend(loggedInUserId.Value, id.Value) : false;
 
             return View(user);
         }
