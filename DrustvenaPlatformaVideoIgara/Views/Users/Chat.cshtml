@@ -8,36 +8,28 @@
         .ToList();
 }
 
-<div class="container chat-container">
-    <div class="row p-2">
-        <div class="col-12 mb-2">
-            <h4 class="text-light">Chat with Friends</h4>
+<div class="chat-container">
+    <div class="friend-list">
+        <h4 class="text-light">Friends List</h4>
+        <label for="recipientUserId" class="form-label text-light">Recipient</label>
+        <div class="input-group">
+            <select id="recipientUserId" class="form-select">
+                <option value="" data-image="" selected>Select a friend</option>
+                @foreach (var friend in friends)
+                {
+                    <option value="@friend.UserId" data-image="@friend.ProfilePicture">@friend.NickName</option>
+                }
+            </select>
         </div>
-        <div class="col-12 mb-2">
-            <label for="recipientUserId" class="form-label text-light">Recipient</label>
-            <div class="input-group">
-                <select id="recipientUserId" class="form-select">
-                    <option value="" data-image="" selected>Select a friend</option>
-                    @foreach (var friend in friends)
-                    {
-                        <option value="@friend.UserId" data-image="@friend.ProfilePicture">@friend.NickName</option>
-                    }
-                </select>
-            </div>
-        </div>
-        <div class="col-12 mb-2">
+    </div>
+    <div class="chat-area">
+        <div class="message-controls mb-2">
             <label for="messageInput" class="form-label text-light">Message</label>
             <input type="text" class="form-control" id="messageInput" />
+            <button type="button" id="sendButton" class="btn btn-primary mt-2">Send Message</button>
         </div>
-        <div class="col-12 text-end mb-2">
-            <button type="button" id="sendButton" class="btn btn-primary">Send Message</button>
-        </div>
-        <div class="col-12">
-            <hr class="text-light" />
-        </div>
-        <div class="col-12">
-            <ul id="messagesList" class="list-group" style="max-height: 350px; overflow-y: auto;"></ul>
-        </div>
+        <hr class="text-light" />
+        <ul id="messagesList" class="list-group"></ul>
     </div>
     <input type="hidden" id="nickName" value="@ViewBag.NickName" />
 </div>
@@ -45,12 +37,38 @@
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/chat.js"></script>
 
+
 <style>
     .chat-container {
-        background-color: #2a2a2a;
-        color: #e5e5e5;
+        display: flex;
+        height: auto; /* Full height of the viewport */
+    }
+
+    .friend-list {
+        width: 40%;
+        background-color: #333;
         padding: 15px;
         border-radius: 10px;
+        overflow-y: auto; /* Adds scroll if content exceeds container height */
+    }
+
+    .chat-area {
+        width: 60%;
+        background-color: #444;
+        padding: 15px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .message-controls {
+        flex-shrink: 0; /* Prevents the message controls from shrinking */
+    }
+
+    #messagesList {
+        flex: 1; /* Takes up remaining space in the chat area */
+        max-height: 400px; /* Ensures the chat history doesn't exceed this height */
+        overflow-y: auto; /* Adds scroll if content exceeds max-height */
     }
 
     .form-label {
@@ -65,6 +83,10 @@
         .btn-primary:hover {
             background-color: #4a9fd4;
         }
+
+    .list-group {
+        margin-bottom: 0; /* Remove bottom margin to align with chat area */
+    }
 
     .list-group-item {
         background-color: #333;
