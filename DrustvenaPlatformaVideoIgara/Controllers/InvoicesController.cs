@@ -18,12 +18,30 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        private int? GetLoggedInUserId()
         {
-            var steamContext = _context.Invoices.Include(i => i.PaymentMethod).Include(i => i.User);
-            return View(await steamContext.ToListAsync());
+            // Assume you are using session to store user ID
+            return HttpContext.Session.GetInt32("UserId");
         }
 
+        // Display a list of invoices for the logged-in user
+        public async Task<IActionResult> Index()
+        {
+            var loggedInUserId = GetLoggedInUserId();
+            if (loggedInUserId == null)
+            {
+                return Unauthorized();
+            }
+
+            var invoices = _context.Invoices
+                .Where(i => i.UserId == loggedInUserId)
+                .Include(i => i.PaymentMethod)
+                .Include(i => i.User);
+
+            return View(await invoices.ToListAsync());
+        }
+
+        // Display details for a specific invoice if it belongs to the logged-in user
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -31,12 +49,19 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 return NotFound();
             }
 
+            var loggedInUserId = GetLoggedInUserId();
+            if (loggedInUserId == null)
+            {
+                return Unauthorized();
+            }
+
             var invoice = await _context.Invoices
                 .Include(i => i.PaymentMethod)
                 .Include(i => i.User)
                 .Include(i => i.InvoiceItems)
                     .ThenInclude(ii => ii.Product)
-                .FirstOrDefaultAsync(m => m.InvoiceId == id);
+                .FirstOrDefaultAsync(m => m.InvoiceId == id && m.UserId == loggedInUserId);
+
             if (invoice == null)
             {
                 return NotFound();

@@ -1,14 +1,11 @@
 ﻿@model IEnumerable<DrustvenaPlatformaVideoIgara.Models.Invoice>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Invoices";
 }
 
-<h1>Index</h1>
+<h1>Invoices</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -37,15 +34,13 @@
                 @Html.DisplayFor(modelItem => item.TotalPrice)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PaymentMethod.PaymentMethodId)
+                @Html.DisplayFor(modelItem => item.PaymentMethod.Method)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.UserId)
+                @Html.DisplayFor(modelItem => item.User.NickName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.InvoiceId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.InvoiceId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.InvoiceId">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.InvoiceId">Details</a>
             </td>
         </tr>
 }
