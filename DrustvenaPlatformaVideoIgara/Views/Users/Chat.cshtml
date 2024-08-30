@@ -69,6 +69,7 @@
         flex: 1; /* Takes up remaining space in the chat area */
         max-height: 400px; /* Ensures the chat history doesn't exceed this height */
         overflow-y: auto; /* Adds scroll if content exceeds max-height */
+        overflow-x: hidden; /* Prevents horizontal scrolling */
     }
 
     .form-label {
@@ -124,6 +125,8 @@
     .message-content {
         margin: 0;
         flex: 1;
+        word-wrap: break-word;
+        word-break: break-word;
     }
 
     .message-timestamp {
