@@ -1,10 +1,18 @@
 ﻿"use strict";
 
+// Initialize SignalR connection
 var connection = new signalR.HubConnectionBuilder()
     .withUrl("/chatHub")
     .configureLogging(signalR.LogLevel.Debug)
     .build();
 
+// Function to scroll the messages list to the bottom
+function scrollToBottom() {
+    var messagesList = document.getElementById("messagesList");
+    messagesList.scrollTop = messagesList.scrollHeight;
+}
+
+// Handle receiving a message
 connection.on("ReceiveMessage", function (user, message, timestamp, profilePicture) {
     console.log(`Received message from ${user} at ${timestamp}: ${message}`); // Debugging line
     if (!user || !message || !timestamp) {
@@ -53,10 +61,8 @@ connection.on("ReceiveMessage", function (user, message, timestamp, profilePictu
 
     document.getElementById("messagesList").appendChild(li);
 
-    var messagesList = document.getElementById("messagesList");
-    if (messagesList.children.length > 10) {
-        messagesList.scrollTop = messagesList.scrollHeight;
-    }
+    // Scroll to the bottom when a new message is received
+    scrollToBottom();
 });
 
 connection.start().then(function () {
@@ -66,6 +72,7 @@ connection.start().then(function () {
     console.error("SignalR connection error:", err.toString()); // Debugging line
 });
 
+// Handle sending a message
 document.getElementById("sendButton").addEventListener("click", function (event) {
     sendMessage();
     event.preventDefault();
@@ -78,6 +85,7 @@ document.getElementById("messageInput").addEventListener("keypress", function (e
     }
 });
 
+// Handle recipient selection and load chat history
 document.getElementById("recipientUserId").addEventListener("change", function () {
     var recipientUserId = this.value;
     var messagesList = document.getElementById("messagesList");
@@ -123,13 +131,13 @@ document.getElementById("recipientUserId").addEventListener("change", function (
                 messagesList.appendChild(li);
             });
 
-            if (messagesList.children.length > 10) {
-                messagesList.scrollTop = messagesList.scrollHeight;
-            }
+            // Scroll to the bottom after loading the chat history
+            scrollToBottom();
         })
         .catch(error => console.error('Error fetching chat history:', error));
 });
 
+// Function to send a message
 function sendMessage() {
     var recipientUserId = document.getElementById("recipientUserId").value;
     var message = document.getElementById("messageInput").value;
@@ -142,4 +150,3 @@ function sendMessage() {
     });
     document.getElementById("messageInput").value = ""; // Clear the input field
 }
-
