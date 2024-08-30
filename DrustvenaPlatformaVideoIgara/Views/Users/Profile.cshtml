@@ -4,6 +4,91 @@
     ViewData["Title"] = "Profile";
 }
 
+<style>
+    .profile-container {
+        max-width: 900px;
+        margin: auto;
+        background-color: #2a2a2a;
+        padding: 20px;
+        border-radius: 10px;
+        color: #e5e5e5;
+    }
+
+    .profile-header {
+        display: flex;
+        margin-bottom: 20px;
+        align-items: center;
+    }
+
+    .profile-picture {
+        margin-right: 20px;
+    }
+
+    .profile-img {
+        width: 184px;
+        height: 184px;
+        object-fit: cover;
+    }
+
+    .placeholder-picture {
+        width: 184px;
+        height: 184px;
+        border-radius: 50%;
+        background-color: #444;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #ccc;
+    }
+
+    .profile-info {
+        flex: 1;
+    }
+
+        .profile-info h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+    .profile-details {
+        margin-bottom: 20px;
+    }
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .profile-links ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+        .profile-links ul li {
+            margin-bottom: 5px;
+        }
+
+            .profile-links ul li a {
+                color: #5bc0de;
+                text-decoration: none;
+            }
+
+                .profile-links ul li a:hover {
+                    text-decoration: underline;
+                }
+
+    .profile-actions {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .inline-form {
+        display: inline-block;
+        margin-right: 10px;
+    }
+</style>
+
 <div class="profile-container">
     <!-- Profile Header -->
     <div class="profile-header">
@@ -90,88 +175,3 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-
-<style>
-    .profile-container {
-        max-width: 900px;
-        margin: auto;
-        background-color: #2a2a2a;
-        padding: 20px;
-        border-radius: 10px;
-        color: #e5e5e5;
-    }
-
-    .profile-header {
-        display: flex;
-        margin-bottom: 20px;
-        align-items: center;
-    }
-
-    .profile-picture {
-        margin-right: 20px;
-    }
-
-    .profile-img {
-        width: 184px;
-        height: 184px;
-        object-fit: cover;
-    }
-
-    .placeholder-picture {
-        width: 184px;
-        height: 184px;
-        border-radius: 50%;
-        background-color: #444;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #ccc;
-    }
-
-    .profile-info {
-        flex: 1;
-    }
-
-        .profile-info h1 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-    .profile-details {
-        margin-bottom: 20px;
-    }
-
-    .details-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
-
-    .profile-links ul {
-        list-style-type: none;
-        padding-left: 0;
-    }
-
-        .profile-links ul li {
-            margin-bottom: 5px;
-        }
-
-            .profile-links ul li a {
-                color: #5bc0de;
-                text-decoration: none;
-            }
-
-                .profile-links ul li a:hover {
-                    text-decoration: underline;
-                }
-
-    .profile-actions {
-        margin-top: 20px;
-        text-align: center;
-    }
-
-    .inline-form {
-        display: inline-block;
-        margin-right: 10px;
-    }
-</style>

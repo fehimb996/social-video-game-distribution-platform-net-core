@@ -4,61 +4,6 @@
     ViewData["Title"] = "Register";
 }
 
-<div class="register-container">
-    <div class="register-header">
-        <h1>Register</h1>
-        <hr />
-    </div>
-    <form asp-action="Register" enctype="multipart/form-data">
-        <div class="form-group">
-            <label asp-for="NickName" class="control-label">Nickname</label>
-            <input asp-for="NickName" class="form-control" placeholder="Enter your nickname" />
-            <span asp-validation-for="NickName" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="FirstName" class="control-label">First Name</label>
-            <input asp-for="FirstName" class="form-control" placeholder="Enter your first name" />
-            <span asp-validation-for="FirstName" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="LastName" class="control-label">Last Name</label>
-            <input asp-for="LastName" class="form-control" placeholder="Enter your last name" />
-            <span asp-validation-for="LastName" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Email" class="control-label">Email</label>
-            <input asp-for="Email" class="form-control" placeholder="Enter your email" />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Password" class="control-label">Password</label>
-            <input asp-for="Password" class="form-control" type="password" placeholder="Enter your password" />
-            <span asp-validation-for="Password" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="ProfileDescription" class="control-label">Profile Description</label>
-            <input asp-for="ProfileDescription" class="form-control" placeholder="Describe yourself" />
-            <span asp-validation-for="ProfileDescription" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="CountryId" class="control-label">Country</label>
-            <select asp-for="CountryId" class="form-control" asp-items="ViewBag.CountryId"></select>
-            <span asp-validation-for="CountryId" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="ProfilePicture" class="control-label">Profile Picture</label>
-            <input asp-for="ProfilePicture" class="form-control" type="file" />
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Register" class="btn btn-steam-primary" />
-        </div>
-    </form>
-</div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
-
 <style>
     .register-container {
         max-width: 500px;
@@ -114,3 +59,58 @@
         color: #ff6f6f;
     }
 </style>
+
+<div class="register-container">
+    <div class="register-header">
+        <h1>Register</h1>
+        <hr />
+    </div>
+    <form asp-action="Register" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="NickName" class="control-label">Nickname</label>
+            <input asp-for="NickName" class="form-control" placeholder="Enter your nickname" />
+            <span asp-validation-for="NickName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FirstName" class="control-label">First Name</label>
+            <input asp-for="FirstName" class="form-control" placeholder="Enter your first name" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LastName" class="control-label">Last Name</label>
+            <input asp-for="LastName" class="form-control" placeholder="Enter your last name" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="control-label">Email</label>
+            <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password" class="control-label">Password</label>
+            <input asp-for="Password" class="form-control" type="password" placeholder="Enter your password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ProfileDescription" class="control-label">Profile Description</label>
+            <input asp-for="ProfileDescription" class="form-control" placeholder="Describe yourself" />
+            <span asp-validation-for="ProfileDescription" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CountryId" class="control-label">Country</label>
+            <select asp-for="CountryId" class="form-control" asp-items="ViewBag.CountryId"></select>
+            <span asp-validation-for="CountryId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ProfilePicture" class="control-label">Profile Picture</label>
+            <input asp-for="ProfilePicture" class="form-control" type="file" />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Register" class="btn btn-steam-primary" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

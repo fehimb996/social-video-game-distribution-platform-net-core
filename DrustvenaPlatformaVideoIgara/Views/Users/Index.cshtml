@@ -4,52 +4,6 @@
     ViewData["Title"] = "Community - Users";
 }
 
-<div class="friends-container">
-    @if (Model.Any())
-    {
-        <table class="table friends-table align-middle">
-            <thead>
-                <tr>
-                    <th>Profile</th>
-                    <th>Nickname</th>
-                    <th>First name</th>
-                    <th>Last name</th>
-                    <th>Country</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var user in Model)
-                {
-                    <tr>
-                        <td class="profile-image">
-                            <a asp-action="Profile" asp-route-id="@user.UserId">
-                                @if (!string.IsNullOrEmpty(user.ProfilePicture))
-                                {
-                                    <img src="@user.ProfilePicture" alt="@user.NickName" class="img-fluid" />
-                                }
-                                else
-                                {
-                                    <img src="~/images/default-profile.png" alt="Default Profile" class="img-fluid" />
-                                }
-                            </a>
-                        </td>
-                        <td>
-                            <a asp-action="Profile" asp-route-id="@user.UserId" class="friend-link">@user.NickName</a>
-                        </td>
-                        <td>@user.FirstName</td>
-                        <td>@user.LastName</td>
-                        <td>@user.Country.CountryName</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>No friends found.</p>
-    }
-</div>
-
 <style>
     .page-title {
         color: #e5e5e5;
@@ -106,3 +60,49 @@
             text-decoration: underline;
         }
 </style>
+
+<div class="friends-container">
+    @if (Model.Any())
+    {
+        <table class="table friends-table align-middle">
+            <thead>
+                <tr>
+                    <th>Profile</th>
+                    <th>Nickname</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Country</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td class="profile-image">
+                            <a asp-action="Profile" asp-route-id="@user.UserId">
+                                @if (!string.IsNullOrEmpty(user.ProfilePicture))
+                                {
+                                    <img src="@user.ProfilePicture" alt="@user.NickName" class="img-fluid" />
+                                }
+                                else
+                                {
+                                    <img src="~/images/default-profile.png" alt="Default Profile" class="img-fluid" />
+                                }
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-action="Profile" asp-route-id="@user.UserId" class="friend-link">@user.NickName</a>
+                        </td>
+                        <td>@user.FirstName</td>
+                        <td>@user.LastName</td>
+                        <td>@user.Country.CountryName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No friends found.</p>
+    }
+</div>

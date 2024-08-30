@@ -8,34 +8,6 @@
         .ToList();
 }
 
-<div class="chat-container">
-    <div class="friend-list">
-        <h4 class="text-light">Friends List</h4>
-        <label for="recipientUserId" class="form-label text-light">Recipient</label>
-        <div class="input-group">
-            <select id="recipientUserId" class="form-select">
-                <option value="" data-image="" selected>Select a friend</option>
-                @foreach (var friend in friends)
-                {
-                    <option value="@friend.UserId" data-image="@friend.ProfilePicture">@friend.NickName</option>
-                }
-            </select>
-        </div>
-    </div>
-    <div class="chat-area">
-        <ul id="messagesList" class="list-group"></ul>
-        <div class="message-controls">
-            <label for="messageInput" class="form-label text-light">Message</label>
-            <textarea class="form-control" id="messageInput" rows="3"></textarea>
-            <button type="button" id="sendButton" class="btn btn-primary mt-2">Send Message</button>
-        </div>
-    </div>
-    <input type="hidden" id="nickName" value="@ViewBag.NickName" />
-</div>
-
-<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
-<script src="~/js/chat.js"></script>
-
 <style>
     .chat-container {
         display: flex;
@@ -129,3 +101,32 @@
         margin-top: 3px;
     }
 </style>
+
+
+<div class="chat-container">
+    <div class="friend-list">
+        <h4 class="text-light">Friends List</h4>
+        <label for="recipientUserId" class="form-label text-light">Recipient</label>
+        <div class="input-group">
+            <select id="recipientUserId" class="form-select">
+                <option value="" data-image="" selected>Select a friend</option>
+                @foreach (var friend in friends)
+                {
+                    <option value="@friend.UserId" data-image="@friend.ProfilePicture">@friend.NickName</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="chat-area">
+        <ul id="messagesList" class="list-group"></ul>
+        <div class="message-controls">
+            <label for="messageInput" class="form-label text-light">Message</label>
+            <textarea class="form-control" id="messageInput" rows="3"></textarea>
+            <button type="button" id="sendButton" class="btn btn-outline-success text-white mt-2">Send Message</button>
+        </div>
+    </div>
+    <input type="hidden" id="nickName" value="@ViewBag.NickName" />
+</div>
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>

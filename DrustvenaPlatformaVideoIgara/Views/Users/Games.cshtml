@@ -4,6 +4,42 @@
     ViewData["Title"] = "Owned Games";
 }
 
+<style>
+    .games-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .game-item {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #f5f5f5;
+        text-align: center;
+        transition: background 0.3s ease;
+    }
+
+        .game-item:hover {
+            background: #e0e0e0;
+        }
+
+        .game-item img {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #ddd;
+        }
+
+    .game-item-name {
+        padding: 10px;
+        font-weight: bold;
+        color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+
 <h1>Owned Games</h1>
 
 @if (Model.Any())
@@ -26,39 +62,3 @@ else
 {
         <p>No games owned.</p>
 }
-
-<style>
-    .games-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 20px;
-    }
-
-    .game-item {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        overflow: hidden;
-        background: #f5f5f5;
-        text-align: center;
-        transition: background 0.3s ease;
-    }
-
-    .game-item:hover {
-        background: #e0e0e0;
-    }
-
-    .game-item img {
-        width: 100%;
-        height: auto;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .game-item-name {
-        padding: 10px;
-        font-weight: bold;
-        color: #333;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-</style>

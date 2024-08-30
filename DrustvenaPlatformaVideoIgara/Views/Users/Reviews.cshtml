@@ -4,57 +4,6 @@
     ViewData["Title"] = "User Reviews";
 }
 
-<h1 class="page-title">User Reviews</h1>
-
-<div class="reviews-container">
-    @if (Model.Any())
-    {
-        <table class="table reviews-table align-middle">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Rating</th>
-                    <th>Comment</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var review in Model)
-                {
-                    <tr>
-                        <td class="product-info">
-                            <a href="@Url.Action("Details", "Products", new { id = review.Product.ProductId })" class="d-flex align-items-center">
-                                <div class="product-image">
-                                    <img src="@review.Product.ImagePath" alt="@review.Product.ProductName" />
-                                </div>
-                                <div class="product-name ms-3">
-                                    @review.Product.ProductName
-                                </div>
-                            </a>
-                        </td>
-                        <td>
-                            @if (review.Rating.HasValue)
-                            {
-                                <span class="rating @(review.Rating.Value ? "positive" : "negative")">
-                                    @(review.Rating.Value ? "Positive" : "Negative")
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="rating">Not Rated</span>
-                            }
-                        </td>
-                        <td>@review.Comment</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>No reviews found.</p>
-    }
-</div>
-
 <style>
     .page-title {
         color: #e5e5e5;
@@ -129,3 +78,54 @@
             color: #d9534f;
         }
 </style>
+
+<h1 class="page-title">User Reviews</h1>
+
+<div class="reviews-container">
+    @if (Model.Any())
+    {
+        <table class="table reviews-table align-middle">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var review in Model)
+                {
+                    <tr>
+                        <td class="product-info">
+                            <a href="@Url.Action("Details", "Products", new { id = review.Product.ProductId })" class="d-flex align-items-center">
+                                <div class="product-image">
+                                    <img src="@review.Product.ImagePath" alt="@review.Product.ProductName" />
+                                </div>
+                                <div class="product-name ms-3">
+                                    @review.Product.ProductName
+                                </div>
+                            </a>
+                        </td>
+                        <td>
+                            @if (review.Rating.HasValue)
+                            {
+                                <span class="rating @(review.Rating.Value ? "positive" : "negative")">
+                                    @(review.Rating.Value ? "Positive" : "Negative")
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="rating">Not Rated</span>
+                            }
+                        </td>
+                        <td>@review.Comment</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No reviews found.</p>
+    }
+</div>

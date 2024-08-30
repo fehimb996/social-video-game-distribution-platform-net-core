@@ -4,57 +4,6 @@
     ViewData["Title"] = "Products";
 }
 
-<h1 class="text-center pt-2 pb-2">Featured & Recommended</h1>
-<div id="randomProductsCarousel" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-        @if (Model.RandomProducts.Any())
-        {
-            var productsList = Model.RandomProducts.ToList();
-            for (var i = 0; i < productsList.Count; i++)
-            {
-                var product = productsList[i];
-                <div class="carousel-item @(i == 0 ? "active" : "")">
-                    <div class="d-flex justify-content-center">
-                        <div class="card" style="width: fit-content;">
-                            <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
-                                <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName" style="object-fit: cover;">
-                            </a>
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a>
-                                </h5>
-                                <p class="card-text">
-                                    <span class="badge bg-success rounded-pill">@product.Price €</span>
-                                    @if (Model.OwnedProductIds.Contains(product.ProductId))
-                                    {
-                                        <span class="badge bg-success rounded-pill">In Library</span>
-                                    }
-                                    else if (Model.WishlistProductIds.Contains(product.ProductId))
-                                    {
-                                        <span class="badge bg-primary rounded-pill">On Wishlist</span>
-                                    }
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        }
-        else
-        {
-            <p>No featured products available.</p>
-        }
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#randomProductsCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#randomProductsCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
-</div>
-
 <style>
     #randomProductsCarousel .carousel-control-prev,
     #randomProductsCarousel .carousel-control-next {
@@ -75,61 +24,6 @@
         right: 20%;
     }
 </style>
-
-<style>
-    #randomProductsCarousel .carousel-control-prev,
-    #randomProductsCarousel .carousel-control-next {
-        width: 5%;
-    }
-
-    #randomProductsCarousel .carousel-control-prev-icon,
-    #randomProductsCarousel .carousel-control-next-icon {
-        width: 30px;
-        height: 30px;
-    }
-
-    #randomProductsCarousel .carousel-control-prev {
-        left: 20%;
-    }
-
-    #randomProductsCarousel .carousel-control-next {
-        right: 20%;
-    }
-</style>
-
-
-<h1 class="text-center pt-5 pb-2">Top Sellers</h1>
-<div class="top-sellers-container">
-    @if (Model.TopSellingProducts.Any())
-    {
-        <div class="top-sellers-grid">
-            @foreach (var product in Model.TopSellingProducts)
-            {
-                <div class="top-seller-item">
-                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
-                        <img src="@Model.RandomProducts.FirstOrDefault(p => p.ProductId == product.ProductId)?.ImagePath" class="img-thumbnail" alt="@product.ProductName">
-                        <div class="top-seller-info">
-                            <span class="top-seller-name">@product.ProductName</span>
-                            <span class="badge bg-success rounded-pill top-seller-price">@product.Price €</span>
-                            @if (Model.OwnedProductIds.Contains(product.ProductId))
-                            {
-                                <span class="badge bg-success rounded-pill">In Library</span>
-                            }
-                            else if (Model.WishlistProductIds.Contains(product.ProductId))
-                            {
-                                <span class="badge bg-primary rounded-pill">On Wishlist</span>
-                            }
-                        </div>
-                    </a>
-                </div>
-            }
-        </div>
-    }
-    else
-    {
-        <p>No top selling products available.</p>
-    }
-</div>
 
 <style>
     .top-sellers-container {
@@ -181,6 +75,100 @@
     }
 </style>
 
+<style>
+    .badge.bg-success {
+        background-color: #28a745;
+    }
+
+    .badge.bg-primary {
+        background-color: #007bff;
+    }
+</style>
+
+<h1 class="text-center pt-2 pb-2">Featured & Recommended</h1>
+<div id="randomProductsCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        @if (Model.RandomProducts.Any())
+        {
+            var productsList = Model.RandomProducts.ToList();
+            for (var i = 0; i < productsList.Count; i++)
+            {
+                var product = productsList[i];
+                <div class="carousel-item @(i == 0 ? "active" : "")">
+                    <div class="d-flex justify-content-center">
+                        <div class="card" style="width: fit-content;">
+                            <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
+                                <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName" style="object-fit: cover;">
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a>
+                                </h5>
+                                <p class="card-text">
+                                    <span class="badge bg-success rounded-pill">@product.Price €</span>
+                                    @if (Model.OwnedProductIds.Contains(product.ProductId))
+                                    {
+                                        <span class="badge bg-success rounded-pill">In Library</span>
+                                    }
+                                    else if (Model.WishlistProductIds.Contains(product.ProductId))
+                                    {
+                                        <span class="badge bg-primary rounded-pill">On Wishlist</span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No featured products available.</p>
+        }
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#randomProductsCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#randomProductsCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+
+<h1 class="text-center pt-5 pb-2">Top Sellers</h1>
+<div class="top-sellers-container">
+    @if (Model.TopSellingProducts.Any())
+    {
+        <div class="top-sellers-grid">
+            @foreach (var product in Model.TopSellingProducts)
+            {
+                <div class="top-seller-item">
+                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
+                        <img src="@Model.RandomProducts.FirstOrDefault(p => p.ProductId == product.ProductId)?.ImagePath" class="img-thumbnail" alt="@product.ProductName">
+                        <div class="top-seller-info">
+                            <span class="top-seller-name">@product.ProductName</span>
+                            <span class="badge bg-success rounded-pill top-seller-price">@product.Price €</span>
+                            @if (Model.OwnedProductIds.Contains(product.ProductId))
+                            {
+                                <span class="badge bg-success rounded-pill">In Library</span>
+                            }
+                            else if (Model.WishlistProductIds.Contains(product.ProductId))
+                            {
+                                <span class="badge bg-primary rounded-pill">On Wishlist</span>
+                            }
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No top selling products available.</p>
+    }
+</div>
 
 <h1 class="text-center pt-5 pb-2">Products Under 10 Bucks</h1>
 <div class="row">
@@ -283,13 +271,3 @@
         <p>No free products available.</p>
     }
 </div>
-
-<style>
-    .badge.bg-success {
-        background-color: #28a745;
-    }
-
-    .badge.bg-primary {
-        background-color: #007bff;
-    }
-</style>

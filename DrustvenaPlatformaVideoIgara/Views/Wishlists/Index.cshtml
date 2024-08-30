@@ -4,6 +4,55 @@
     ViewData["Title"] = "Wishlist";
 }
 
+<style>
+    .wishlist-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .wishlist-item {
+        display: flex;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        width: 100%;
+        max-width: 600px;
+        box-sizing: border-box;
+    }
+
+        .wishlist-item.full-width {
+            flex-direction: column;
+            max-width: 100%;
+        }
+
+    .wishlist-image img {
+        width: 100%; /* Full-width image for full-width item */
+        height: auto;
+        border-radius: 5px;
+    }
+
+    .wishlist-details {
+        margin-left: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+        .wishlist-details h4 {
+            margin-bottom: 10px;
+        }
+
+        .wishlist-details p {
+            margin-bottom: 10px;
+        }
+
+        .wishlist-details button {
+            margin-right: 5px;
+        }
+</style>
+
+
 <h1>My Wishlist</h1>
 
 @if (Model?.Wishlist?.WishlistItems != null && Model.Wishlist.WishlistItems.Any())
@@ -55,51 +104,3 @@ else
 {
     <p>No items in your wishlist.</p>
 }
-
-<style>
-    .wishlist-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-
-    .wishlist-item {
-        display: flex;
-        border: 1px solid #ccc;
-        padding: 10px;
-        border-radius: 5px;
-        width: 100%;
-        max-width: 600px;
-        box-sizing: border-box;
-    }
-
-        .wishlist-item.full-width {
-            flex-direction: column;
-            max-width: 100%;
-        }
-
-    .wishlist-image img {
-        width: 100%; /* Full-width image for full-width item */
-        height: auto;
-        border-radius: 5px;
-    }
-
-    .wishlist-details {
-        margin-left: 15px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-        .wishlist-details h4 {
-            margin-bottom: 10px;
-        }
-
-        .wishlist-details p {
-            margin-bottom: 10px;
-        }
-
-        .wishlist-details button {
-            margin-right: 5px;
-        }
-</style>

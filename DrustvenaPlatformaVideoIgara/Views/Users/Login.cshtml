@@ -4,33 +4,6 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="login-container">
-    <div class="login-header">
-        <h1>Login</h1>
-        <hr />
-    </div>
-    <form asp-action="Login">
-        <div class="form-group">
-            <label asp-for="Email">Email</label>
-            <input asp-for="Email" class="form-control" />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Password">Password</label>
-            <input asp-for="Password" type="password" class="form-control" />
-            <span asp-validation-for="Password" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-success">Login</button>
-        </div>
-        <div asp-validation-summary="All" class="text-danger"></div>
-    </form>
-    <div class="login-links">
-        <p>Don't have an account?</p>
-        <a asp-action="Register" class="btn btn-outline-info text-white">Register</a>
-    </div>
-</div>
-
 <style>
     .login-container {
         max-width: 500px;
@@ -99,3 +72,30 @@
                 text-decoration: underline;
             }
 </style>
+
+<div class="login-container">
+    <div class="login-header">
+        <h1>Login</h1>
+        <hr />
+    </div>
+    <form asp-action="Login">
+        <div class="form-group">
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password" type="password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Login</button>
+        </div>
+        <div asp-validation-summary="All" class="text-danger"></div>
+    </form>
+    <div class="login-links">
+        <p>Don't have an account?</p>
+        <a asp-action="Register" class="btn btn-outline-info text-white">Register</a>
+    </div>
+</div>

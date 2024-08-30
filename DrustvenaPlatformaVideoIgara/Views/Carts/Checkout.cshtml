@@ -4,73 +4,6 @@
     ViewData["Title"] = "Checkout";
 }
 
-<h1>Checkout</h1>
-
-<div class="checkout-container">
-    <div class="wallet-balance">
-        <h3>Wallet Balance: <span>@Model.WalletBalance €</span></h3>
-    </div>
-
-    @if (Model.WalletBalance < Model.TotalPrice)
-    {
-        <div class="alert alert-warning" role="alert">
-            <strong>Insufficient funds.</strong> Please add more money to your wallet before proceeding or choose a different payment method.
-        </div>
-    }
-
-    <form asp-action="Purchase" method="post" class="checkout-form">
-        <div class="form-group">
-            <label for="paymentMethod" class="form-label">Select Payment Method</label>
-            <select asp-for="SelectedPaymentMethod" asp-items="@(new SelectList(Model.PaymentMethods, "PaymentMethodId", "Method"))" class="form-select">
-            </select>
-        </div>
-
-        <h3>Cart Items:</h3>
-        <table class="table table-hover align-middle">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Product</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Cart.CartItems)
-                {
-                    <tr>
-                        <td class="checkout-image">
-                            <a asp-action="Details" asp-controller="Products" asp-route-id="@item.Product.ProductId">
-                                <img src="@item.Product.ImagePath" alt="@item.Product.ProductName" class="img-fluid rounded" />
-                            </a>
-                        </td>
-                        <td>
-                            <a asp-action="Details" asp-controller="Products" asp-route-id="@item.Product.ProductId" class="text-light">
-                                @item.Product.ProductName
-                            </a>
-                        </td>
-                        <td>@item.Price €</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <div class="total-price">
-            <strong>Total Price: <span>@Model.TotalPrice €</span></strong>
-        </div>
-
-        <div class="checkout-button-container">
-            @if (Model.SelectedPaymentMethod == 1 && Model.WalletBalance < Model.TotalPrice)
-            {
-                <button type="submit" class="btn btn-primary" disabled>Buy</button>
-            }
-            else
-            {
-                <button type="submit" class="btn btn-primary">Buy</button>
-            }
-        </div>
-    </form>
-</div>
-
 <style>
     .checkout-container {
         background-color: #2a2a2a;
@@ -159,3 +92,71 @@
         font-weight: bold;
     }
 </style>
+
+
+<h1>Checkout</h1>
+
+<div class="checkout-container">
+    <div class="wallet-balance">
+        <h3>Wallet Balance: <span>@Model.WalletBalance €</span></h3>
+    </div>
+
+    @if (Model.WalletBalance < Model.TotalPrice)
+    {
+        <div class="alert alert-warning" role="alert">
+            <strong>Insufficient funds.</strong> Please add more money to your wallet before proceeding or choose a different payment method.
+        </div>
+    }
+
+    <form asp-action="Purchase" method="post" class="checkout-form">
+        <div class="form-group">
+            <label for="paymentMethod" class="form-label">Select Payment Method</label>
+            <select asp-for="SelectedPaymentMethod" asp-items="@(new SelectList(Model.PaymentMethods, "PaymentMethodId", "Method"))" class="form-select">
+            </select>
+        </div>
+
+        <h3>Cart Items:</h3>
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Cart.CartItems)
+                {
+                    <tr>
+                        <td class="checkout-image">
+                            <a asp-action="Details" asp-controller="Products" asp-route-id="@item.Product.ProductId">
+                                <img src="@item.Product.ImagePath" alt="@item.Product.ProductName" class="img-fluid rounded" />
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-controller="Products" asp-route-id="@item.Product.ProductId" class="text-light">
+                                @item.Product.ProductName
+                            </a>
+                        </td>
+                        <td>@item.Price €</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="total-price">
+            <strong>Total Price: <span>@Model.TotalPrice €</span></strong>
+        </div>
+
+        <div class="checkout-button-container">
+            @if (Model.SelectedPaymentMethod == 1 && Model.WalletBalance < Model.TotalPrice)
+            {
+                <button type="submit" class="btn btn-primary" disabled>Buy</button>
+            }
+            else
+            {
+                <button type="submit" class="btn btn-primary">Buy</button>
+            }
+        </div>
+    </form>
+</div>

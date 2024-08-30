@@ -4,38 +4,6 @@
     ViewData["Title"] = "Wallet";
 }
 
-<h1 class="page-title">Wallet</h1>
-
-<div class="wallet-container">
-    <div class="balance-info">
-        <h3>Current Balance: <span>@Model.Balance €</span></h3>
-    </div>
-
-    <h4 class="section-title">Add Funds</h4>
-    <form asp-action="AddFunds" method="post" class="add-funds-form">
-        <div class="form-group">
-            <label for="amount" class="form-label">Amount:</label>
-            <select class="form-control" id="amount" name="amount">
-                <option value="5">5 €</option>
-                <option value="10">10 €</option>
-                <option value="25">25 €</option>
-                <option value="50">50 €</option>
-                <option value="100">100 €</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="paymentMethod" class="form-label">Payment Method:</label>
-            <select class="form-control" id="paymentMethod" name="paymentMethod">
-                @foreach (var method in Model.PaymentMethods)
-                {
-                    <option value="@method.PaymentMethodId">@method.Method</option>
-                }
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Add Funds</button>
-    </form>
-</div>
-
 <style>
     .page-title {
         color: #e5e5e5;
@@ -114,3 +82,36 @@
             cursor: not-allowed;
         }
 </style>
+
+
+<h1 class="page-title">Wallet</h1>
+
+<div class="wallet-container">
+    <div class="balance-info">
+        <h3>Current Balance: <span>@Model.Balance €</span></h3>
+    </div>
+
+    <h4 class="section-title">Add Funds</h4>
+    <form asp-action="AddFunds" method="post" class="add-funds-form">
+        <div class="form-group">
+            <label for="amount" class="form-label">Amount:</label>
+            <select class="form-control" id="amount" name="amount">
+                <option value="5">5 €</option>
+                <option value="10">10 €</option>
+                <option value="25">25 €</option>
+                <option value="50">50 €</option>
+                <option value="100">100 €</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="paymentMethod" class="form-label">Payment Method:</label>
+            <select class="form-control" id="paymentMethod" name="paymentMethod">
+                @foreach (var method in Model.PaymentMethods)
+                {
+                    <option value="@method.PaymentMethodId">@method.Method</option>
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Funds</button>
+    </form>
+</div>
