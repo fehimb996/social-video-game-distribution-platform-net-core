@@ -503,7 +503,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 return Unauthorized();
             }
 
-            var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"); // CET/Belgrade time zone
+            var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
 
             var messages = await _context.Messages
                 .Where(m => (m.UserId1 == loggedInUserId && m.UserId2 == recipientUserId) ||
@@ -512,10 +512,10 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 .Select(m => new
                 {
                     m.MessageContent,
-                    SenderNickName = m.UserId1 == loggedInUserId ? _context.Users.Where(u => u.UserId == m.UserId2).Select(u => u.NickName).FirstOrDefault()
+                    SenderNickName = m.UserId1 == loggedInUserId ? _context.Users.Where(u => u.UserId == m.UserId1).Select(u => u.NickName).FirstOrDefault()
                                                                  : _context.Users.Where(u => u.UserId == m.UserId1).Select(u => u.NickName).FirstOrDefault(),
-                    Timestamp = TimeZoneInfo.ConvertTimeFromUtc(m.Timestamp, timeZoneInfo).ToString("dd MMM yyyy, HH:mm"), // Format timestamp
-                    ProfilePicture = m.UserId1 == loggedInUserId ? _context.Users.Where(u => u.UserId == m.UserId2).Select(u => u.ProfilePicture).FirstOrDefault()
+                    Timestamp = TimeZoneInfo.ConvertTimeFromUtc(m.Timestamp, timeZoneInfo).ToString("dd MMM yyyy, HH:mm"),
+                    ProfilePicture = m.UserId1 == loggedInUserId ? _context.Users.Where(u => u.UserId == m.UserId1).Select(u => u.ProfilePicture).FirstOrDefault()
                                                                  : _context.Users.Where(u => u.UserId == m.UserId1).Select(u => u.ProfilePicture).FirstOrDefault()
                 })
                 .ToListAsync();

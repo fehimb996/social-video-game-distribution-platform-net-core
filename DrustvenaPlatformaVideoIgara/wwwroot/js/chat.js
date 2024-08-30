@@ -111,7 +111,7 @@ document.getElementById("recipientUserId").addEventListener("change", function (
 
                 var messageTimestamp = document.createElement("small");
                 messageTimestamp.className = "message-timestamp";
-                messageTimestamp.textContent = message.timestamp; // Already formatted from the backend
+                messageTimestamp.textContent = message.timestamp;
 
                 messageContainer.appendChild(userSpan);
                 messageContainer.appendChild(messageContent);
