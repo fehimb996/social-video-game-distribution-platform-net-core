@@ -7,28 +7,30 @@
 <style>
     .wishlist-container {
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column;
         gap: 20px;
+        background-color: #2a2a2a;
+        padding: 20px;
+        border-radius: 10px;
+        color: #e5e5e5;
+        max-width: 800px;
+        margin: auto;
     }
 
     .wishlist-item {
         display: flex;
-        border: 1px solid #ccc;
+        border: 1px solid #555;
         padding: 10px;
         border-radius: 5px;
         width: 100%;
-        max-width: 600px;
         box-sizing: border-box;
+        background-color: transparent;
+        flex-direction: row;
     }
 
-        .wishlist-item.full-width {
-            flex-direction: column;
-            max-width: 100%;
-        }
-
     .wishlist-image img {
-        width: 100%; /* Full-width image for full-width item */
-        height: auto;
+        width: fit-content;
+        height: 130px;
         border-radius: 5px;
     }
 
@@ -37,23 +39,55 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        flex: 1;
     }
 
         .wishlist-details h4 {
             margin-bottom: 10px;
+            color: #e5e5e5;
         }
 
         .wishlist-details p {
             margin-bottom: 10px;
+            color: #c0c0c0;
         }
 
         .wishlist-details button {
             margin-right: 5px;
         }
+
+    .btn-primary {
+        /* background-color: #5bc0de; */
+        border: none;
+        width: 30%;
+    }
+
+        .btn-primary:hover {
+            background-color: #4a9fd4;
+        }
+
+    .btn-danger {
+        /* background-color: #d9534f; */
+        border: none;
+        width: 30%;
+    }
+
+        .btn-danger:hover {
+           /*  background-color: #c9302c; */
+        }
+
+    .btn-success {
+     /*    background-color: #5cb85c; */
+        border: none;
+        width: 30%;
+    }
+
+        .btn-success:hover {
+            /* background-color: #4cae4c; */
+        }
 </style>
 
-
-<h1>My Wishlist</h1>
+<h1 class="page-title text-center">My Wishlist</h1>
 
 @if (Model?.Wishlist?.WishlistItems != null && Model.Wishlist.WishlistItems.Any())
 {
@@ -63,7 +97,7 @@
             var product = wishlistItem.Product;
             var isInCart = Model.CartItems.Any(ci => ci.ProductId == product.ProductId);
 
-            <div class="wishlist-item @(wishlistItem.WishlistItemId == 1 ? "full-width" : "")">
+            <div class="wishlist-item">
                 <div class="wishlist-image">
                     <a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductId">
                         <img src="@product.ImagePath" alt="@product.ProductName Cover Image" class="img-fluid" />
@@ -71,11 +105,11 @@
                 </div>
                 <div class="wishlist-details">
                     <h4>
-                        <a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductId">
+                        <a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductId" class="friend-link">
                             @product.ProductName
                         </a>
                     </h4>
-                    <p>Price: <strong>@product.Price €</strong></p>
+                    <p><strong> <span class="badge bg-success rounded-pill">@product.Price €</span></strong></p>
 
                     @if (isInCart)
                     {
