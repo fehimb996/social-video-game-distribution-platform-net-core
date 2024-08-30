@@ -57,34 +57,19 @@
         }
 
     .btn-primary {
-        /* background-color: #5bc0de; */
         border: none;
         width: 30%;
     }
-
-        .btn-primary:hover {
-            background-color: #4a9fd4;
-        }
 
     .btn-danger {
-        /* background-color: #d9534f; */
         border: none;
         width: 30%;
     }
-
-        .btn-danger:hover {
-           /*  background-color: #c9302c; */
-        }
 
     .btn-success {
-     /*    background-color: #5cb85c; */
         border: none;
         width: 30%;
     }
-
-        .btn-success:hover {
-            /* background-color: #4cae4c; */
-        }
 </style>
 
 <h1 class="page-title text-center">My Wishlist</h1>
@@ -123,7 +108,7 @@
                             <button class="btn btn-primary">Add to Cart</button>
                         </form>
                     }
-
+                    
                     <form asp-action="RemoveItem" method="post" style="display:inline;">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="wishlistItemId" value="@wishlistItem.WishlistItemId" />
