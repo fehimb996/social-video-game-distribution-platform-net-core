@@ -11,7 +11,7 @@
 <style>
     .chat-container {
         display: flex;
-        height: auto;
+        height: 80vh; /* Full viewport height */
     }
 
     .friend-list {
@@ -20,6 +20,8 @@
         padding: 15px;
         border-radius: 10px;
         overflow-y: auto;
+        max-height: 80vh; /* Maximum height of the viewport */
+        box-sizing: border-box; /* Include padding in the height calculation */
     }
 
     .chat-area {
@@ -69,13 +71,19 @@
         display: flex;
         align-items: center;
         padding: 10px;
+        cursor: pointer;
     }
 
         .list-group-item img {
-            width: fit-content;
-            height: 80px;
+            width: 50px; /* Adjusted size for profile picture */
+            height: 50px;
             object-fit: cover;
             margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        .list-group-item.selected {
+            background-color: #555; /* Highlight selected friend */
         }
 
     .message-header {
@@ -102,19 +110,17 @@
     }
 </style>
 
-
 <div class="chat-container">
     <div class="friend-list">
         <h4 class="text-light">Friends List</h4>
-        <label for="recipientUserId" class="form-label text-light">Recipient</label>
-        <div class="input-group">
-            <select id="recipientUserId" class="form-select">
-                <option value="" data-image="" selected>Select a friend</option>
-                @foreach (var friend in friends)
-                {
-                    <option value="@friend.UserId" data-image="@friend.ProfilePicture">@friend.NickName</option>
-                }
-            </select>
+        <div id="friendsList">
+            @foreach (var friend in friends)
+            {
+                <div class="list-group-item" data-user-id="@friend.UserId" data-image="@friend.ProfilePicture">
+                    <img src="@friend.ProfilePicture" alt="@friend.NickName's profile picture">
+                    <span>@friend.NickName</span>
+                </div>
+            }
         </div>
     </div>
     <div class="chat-area">

@@ -86,60 +86,67 @@ document.getElementById("messageInput").addEventListener("keypress", function (e
 });
 
 // Handle recipient selection and load chat history
-document.getElementById("recipientUserId").addEventListener("change", function () {
-    var recipientUserId = this.value;
-    var messagesList = document.getElementById("messagesList");
+document.getElementById("friendsList").addEventListener("click", function (event) {
+    var target = event.target.closest(".list-group-item");
+    if (target) {
+        var recipientUserId = target.getAttribute("data-user-id");
+        var messagesList = document.getElementById("messagesList");
 
-    if (recipientUserId === "") {
-        messagesList.innerHTML = "";
-        return;
-    }
+        // Highlight the selected friend
+        document.querySelectorAll(".list-group-item").forEach(item => item.classList.remove("selected"));
+        target.classList.add("selected");
 
-    fetch(`/Users/GetChatHistory?recipientUserId=${recipientUserId}`)
-        .then(response => response.json())
-        .then(data => {
+        if (recipientUserId === "") {
             messagesList.innerHTML = "";
+            return;
+        }
 
-            data.forEach(message => {
-                var li = document.createElement("li");
-                li.className = "list-group-item d-flex align-items-start";
+        fetch(`/Users/GetChatHistory?recipientUserId=${recipientUserId}`)
+            .then(response => response.json())
+            .then(data => {
+                messagesList.innerHTML = "";
 
-                var img = document.createElement("img");
-                img.src = message.profilePicture || "/images/default-profile.png";
-                img.alt = `${message.senderNickName}'s profile picture`;
+                data.forEach(message => {
+                    var li = document.createElement("li");
+                    li.className = "list-group-item d-flex align-items-start";
 
-                var messageContainer = document.createElement("div");
+                    var img = document.createElement("img");
+                    img.src = message.profilePicture || "/images/default-profile.png";
+                    img.alt = `${message.senderNickName}'s profile picture`;
 
-                var userSpan = document.createElement("strong");
-                userSpan.textContent = `${message.senderNickName}:`;
+                    var messageContainer = document.createElement("div");
 
-                var messageContent = document.createElement("p");
-                messageContent.className = "message-content mb-0";
-                messageContent.textContent = message.messageContent;
+                    var userSpan = document.createElement("strong");
+                    userSpan.textContent = `${message.senderNickName}:`;
 
-                var messageTimestamp = document.createElement("small");
-                messageTimestamp.className = "message-timestamp";
-                messageTimestamp.textContent = message.timestamp;
+                    var messageContent = document.createElement("p");
+                    messageContent.className = "message-content mb-0";
+                    messageContent.textContent = message.messageContent;
 
-                messageContainer.appendChild(userSpan);
-                messageContainer.appendChild(messageContent);
-                messageContainer.appendChild(messageTimestamp);
+                    var messageTimestamp = document.createElement("small");
+                    messageTimestamp.className = "message-timestamp";
+                    messageTimestamp.textContent = message.timestamp;
 
-                li.appendChild(img);
-                li.appendChild(messageContainer);
+                    messageContainer.appendChild(userSpan);
+                    messageContainer.appendChild(messageContent);
+                    messageContainer.appendChild(messageTimestamp);
 
-                messagesList.appendChild(li);
-            });
+                    li.appendChild(img);
+                    li.appendChild(messageContainer);
 
-            // Scroll to the bottom after loading the chat history
-            scrollToBottom();
-        })
-        .catch(error => console.error('Error fetching chat history:', error));
+                    messagesList.appendChild(li);
+                });
+
+                // Scroll to the bottom after loading the chat history
+                scrollToBottom();
+            })
+            .catch(error => console.error('Error fetching chat history:', error));
+    }
 });
 
 // Function to send a message
 function sendMessage() {
-    var recipientUserId = document.getElementById("recipientUserId").value;
+    var recipientUserId = document.querySelector(".list-group-item.selected")?.getAttribute("data-user-id");
     var message = document.getElementById("messageInput").value;
     if (!recipientUserId || !message) {
         console.error("Recipient or message is empty.");
