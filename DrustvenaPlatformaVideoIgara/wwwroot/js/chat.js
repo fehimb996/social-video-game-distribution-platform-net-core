@@ -61,6 +61,9 @@ connection.on("ReceiveMessage", function (user, message, timestamp, profilePictu
 
     document.getElementById("messagesList").appendChild(li);
 
+    // Hide the no chat history message if there are messages
+    document.getElementById("noChatHistory").style.display = 'none';
+
     // Scroll to the bottom when a new message is received
     scrollToBottom();
 });
@@ -91,6 +94,7 @@ document.getElementById("friendsList").addEventListener("click", function (event
     if (target) {
         var recipientUserId = target.getAttribute("data-user-id");
         var messagesList = document.getElementById("messagesList");
+        var noChatHistory = document.getElementById("noChatHistory");
 
         // Highlight the selected friend
         document.querySelectorAll(".list-group-item").forEach(item => item.classList.remove("selected"));
@@ -98,6 +102,7 @@ document.getElementById("friendsList").addEventListener("click", function (event
 
         if (recipientUserId === "") {
             messagesList.innerHTML = "";
+            noChatHistory.style.display = 'none';
             return;
         }
 
@@ -106,39 +111,47 @@ document.getElementById("friendsList").addEventListener("click", function (event
             .then(data => {
                 messagesList.innerHTML = "";
 
-                data.forEach(message => {
-                    var li = document.createElement("li");
-                    li.className = "list-group-item d-flex align-items-start";
+                if (data.length === 0) {
+                    // Show the no chat history message
+                    noChatHistory.style.display = 'block';
+                } else {
+                    // Hide the no chat history message
+                    noChatHistory.style.display = 'none';
 
-                    var img = document.createElement("img");
-                    img.src = message.profilePicture || "/images/default-profile.png";
-                    img.alt = `${message.senderNickName}'s profile picture`;
+                    data.forEach(message => {
+                        var li = document.createElement("li");
+                        li.className = "list-group-item d-flex align-items-start";
 
-                    var messageContainer = document.createElement("div");
+                        var img = document.createElement("img");
+                        img.src = message.profilePicture || "/images/default-profile.png";
+                        img.alt = `${message.senderNickName}'s profile picture`;
 
-                    var userSpan = document.createElement("strong");
-                    userSpan.textContent = `${message.senderNickName}:`;
+                        var messageContainer = document.createElement("div");
 
-                    var messageContent = document.createElement("p");
-                    messageContent.className = "message-content mb-0";
-                    messageContent.textContent = message.messageContent;
+                        var userSpan = document.createElement("strong");
+                        userSpan.textContent = `${message.senderNickName}:`;
 
-                    var messageTimestamp = document.createElement("small");
-                    messageTimestamp.className = "message-timestamp";
-                    messageTimestamp.textContent = message.timestamp;
+                        var messageContent = document.createElement("p");
+                        messageContent.className = "message-content mb-0";
+                        messageContent.textContent = message.messageContent;
 
-                    messageContainer.appendChild(userSpan);
-                    messageContainer.appendChild(messageContent);
-                    messageContainer.appendChild(messageTimestamp);
+                        var messageTimestamp = document.createElement("small");
+                        messageTimestamp.className = "message-timestamp";
+                        messageTimestamp.textContent = message.timestamp;
 
-                    li.appendChild(img);
-                    li.appendChild(messageContainer);
+                        messageContainer.appendChild(userSpan);
+                        messageContainer.appendChild(messageContent);
+                        messageContainer.appendChild(messageTimestamp);
 
-                    messagesList.appendChild(li);
-                });
+                        li.appendChild(img);
+                        li.appendChild(messageContainer);
 
-                // Scroll to the bottom after loading the chat history
-                scrollToBottom();
+                        messagesList.appendChild(li);
+                    });
+
+                    // Scroll to the bottom after loading the chat history
+                    scrollToBottom();
+                }
             })
             .catch(error => console.error('Error fetching chat history:', error));
     }

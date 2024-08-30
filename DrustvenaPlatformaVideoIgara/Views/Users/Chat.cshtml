@@ -108,6 +108,13 @@
         color: #bbb;
         margin-top: 3px;
     }
+
+    .no-chat-history {
+        display: none; /* Hidden by default */
+        text-align: center;
+        margin-top: 15px;
+        color: #e5e5e5;
+    }
 </style>
 
 <div class="chat-container">
@@ -125,6 +132,7 @@
     </div>
     <div class="chat-area">
         <ul id="messagesList" class="list-group"></ul>
+        <div id="noChatHistory" class="no-chat-history text-light">There is no chat history with this friend.</div>
         <div class="message-controls">
             <label for="messageInput" class="form-label text-light">Message</label>
             <textarea class="form-control" id="messageInput" rows="3"></textarea>
