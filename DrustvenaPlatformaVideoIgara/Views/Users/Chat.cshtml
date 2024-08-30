@@ -23,13 +23,12 @@
         </div>
     </div>
     <div class="chat-area">
-        <div class="message-controls mb-2">
+        <ul id="messagesList" class="list-group"></ul>
+        <div class="message-controls mt-2">
             <label for="messageInput" class="form-label text-light">Message</label>
-            <input type="text" class="form-control" id="messageInput" />
+            <textarea class="form-control" id="messageInput" rows="3"></textarea>
             <button type="button" id="sendButton" class="btn btn-primary mt-2">Send Message</button>
         </div>
-        <hr class="text-light" />
-        <ul id="messagesList" class="list-group"></ul>
     </div>
     <input type="hidden" id="nickName" value="@ViewBag.NickName" />
 </div>
@@ -37,11 +36,10 @@
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/chat.js"></script>
 
-
 <style>
     .chat-container {
         display: flex;
-        height: auto; /* height of the viewport */
+        height: auto;
     }
 
     .friend-list {
@@ -49,7 +47,7 @@
         background-color: #333;
         padding: 15px;
         border-radius: 10px;
-        overflow-y: auto; /* Adds scroll if content exceeds container height */
+        overflow-y: auto;
     }
 
     .chat-area {
@@ -61,15 +59,16 @@
         flex-direction: column;
     }
 
-    .message-controls {
-        flex-shrink: 0; /* Prevents the message controls from shrinking */
+    #messagesList {
+        flex: 1;
+        max-height: 400px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        margin-bottom: 10px; /* Space between message list and input controls */
     }
 
-    #messagesList {
-        flex: 1; /* Takes up remaining space in the chat area */
-        max-height: 400px; /* Ensures the chat history doesn't exceed this height */
-        overflow-y: auto; /* Adds scroll if content exceeds max-height */
-        overflow-x: hidden; /* Prevents horizontal scrolling */
+    .message-controls {
+        flex-shrink: 0;
     }
 
     .form-label {
@@ -86,7 +85,7 @@
         }
 
     .list-group {
-        margin-bottom: 0; /* Remove bottom margin to align with chat area */
+        margin-bottom: 0;
     }
 
     .list-group-item {
@@ -100,14 +99,9 @@
         padding: 10px;
     }
 
-        /* .list-group-item:nth-child(even) {
-            background-color: #444;
-        } */
-
         .list-group-item img {
             width: fit-content;
             height: 80px;
-            /* border-radius: 50%; */
             object-fit: cover;
             margin-right: 10px;
         }
