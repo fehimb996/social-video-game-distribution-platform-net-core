@@ -4,134 +4,173 @@
     ViewData["Title"] = "Categories";
 }
 
-@* <div class="container py-4">
-    <h1 class="text-light">Categories</h1> *@
-
-    <!-- Platforms Section -->
-    <h2 class="text-light">Platforms</h2>
-    @foreach (var platform in Model.Platforms)
-    {
-        <div class="mb-4">
-            <h4 class="text-light">@platform.PlatformName</h4>
-            @if (platform.ProductPlatforms.Any())
-            {
-                <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
-                    @foreach (var productPlatform in platform.ProductPlatforms)
-                    {
-                        var product = productPlatform.Product;
-                        <div class="col">
-                            <div class="card text-light bg-dark border-0">
-                                <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="text-decoration-none text-light">
-                                    <img src="@product.ImagePath" alt="@product.ProductName" class="card-img-top" style="max-height: 180px; object-fit: cover;">
-                                    <div class="card-body">
-                                        <h5 class="card-title">@product.ProductName</h5>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    }
-                </div>
-            }
-            else
-            {
-                <p class="text-light">No products available for this platform.</p>
-            }
-        </div>
+<style>
+    .category-section {
+        text-align: center;
+        margin-bottom: 50px;
     }
+
+        .category-section h2 {
+            font-size: 2.5rem;
+            color: #e5e5e5;
+            margin-bottom: 20px;
+        }
+
+    .category-divider {
+        width: 60%;
+        height: 2px;
+        background-color: #5bc0de;
+        margin: 20px auto;
+        border-radius: 2px;
+    }
+
+    .card {
+        margin: 0 auto; /* Centers the card in its column */
+    }
+
+    .card-body {
+        text-align: center;
+    }
+</style>
+
+<div class="container py-4">
+    <!-- Platforms Section -->
+    <div class="category-section">
+        <h2>Platforms</h2>
+        <div class="category-divider"></div>
+        @foreach (var platform in Model.Platforms)
+        {
+            <div class="mb-4">
+                <h4 class="text-light">@platform.PlatformName</h4>
+                @if (platform.ProductPlatforms.Any())
+                {
+                    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
+                        @foreach (var productPlatform in platform.ProductPlatforms)
+                        {
+                            var product = productPlatform.Product;
+                            <div class="col">
+                                <div class="card text-light bg-dark border-0">
+                                    <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="text-decoration-none text-light">
+                                        <img src="@product.ImagePath" alt="@product.ProductName" class="card-img-top" style="max-height: 180px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@product.ProductName</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-light">No products available for this platform.</p>
+                }
+            </div>
+        }
+    </div>
 
     <!-- Genres Section -->
-    <h2 class="text-light">Genres</h2>
-    @foreach (var genre in Model.Genres)
-    {
-        <div class="mb-4">
-            <h4 class="text-light">@genre.GenreName</h4>
-            @if (genre.ProductGenres.Any())
-            {
-                <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
-                    @foreach (var productGenre in genre.ProductGenres)
-                    {
-                        var product = productGenre.Product;
-                        <div class="col">
-                            <div class="card text-light bg-dark border-0">
-                                <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="text-decoration-none text-light">
-                                    <img src="@product.ImagePath" alt="@product.ProductName" class="card-img-top" style="max-height: 180px; object-fit: cover;">
-                                    <div class="card-body">
-                                        <h5 class="card-title">@product.ProductName</h5>
-                                    </div>
-                                </a>
+    <div class="category-section">
+        <h2>Genres</h2>
+        <div class="category-divider"></div>
+        @foreach (var genre in Model.Genres)
+        {
+            <div class="mb-4">
+                <h4 class="text-light">@genre.GenreName</h4>
+                @if (genre.ProductGenres.Any())
+                {
+                    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
+                        @foreach (var productGenre in genre.ProductGenres)
+                        {
+                            var product = productGenre.Product;
+                            <div class="col">
+                                <div class="card text-light bg-dark border-0">
+                                    <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="text-decoration-none text-light">
+                                        <img src="@product.ImagePath" alt="@product.ProductName" class="card-img-top" style="max-height: 180px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@product.ProductName</h5>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                    }
-                </div>
-            }
-            else
-            {
-                <p class="text-light">No products available for this genre.</p>
-            }
-        </div>
-    }
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-light">No products available for this genre.</p>
+                }
+            </div>
+        }
+    </div>
 
     <!-- Developers Section -->
-    <h2 class="text-light">Developers</h2>
-    @foreach (var developer in Model.Developers)
-    {
-        <div class="mb-4">
-            <h4 class="text-light">@developer.DeveloperName</h4>
-            @if (developer.ProductDevelopers.Any())
-            {
-                <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
-                    @foreach (var productDeveloper in developer.ProductDevelopers)
-                    {
-                        var product = productDeveloper.Product;
-                        <div class="col">
-                            <div class="card text-light bg-dark border-0">
-                                <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="text-decoration-none text-light">
-                                    <img src="@product.ImagePath" alt="@product.ProductName" class="card-img-top" style="max-height: 180px; object-fit: cover;">
-                                    <div class="card-body">
-                                        <h5 class="card-title">@product.ProductName</h5>
-                                    </div>
-                                </a>
+    <div class="category-section">
+        <h2>Developers</h2>
+        <div class="category-divider"></div>
+        @foreach (var developer in Model.Developers)
+        {
+            <div class="mb-4">
+                <h4 class="text-light">@developer.DeveloperName</h4>
+                @if (developer.ProductDevelopers.Any())
+                {
+                    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
+                        @foreach (var productDeveloper in developer.ProductDevelopers)
+                        {
+                            var product = productDeveloper.Product;
+                            <div class="col">
+                                <div class="card text-light bg-dark border-0">
+                                    <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="text-decoration-none text-light">
+                                        <img src="@product.ImagePath" alt="@product.ProductName" class="card-img-top" style="max-height: 180px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@product.ProductName</h5>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                    }
-                </div>
-            }
-            else
-            {
-                <p class="text-light">No products available for this developer.</p>
-            }
-        </div>
-    }
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-light">No products available for this developer.</p>
+                }
+            </div>
+        }
+    </div>
 
     <!-- Publishers Section -->
-    <h2 class="text-light">Publishers</h2>
-    @foreach (var publisher in Model.Publishers)
-    {
-        <div class="mb-4">
-            <h4 class="text-light">@publisher.PublisherName</h4>
-            @if (publisher.ProductPublishers.Any())
-            {
-                <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
-                    @foreach (var productPublisher in publisher.ProductPublishers)
-                    {
-                        var product = productPublisher.Product;
-                        <div class="col">
-                            <div class="card text-light bg-dark border-0">
-                                <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="text-decoration-none text-light">
-                                    <img src="@product.ImagePath" alt="@product.ProductName" class="card-img-top" style="max-height: 180px; object-fit: cover;">
-                                    <div class="card-body">
-                                        <h5 class="card-title">@product.ProductName</h5>
-                                    </div>
-                                </a>
+    <div class="category-section">
+        <h2>Publishers</h2>
+        <div class="category-divider"></div>
+        @foreach (var publisher in Model.Publishers)
+        {
+            <div class="mb-4">
+                <h4 class="text-light">@publisher.PublisherName</h4>
+                @if (publisher.ProductPublishers.Any())
+                {
+                    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
+                        @foreach (var productPublisher in publisher.ProductPublishers)
+                        {
+                            var product = productPublisher.Product;
+                            <div class="col">
+                                <div class="card text-light bg-dark border-0">
+                                    <a asp-action="Details" asp-controller="Products" asp-route-id="@product.ProductId" class="text-decoration-none text-light">
+                                        <img src="@product.ImagePath" alt="@product.ProductName" class="card-img-top" style="max-height: 180px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@product.ProductName</h5>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                    }
-                </div>
-            }
-            else
-            {
-                <p class="text-light">No products available for this publisher.</p>
-            }
-        </div>
-    }
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-light">No products available for this publisher.</p>
+                }
+            </div>
+        }
+    </div>
 </div>
