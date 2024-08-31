@@ -24,22 +24,22 @@
         border-radius: 2px;
     }
 
-    .carousel-control-prev,
-    .carousel-control-next {
+    #randomProductsCarousel .carousel-control-prev,
+    #randomProductsCarousel .carousel-control-next {
         width: 5%;
     }
 
-    .carousel-control-prev-icon,
-    .carousel-control-next-icon {
+    #randomProductsCarousel .carousel-control-prev-icon,
+    #randomProductsCarousel .carousel-control-next-icon {
         width: 30px;
         height: 30px;
     }
 
-    .carousel-control-prev {
+    #randomProductsCarousel .carousel-control-prev {
         left: 20%;
     }
 
-    .carousel-control-next {
+    #randomProductsCarousel .carousel-control-next {
         right: 20%;
     }
 
@@ -57,13 +57,13 @@
         border: 1px solid #ddd;
         border-radius: 8px;
         overflow: hidden;
-        background: #333;
+        background: #f5f5f5;
         transition: background 0.3s ease;
         text-align: center;
     }
 
         .top-seller-item:hover {
-            background: #444;
+            background: #e0e0e0;
         }
 
         .top-seller-item img {
@@ -79,7 +79,7 @@
     .top-seller-name {
         display: block;
         font-weight: bold;
-        color: #e5e5e5;
+        color: #333;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -96,15 +96,24 @@
         border: 1px solid #444;
         border-radius: 8px;
         overflow: hidden;
-    }
-
-    .card-body {
         text-align: center;
     }
 
-    .card-img-top {
-        max-height: 180px;
-        object-fit: cover;
+    .card-body {
+        padding: 15px;
+    }
+
+    .card-title a {
+        color: #e5e5e5;
+        text-decoration: none;
+    }
+
+        .card-title a:hover {
+            color: #5bc0de;
+        }
+
+    .card-text, .top-seller-price {
+        text-align: center;
     }
 
     .badge.bg-success {
@@ -114,11 +123,8 @@
     .badge.bg-primary {
         background-color: #007bff;
     }
-
-    .text-light {
-        color: #e5e5e5;
-    }
 </style>
+
 
 <!-- Featured & Recommended Section -->
 <div class="section-heading pt-4">
@@ -137,7 +143,7 @@
                     <div class="d-flex justify-content-center">
                         <div class="card" style="width: fit-content;">
                             <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
-                                <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
+                                <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName" style="object-fit: cover;">
                             </a>
                             <div class="card-body">
                                 <h5 class="card-title">
@@ -162,7 +168,7 @@
         }
         else
         {
-            <p class="text-light text-center">No featured products available.</p>
+            <p>No featured products available.</p>
         }
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#randomProductsCarousel" data-bs-slide="prev">
@@ -231,7 +237,7 @@
                         <h5 class="card-title">
                             <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a>
                         </h5>
-                        <p class="card-text badge bg-success rounded-pill">@product.Price €</p>
+                        <p class="badge bg-success rounded-pill">@product.Price €</p>
                         @if (Model.OwnedProductIds.Contains(product.ProductId))
                         {
                             <span class="badge bg-success rounded-pill">In Library</span>
@@ -270,7 +276,7 @@
                         <h5 class="card-title">
                             <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">@product.ProductName</a>
                         </h5>
-                        <p class="card-text badge bg-success rounded-pill">@product.Price €</p>
+                        <p class="badge bg-success rounded-pill">@product.Price €</p>
                         @if (Model.OwnedProductIds.Contains(product.ProductId))
                         {
                             <span class="badge bg-success rounded-pill">In Library</span>
