@@ -22,10 +22,10 @@
         margin-right: 20px;
     }
 
-    .product-image img {
-        max-width: 100%;
-        border-radius: 10px;
-    }
+        .product-image img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
 
     .product-info {
         flex: 2;
@@ -34,22 +34,22 @@
         justify-content: space-between;
     }
 
-    .product-info h1 {
-        font-size: 2rem;
-        margin-bottom: 15px;
-    }
+        .product-info h1 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
 
-    .product-info p {
-        margin-bottom: 10px;
-    }
+        .product-info p {
+            margin-bottom: 10px;
+        }
 
-    .product-info .price {
-        color: #3ac37a;
-    }
+        .product-info .price {
+            color: #3ac37a;
+        }
 
-    .product-info .action-button {
-        margin-bottom: 10px; /* Added space between buttons */
-    }
+        .product-info .action-button {
+            margin-bottom: 10px; /* Added space between buttons */
+        }
 
     .product-main-content {
         display: flex;
@@ -68,10 +68,10 @@
         margin-top: 30px;
     }
 
-    .product-reviews ul {
-        list-style: none;
-        padding: 0;
-    }
+        .product-reviews ul {
+            list-style: none;
+            padding: 0;
+        }
 
     .review-item {
         background-color: #1b1b1b;
@@ -80,27 +80,27 @@
         border-radius: 10px;
     }
 
-    .review-item strong {
-        font-size: 1.1rem;
-    }
+        .review-item strong {
+            font-size: 1.1rem;
+        }
 
     .review-rating {
         display: inline-block;
         margin-right: 10px;
     }
 
-    .review-rating img {
-        width: 20px;
-        vertical-align: middle;
-    }
+        .review-rating img {
+            width: 20px;
+            vertical-align: middle;
+        }
 
-    .review-rating.positive {
-        color: #3ac37a;
-    }
+        .review-rating.positive {
+            color: #3ac37a;
+        }
 
-    .review-rating.negative {
-        color: #d9534f;
-    }
+        .review-rating.negative {
+            color: #d9534f;
+        }
 
     .action-button {
         width: 200px;
@@ -112,14 +112,14 @@
         text-align: center;
     }
 
-    .footer-links a {
-        color: #5bc0de;
-        margin-right: 10px;
-    }
+        .footer-links a {
+            color: #5bc0de;
+            margin-right: 10px;
+        }
 
-    .footer-links a:hover {
-        text-decoration: underline;
-    }
+            .footer-links a:hover {
+                text-decoration: underline;
+            }
 
     .button-container {
         display: flex;
@@ -141,39 +141,39 @@
 
             @if (Model.IsUserLoggedIn)
             {
-                    <div class="button-container">
+                <div class="button-container">
                     @if (Model.IsOwned)
                     {
-                                <button class="btn btn-success action-button" disabled>Already in Library</button>
+                        <button class="btn btn-success action-button" disabled>Already in Library</button>
                     }
                     else if (Model.IsInCart)
                     {
-                                <a href="@Url.Action("Index", "Carts")" class="btn btn-success action-button">Added to Cart</a>
+                        <a href="@Url.Action("Index", "Carts")" class="btn btn-success action-button">Added to Cart</a>
                     }
                     else
                     {
-                                <form asp-action="AddToCart" method="post" style="display:inline;">
-                                    <input type="hidden" name="productId" value="@Model.Product.ProductId" />
-                                    <button type="submit" class="btn btn-primary action-button">Add to Cart</button>
-                                </form>
+                        <form asp-action="AddToCart" method="post" style="display:inline;">
+                            <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+                            <button type="submit" class="btn btn-primary action-button">Add to Cart</button>
+                        </form>
                     }
 
-                    @if (!Model.IsInWishlist)
+                    @if (!Model.IsInWishlist && !Model.IsOwned)
                     {
-                                <form asp-action="AddToWishlist" method="post" style="display:inline;">
-                                    <input type="hidden" name="productId" value="@Model.Product.ProductId" />
-                                    <button type="submit" class="btn btn-warning action-button">Add to Wishlist</button>
-                                </form>
+                        <form asp-action="AddToWishlist" method="post" style="display:inline;">
+                            <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+                            <button type="submit" class="btn btn-warning action-button">Add to Wishlist</button>
+                        </form>
                     }
-                    else
+                    else if (Model.IsInWishlist)
                     {
-                                <a href="@Url.Action("Index", "Wishlists")" class="btn btn-warning action-button">Added to Wishlist</a>
+                        <a href="@Url.Action("Index", "Wishlists")" class="btn btn-warning action-button">Added to Wishlist</a>
                     }
-                    </div>
+                </div>
             }
             else
             {
-                    <button class="btn btn-primary action-button" disabled>Add to Cart (Login Required)</button>
+                <button class="btn btn-primary action-button" disabled>Add to Cart (Login Required)</button>
             }
         </div>
     </div>
@@ -189,61 +189,61 @@
             <h3>Developers</h3>
             @if (Model.Developers == null || !Model.Developers.Any())
             {
-                    <p>No developers associated with this product</p>
+                <p>No developers associated with this product</p>
             }
             else
             {
-                    <ul>
+                <ul>
                     @foreach (var developer in Model.Developers)
                     {
-                                <li>@developer.DeveloperName</li>
+                        <li>@developer.DeveloperName</li>
                     }
-                    </ul>
+                </ul>
             }
 
             <h3>Publishers</h3>
             @if (Model.Publishers == null || !Model.Publishers.Any())
             {
-                    <p>No publishers associated with this product</p>
+                <p>No publishers associated with this product</p>
             }
             else
             {
-                    <ul>
+                <ul>
                     @foreach (var publisher in Model.Publishers)
                     {
-                                <li>@publisher.PublisherName</li>
+                        <li>@publisher.PublisherName</li>
                     }
-                    </ul>
+                </ul>
             }
 
             <h3>Genres</h3>
             @if (Model.Genres == null || !Model.Genres.Any())
             {
-                    <p>No genres associated with this product</p>
+                <p>No genres associated with this product</p>
             }
             else
             {
-                    <ul>
+                <ul>
                     @foreach (var genre in Model.Genres)
                     {
-                                <li>@genre.GenreName</li>
+                        <li>@genre.GenreName</li>
                     }
-                    </ul>
+                </ul>
             }
 
             <h3>Platforms</h3>
             @if (Model.Platforms == null || !Model.Platforms.Any())
             {
-                    <p>No platforms associated with this product</p>
+                <p>No platforms associated with this product</p>
             }
             else
             {
-                    <ul>
+                <ul>
                     @foreach (var platform in Model.Platforms)
                     {
-                                <li>@platform.PlatformName</li>
+                        <li>@platform.PlatformName</li>
                     }
-                    </ul>
+                </ul>
             }
         </div>
     </div>
@@ -253,90 +253,90 @@
         <h3>Reviews</h3>
         @if (Model.Reviews == null || !Model.Reviews.Any())
         {
-                <p>No reviews yet</p>
+            <p>No reviews yet</p>
         }
         else
         {
-                <ul>
+            <ul>
                 @foreach (var review in Model.Reviews)
                 {
-                            <li class="review-item">
-                                <strong>
-                                    <a asp-controller="Users" asp-action="Profile" asp-route-id="@review.User.UserId">
+                    <li class="review-item">
+                        <strong>
+                            <a asp-controller="Users" asp-action="Profile" asp-route-id="@review.User.UserId">
                                 @review.User?.NickName
-                                    </a>
-                                </strong> -
+                            </a>
+                        </strong> -
                         @if (review.Rating == true)
                         {
-                                        <span class="review-rating positive">
-                                            <img src="~/images/icon_thumbsUp_v6.png" alt="Thumbs Up" /> Recommended
-                                        </span>
+                            <span class="review-rating positive">
+                                <img src="~/images/icon_thumbsUp_v6.png" alt="Thumbs Up" /> Recommended
+                            </span>
                         }
                         else
                         {
-                                        <span class="review-rating negative">
-                                            <img src="~/images/icon_thumbsDown_v6.png" alt="Thumbs Down" /> Not recommended
-                                        </span>
+                            <span class="review-rating negative">
+                                <img src="~/images/icon_thumbsDown_v6.png" alt="Thumbs Down" /> Not recommended
+                            </span>
                         }
-                                <br />
-                                <p>@review.Comment</p>
+                        <br />
+                        <p>@review.Comment</p>
                         @if (review.UserId == Model.UserId)
                         {
-                                        <form asp-action="DeleteReview" method="post" style="display:inline;">
-                                            <input type="hidden" name="reviewId" value="@review.ReviewId" />
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form>
+                            <form asp-action="DeleteReview" method="post" style="display:inline;">
+                                <input type="hidden" name="reviewId" value="@review.ReviewId" />
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
                         }
-                            </li>
+                    </li>
                 }
-                </ul>
+            </ul>
         }
         <!-- Add/Edit Review -->
         @if (Model.IsUserLoggedIn && Model.IsOwned)
         {
             if (Model.UserReview == null)
             {
-                        <form asp-action="AddReview" method="post">
-                            <input type="hidden" name="productId" value="@Model.Product.ProductId" />
-                            <div class="form-group">
-                                <label for="comment">Comment:</label>
-                                <textarea class="form-control" id="comment" name="comment"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>Do you recommend this game?</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="rating" id="yes" value="true" />
-                                    <label class="form-check-label" for="yes">Yes</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="rating" id="no" value="false" />
-                                    <label class="form-check-label" for="no">No</label>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Post Review</button>
-                        </form>
+                <form asp-action="AddReview" method="post">
+                    <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+                    <div class="form-group">
+                        <label for="comment">Comment:</label>
+                        <textarea class="form-control" id="comment" name="comment"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Do you recommend this game?</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="rating" id="yes" value="true" />
+                            <label class="form-check-label" for="yes">Yes</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="rating" id="no" value="false" />
+                            <label class="form-check-label" for="no">No</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Post Review</button>
+                </form>
             }
             else
             {
-                        <form asp-action="EditReview" method="post">
-                            <input type="hidden" name="reviewId" value="@Model.UserReview.ReviewId" />
-                            <div class="form-group">
-                                <label for="comment">Comment:</label>
-                                <textarea class="form-control" id="comment" name="comment">@Model.UserReview.Comment</textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>Do you recommend this game?</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="rating" id="yes" value="true" @(Model.UserReview.Rating == true ? "checked" : "") />
-                                    <label class="form-check-label" for="yes">Yes</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="rating" id="no" value="false" @(Model.UserReview.Rating == false ? "checked" : "") />
-                                    <label class="form-check-label" for="no">No</label>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Update Review</button>
-                        </form>
+                <form asp-action="EditReview" method="post">
+                    <input type="hidden" name="reviewId" value="@Model.UserReview.ReviewId" />
+                    <div class="form-group">
+                        <label for="comment">Comment:</label>
+                        <textarea class="form-control" id="comment" name="comment">@Model.UserReview.Comment</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Do you recommend this game?</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="rating" id="yes" value="true" @(Model.UserReview.Rating == true ? "checked" : "") />
+                            <label class="form-check-label" for="yes">Yes</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="rating" id="no" value="false" @(Model.UserReview.Rating == false ? "checked" : "") />
+                            <label class="form-check-label" for="no">No</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Review</button>
+                </form>
             }
         }
     </div>
