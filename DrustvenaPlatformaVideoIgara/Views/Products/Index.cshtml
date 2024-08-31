@@ -5,25 +5,43 @@
 }
 
 <style>
-    #randomProductsCarousel .carousel-control-prev,
-    #randomProductsCarousel .carousel-control-next {
+    .section-heading {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+        .section-heading h1 {
+            font-size: 2.5rem;
+            color: #e5e5e5;
+            margin-bottom: 20px;
+        }
+
+    .category-divider {
+        width: 60%;
+        height: 2px;
+        background-color: #5bc0de;
+        margin: 20px auto;
+        border-radius: 2px;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
         width: 5%;
     }
 
-    #randomProductsCarousel .carousel-control-prev-icon,
-    #randomProductsCarousel .carousel-control-next-icon {
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
         width: 30px;
         height: 30px;
     }
 
-    #randomProductsCarousel .carousel-control-prev {
+    .carousel-control-prev {
         left: 20%;
     }
 
-    #randomProductsCarousel .carousel-control-next {
+    .carousel-control-next {
         right: 20%;
     }
-
 
     .top-sellers-container {
         padding: 20px;
@@ -39,13 +57,13 @@
         border: 1px solid #ddd;
         border-radius: 8px;
         overflow: hidden;
-        background: #f5f5f5;
+        background: #333;
         transition: background 0.3s ease;
         text-align: center;
     }
 
         .top-seller-item:hover {
-            background: #e0e0e0;
+            background: #444;
         }
 
         .top-seller-item img {
@@ -61,7 +79,7 @@
     .top-seller-name {
         display: block;
         font-weight: bold;
-        color: #333;
+        color: #e5e5e5;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -73,6 +91,21 @@
         padding: 5px 10px;
     }
 
+    .card {
+        background-color: #333;
+        border: 1px solid #444;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .card-body {
+        text-align: center;
+    }
+
+    .card-img-top {
+        max-height: 180px;
+        object-fit: cover;
+    }
 
     .badge.bg-success {
         background-color: #28a745;
@@ -81,9 +114,17 @@
     .badge.bg-primary {
         background-color: #007bff;
     }
+
+    .text-light {
+        color: #e5e5e5;
+    }
 </style>
 
-<h1 class="text-center pt-2 pb-2">Featured & Recommended</h1>
+<!-- Featured & Recommended Section -->
+<div class="section-heading pt-4">
+    <h1>Featured & Recommended</h1>
+    <div class="category-divider"></div>
+</div>
 <div id="randomProductsCarousel" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
         @if (Model.RandomProducts.Any())
@@ -96,7 +137,7 @@
                     <div class="d-flex justify-content-center">
                         <div class="card" style="width: fit-content;">
                             <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
-                                <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName" style="object-fit: cover;">
+                                <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
                             </a>
                             <div class="card-body">
                                 <h5 class="card-title">
@@ -121,7 +162,7 @@
         }
         else
         {
-            <p>No featured products available.</p>
+            <p class="text-light text-center">No featured products available.</p>
         }
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#randomProductsCarousel" data-bs-slide="prev">
@@ -134,8 +175,11 @@
     </button>
 </div>
 
-
-<h1 class="text-center pt-5 pb-2">Top Sellers</h1>
+<!-- Top Sellers Section -->
+<div class="section-heading pt-5">
+    <h1>Top Sellers</h1>
+    <div class="category-divider"></div>
+</div>
 <div class="top-sellers-container">
     @if (Model.TopSellingProducts.Any())
     {
@@ -164,11 +208,15 @@
     }
     else
     {
-        <p>No top selling products available.</p>
+        <p class="text-light text-center">No top selling products available.</p>
     }
 </div>
 
-<h1 class="text-center pt-5 pb-2">Products Under 10 Bucks</h1>
+<!-- Products Under 10 Bucks Section -->
+<div class="section-heading pt-5">
+    <h1>Products Under 10 Bucks</h1>
+    <div class="category-divider"></div>
+</div>
 <div class="row">
     @if (Model.ProductsUnder10Bucks.Any())
     {
@@ -199,11 +247,15 @@
     }
     else
     {
-        <p>No products under 10 bucks available.</p>
+        <p class="text-light text-center">No products under 10 bucks available.</p>
     }
 </div>
 
-<h1 class="text-center pt-5 pb-2">Products Under 5 Bucks</h1>
+<!-- Products Under 5 Bucks Section -->
+<div class="section-heading pt-5">
+    <h1>Products Under 5 Bucks</h1>
+    <div class="category-divider"></div>
+</div>
 <div class="row">
     @if (Model.ProductsUnder5Bucks.Any())
     {
@@ -211,7 +263,8 @@
         {
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })"><img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
+                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
+                        <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
                     </a>
                     <div class="card-body">
                         <h5 class="card-title">
@@ -233,11 +286,15 @@
     }
     else
     {
-        <p>No products under 5 bucks available.</p>
+        <p class="text-light text-center">No products under 5 bucks available.</p>
     }
 </div>
 
-<h1 class="text-center pt-5 pb-2">Free Products</h1>
+<!-- Free Products Section -->
+<div class="section-heading pt-5">
+    <h1>Free Products</h1>
+    <div class="category-divider"></div>
+</div>
 <div class="row">
     @if (Model.FreeProducts.Any())
     {
@@ -245,7 +302,8 @@
         {
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })"><img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
+                    <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
+                        <img src="@product.ImagePath" class="card-img-top" alt="@product.ProductName">
                     </a>
                     <div class="card-body">
                         <h5 class="card-title">
@@ -266,6 +324,6 @@
     }
     else
     {
-        <p>No free products available.</p>
+        <p class="text-light text-center">No free products available.</p>
     }
 </div>
