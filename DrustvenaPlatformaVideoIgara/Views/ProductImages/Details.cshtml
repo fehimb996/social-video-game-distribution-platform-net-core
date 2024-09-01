@@ -1,0 +1,23 @@
+﻿@model DrustvenaPlatformaVideoIgara.Models.ProductImage
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Product Image</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Product</dt>
+        <dd class="col-sm-10">@Model.Product?.ProductName</dd>
+
+        <dt class="col-sm-2">Image</dt>
+        <dd class="col-sm-10"><img src="@Model.ImagePath" alt="@Model.ImagePath" width="300" /></dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ImageId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

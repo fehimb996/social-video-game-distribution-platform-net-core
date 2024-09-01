@@ -126,6 +126,24 @@
         gap: 10px; /* Space between the buttons */
         margin-top: 10px; /* Optional: space above the buttons */
     }
+
+    /* Carousel Section */
+    .product-carousel {
+        margin-bottom: 20px;
+        max-width: 1200px; /* Set a max-width for the carousel */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .carousel-item img {
+        width: 100%; /* Ensure the image fills the carousel item */
+        border-radius: 10px;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for better visibility */
+    }
 </style>
 
 <div class="product-details-container">
@@ -176,6 +194,35 @@
                 <button class="btn btn-primary action-button" disabled>Add to Cart (Login Required)</button>
             }
         </div>
+    </div>
+
+    <!-- Carousel Section -->
+    <div class="product-carousel">
+        @if (Model.ProductImages != null && Model.ProductImages.Any())
+        {
+            <div id="productImageCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @foreach (var image in Model.ProductImages)
+                    {
+                        <div class="carousel-item @(Model.ProductImages.IndexOf(image) == 0 ? "active" : "")">
+                            <img src="@Url.Content(image.ImagePath)" alt="Product Image" class="d-block w-100" />
+                        </div>
+                    }
+                </div>
+                <a class="carousel-control-prev" href="#productImageCarousel" role="button" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only"></span>
+                </a>
+                <a class="carousel-control-next" href="#productImageCarousel" role="button" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only"></span>
+                </a>
+            </div>
+        }
+        else
+        {
+            <p>No images available for this product.</p>
+        }
     </div>
 
     <!-- Main Content Section -->

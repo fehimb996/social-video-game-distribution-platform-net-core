@@ -125,12 +125,18 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 .ThenInclude(pp => pp.Publisher)
                 .Include(p => p.ProductDevelopers)
                 .ThenInclude(pd => pd.Developer)
+                .Include(p => p.ProductImages)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
 
             if (product == null)
             {
                 return NotFound();
             }
+
+            // Retrieve the images related to the product
+            var productImages = await _context.ProductImages
+                .Where(pi => pi.ProductId == id)
+                .ToListAsync();
 
             bool isInCart = false;
             bool isOwned = false;
@@ -170,7 +176,8 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 Genres = product.ProductGenres.Select(pg => pg.Genre).ToList(),
                 Platforms = product.ProductPlatforms.Select(pp => pp.Platform).ToList(),
                 Publishers = product.ProductPublishers.Select(pp => pp.Publisher).ToList(),
-                Developers = product.ProductDevelopers.Select(pd => pd.Developer).ToList()
+                Developers = product.ProductDevelopers.Select(pd => pd.Developer).ToList(),
+                ProductImages = productImages
             };
 
             return View(viewModel);

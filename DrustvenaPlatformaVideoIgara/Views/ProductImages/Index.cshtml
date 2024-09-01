@@ -1,0 +1,34 @@
+﻿@model IEnumerable<DrustvenaPlatformaVideoIgara.Models.ProductImage>
+
+@{
+    ViewData["Title"] = "Product Images";
+}
+
+<h1>Product Images</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Product</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><img src="@item.ImagePath" alt="@item.ImagePath" width="100" /></td>
+                <td>@item.Product?.ProductName</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ImageId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ImageId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ImageId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
