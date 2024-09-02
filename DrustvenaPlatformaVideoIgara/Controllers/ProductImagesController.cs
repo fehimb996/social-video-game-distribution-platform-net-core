@@ -16,14 +16,12 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        // GET: ProductImages
         public async Task<IActionResult> Index()
         {
             var images = await _context.ProductImages.Include(p => p.Product).ToListAsync();
             return View(images);
         }
 
-        // GET: ProductImages/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -42,14 +40,12 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(productImage);
         }
 
-        // GET: ProductImages/Create
         public IActionResult Create()
         {
             ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName");
             return View();
         }
 
-        // POST: ProductImages/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ImageId,ProductId")] ProductImage productImage, IFormFile imageFile)
@@ -75,7 +71,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: ProductImages/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
