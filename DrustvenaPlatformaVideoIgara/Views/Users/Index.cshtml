@@ -26,28 +26,30 @@
         border-collapse: collapse;
     }
 
-        .friends-table th, .friends-table td {
-            padding: 15px;
-            text-align: left;
-        }
+    .friends-table th,
+    .friends-table td {
+        padding: 15px;
+        text-align: left;
+    }
 
-        .friends-table thead th {
-            background-color: #333;
-            color: #c0c0c0;
-        }
+    .friends-table thead th {
+        background-color: #333;
+        color: #c0c0c0;
+    }
 
-        .friends-table tbody tr {
-            background-color: #444;
-            border-bottom: 1px solid #555;
-        }
+    .friends-table tbody tr {
+        background-color: #444;
+        border-bottom: 1px solid #555;
+        cursor: pointer;
+    }
 
-            .friends-table tbody tr:hover {
-                background-color: #555;
-            }
+    .friends-table tbody tr:hover {
+        background-color: #555;
+    }
 
     .profile-image img {
-        width: 50px;
-        height: 50px;
+        width: 64px;
+        height: 64px;
         object-fit: cover;
     }
 
@@ -56,9 +58,9 @@
         text-decoration: none;
     }
 
-        .friend-link:hover {
-            text-decoration: underline;
-        }
+    .friend-link:hover {
+        text-decoration: underline;
+    }
 </style>
 
 <div class="friends-container">
@@ -67,7 +69,7 @@
         <table class="table friends-table align-middle">
             <thead>
                 <tr>
-                    <th>Profile</th>
+                    <th></th>
                     <th>Nickname</th>
                     <th>First name</th>
                     <th>Last name</th>
@@ -77,22 +79,18 @@
             <tbody>
                 @foreach (var user in Model)
                 {
-                    <tr>
+                    <tr onclick="window.location='@Url.Action("Profile", new { id = user.UserId })';">
                         <td class="profile-image">
-                            <a asp-action="Profile" asp-route-id="@user.UserId">
-                                @if (!string.IsNullOrEmpty(user.ProfilePicture))
-                                {
-                                    <img src="@user.ProfilePicture" alt="@user.NickName" class="img-fluid" />
-                                }
-                                else
-                                {
-                                    <img src="~/images/default-profile.png" alt="Default Profile" class="img-fluid" />
-                                }
-                            </a>
+                            @if (!string.IsNullOrEmpty(user.ProfilePicture))
+                            {
+                                <img src="@user.ProfilePicture" alt="@user.NickName" class="img-fluid" />
+                            }
+                            else
+                            {
+                                <img src="~/images/default-profile.png" alt="Default Profile" class="img-fluid" />
+                            }
                         </td>
-                        <td>
-                            <a asp-action="Profile" asp-route-id="@user.UserId" class="friend-link">@user.NickName</a>
-                        </td>
+                        <td>@user.NickName</td>
                         <td>@user.FirstName</td>
                         <td>@user.LastName</td>
                         <td>@user.Country.CountryName</td>
