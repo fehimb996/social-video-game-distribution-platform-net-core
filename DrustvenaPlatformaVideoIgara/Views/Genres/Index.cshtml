@@ -41,7 +41,7 @@
         @foreach (var platform in Model.Platforms)
         {
             <div class="mb-4">
-                <h4 class="text-light">@platform.PlatformName</h4>
+                <h4 class="text-light pb-2">@platform.PlatformName</h4>
                 @if (platform.ProductPlatforms.Any())
                 {
                     <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
@@ -76,7 +76,7 @@
         @foreach (var genre in Model.Genres)
         {
             <div class="mb-4">
-                <h4 class="text-light">@genre.GenreName</h4>
+                <h4 class="text-light pb-2">@genre.GenreName</h4>
                 @if (genre.ProductGenres.Any())
                 {
                     <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
@@ -111,7 +111,7 @@
         @foreach (var developer in Model.Developers)
         {
             <div class="mb-4">
-                <h4 class="text-light">@developer.DeveloperName</h4>
+                <h4 class="text-light pb-2">@developer.DeveloperName</h4>
                 @if (developer.ProductDevelopers.Any())
                 {
                     <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
@@ -146,7 +146,7 @@
         @foreach (var publisher in Model.Publishers)
         {
             <div class="mb-4">
-                <h4 class="text-light">@publisher.PublisherName</h4>
+                <h4 class="text-light pb-2">@publisher.PublisherName</h4>
                 @if (publisher.ProductPublishers.Any())
                 {
                     <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
