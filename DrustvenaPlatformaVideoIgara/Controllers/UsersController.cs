@@ -37,7 +37,6 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         {
             var loggedInUserId = HttpContext.Session.GetInt32("UserId");
 
-            // If id is null, use the logged-in user's ID
             if (id == null)
             {
                 if (loggedInUserId == null)

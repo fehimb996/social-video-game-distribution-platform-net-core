@@ -12,7 +12,22 @@
         margin-bottom: 20px;
     }
 
-    .friends-container {
+    .search-bar {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .search-input {
+        width: 60%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #555;
+        font-size: 1rem;
+        background-color: #333;
+        color: #e5e5e5;
+    }
+
+    .users-container {
         background-color: #2a2a2a;
         padding: 20px;
         border-radius: 10px;
@@ -21,31 +36,31 @@
         margin: auto;
     }
 
-    .friends-table {
+    .users-table {
         width: 100%;
         border-collapse: collapse;
     }
 
-    .friends-table th,
-    .friends-table td {
-        padding: 15px;
-        text-align: left;
-    }
+        .users-table th,
+        .users-table td {
+            padding: 15px;
+            text-align: left;
+        }
 
-    .friends-table thead th {
-        background-color: #333;
-        color: #c0c0c0;
-    }
+        .users-table thead th {
+            background-color: #333;
+            color: #c0c0c0;
+        }
 
-    .friends-table tbody tr {
-        background-color: #444;
-        border-bottom: 1px solid #555;
-        cursor: pointer;
-    }
+        .users-table tbody tr {
+            background-color: #444;
+            border-bottom: 1px solid #555;
+            cursor: pointer;
+        }
 
-    .friends-table tbody tr:hover {
-        background-color: #555;
-    }
+            .users-table tbody tr:hover {
+                background-color: #555;
+            }
 
     .profile-image img {
         width: 64px;
@@ -58,17 +73,28 @@
         text-decoration: none;
     }
 
-    .friend-link:hover {
-        text-decoration: underline;
+        .friend-link:hover {
+            text-decoration: underline;
+        }
+
+    .no-results {
+        text-align: center;
+        color: #e5e5e5;
+        font-size: 1.2rem;
+        margin-top: 20px;
     }
 </style>
 
 <h1 class="page-title">Users</h1>
 
-<div class="friends-container">
+<div class="search-bar">
+    <input type="text" id="searchInput" class="search-input" placeholder="Search users..." onkeyup="filterTable()" />
+</div>
+
+<div class="users-container">
     @if (Model.Any())
     {
-        <table class="table friends-table align-middle">
+        <table class="table users-table align-middle" id="usersTable">
             <thead>
                 <tr>
                     <th></th>
@@ -100,9 +126,45 @@
                 }
             </tbody>
         </table>
+        <p id="noResultsMessage" class="no-results" style="display: none;">No results found.</p>
     }
     else
     {
         <p>No users found.</p>
     }
 </div>
+
+<script>
+    function filterTable() {
+        var input, filter, table, tr, td, i, j, txtValue, visibleRows;
+        input = document.getElementById("searchInput");
+        filter = input.value.toLowerCase();
+        table = document.getElementById("usersTable");
+        tr = table.getElementsByTagName("tr");
+        visibleRows = 0;
+
+        for (i = 1; i < tr.length; i++) { // Start at 1 to skip the table header
+            tr[i].style.display = "none";
+
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j]) {
+                    txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                        visibleRows++;
+                        break; // Stop checking the other cells in this row
+                    }
+                }
+            }
+        }
+
+        // Show or hide the "No results found" message
+        var noResultsMessage = document.getElementById("noResultsMessage");
+        if (visibleRows === 0) {
+            noResultsMessage.style.display = "block";
+        } else {
+            noResultsMessage.style.display = "none";
+        }
+    }
+</script>
