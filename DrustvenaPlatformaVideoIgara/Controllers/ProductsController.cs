@@ -109,6 +109,26 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             return View(viewModel);
         }
 
+        public async Task<IActionResult> Search(string searchTerm)
+        {
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                return Json(new List<Product>());
+            }
+
+            var products = await _context.Products
+                .Where(p => p.ProductName.Contains(searchTerm))
+                .Select(p => new
+                {
+                    p.ProductId,
+                    p.ProductName,
+                    p.ImagePath
+                })
+                .ToListAsync();
+
+            return Json(products);
+        }
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

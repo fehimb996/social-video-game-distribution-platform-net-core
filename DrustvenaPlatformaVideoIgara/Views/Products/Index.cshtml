@@ -123,8 +123,106 @@
     .badge.bg-primary {
         background-color: #007bff;
     }
+
+    .search-bar {
+        margin: 20px 0;
+        text-align: center;
+        position: relative;
+    }
+
+    .search-input {
+        width: 60%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #555;
+        font-size: 1rem;
+        background-color: #333;
+        color: #e5e5e5;
+    }
+
+    .search-results {
+        position: absolute;
+        top: 100%; 
+        left: 50%; 
+        transform: translateX(-50%);
+        width: 60%;
+        background-color: #2a2a2a;
+        max-height: 300px;
+        overflow-y: auto;
+        margin-top: 5px;
+        border: 1px solid #555;
+        z-index: 1000;
+        display: none;
+        text-align: left;
+        color: #e5e5e5;
+    }
+
+    .search-results-item {
+        padding: 10px;
+        border-bottom: 1px solid #444;
+    }
+
+        .search-results-item a {
+            color: #5bc0de;
+            text-decoration: none;
+        }
+
+            .search-results-item a:hover {
+                text-decoration: underline;
+            }
+
+        .search-results-item img {
+            width: 50px;
+            height: auto;
+            margin-right: 10px;
+        }
 </style>
 
+<!-- Search Bar -->
+<div class="search-bar">
+    <input type="text" id="productSearchInput" class="search-input" placeholder="Search products..." />
+    <div id="searchResults" class="search-results"></div>
+</div>
+
+<script>
+    document.getElementById("productSearchInput").addEventListener("input", function () {
+        var searchTerm = this.value.trim();
+        var resultsDiv = document.getElementById("searchResults");
+
+        if (searchTerm.length === 0) {
+            resultsDiv.style.display = "none";
+            return;
+        }
+
+        fetch('/Products/Search?searchTerm=' + encodeURIComponent(searchTerm))
+            .then(response => response.json())
+            .then(products => {
+                var output = "";
+
+                if (products.length > 0) {
+                    products.forEach(function (product) {
+                        output += "<div class='search-results-item'>" +
+                            "<a href='/Products/Details/" + product.productId + "'>" +
+                            "<img src='" + product.imagePath + "' alt='" + product.productName + "'>" +
+                            product.productName + "</a>" +
+                            "</div>";
+                    });
+                    resultsDiv.innerHTML = output;
+                    resultsDiv.style.display = "block";
+                } else {
+                    resultsDiv.innerHTML = "<p>No products found.</p>";
+                    resultsDiv.style.display = "block";
+                }
+            });
+    });
+
+    document.addEventListener("click", function (event) {
+        var searchResults = document.getElementById("searchResults");
+        if (!searchResults.contains(event.target) && event.target.id !== "productSearchInput") {
+            searchResults.style.display = "none";
+        }
+    });
+</script>
 
 <!-- Featured & Recommended Section -->
 <div class="section-heading pt-4">
