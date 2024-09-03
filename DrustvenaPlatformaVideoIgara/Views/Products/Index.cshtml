@@ -292,7 +292,7 @@
             {
                 <div class="top-seller-item">
                     <a href="@Url.Action("Details", "Products", new { id = product.ProductId })">
-                        <img src="@Model.RandomProducts.FirstOrDefault(p => p.ProductId == product.ProductId)?.ImagePath" class="img-thumbnail" alt="@product.ProductName">
+                        <img src="@product.ImagePath" class="img-thumbnail" alt="@product.ProductName">
                         <div class="top-seller-info">
                             <span class="top-seller-name">@product.ProductName</span>
                             <span class="badge bg-success rounded-pill top-seller-price">@product.Price €</span>

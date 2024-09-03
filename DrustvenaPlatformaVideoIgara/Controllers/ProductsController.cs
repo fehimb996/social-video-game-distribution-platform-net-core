@@ -36,17 +36,27 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                       ii => ii.InvoiceId,
                       i => i.InvoiceId,
                       (ii, i) => new { ii.Product, i.UserId })
-                .GroupBy(x => new { x.Product.ProductId, x.Product.ProductName, x.Product.Price })
+                .GroupBy(x => new { x.Product.ProductId, x.Product.ProductName, x.Product.Price, x.Product.ImagePath })
                 .Select(g => new
                 {
                     ProductId = g.Key.ProductId,
                     ProductName = g.Key.ProductName,
                     Price = g.Key.Price,
+                    ImagePath = g.Key.ImagePath,
                     TimesSold = g.Select(x => x.UserId).Distinct().Count()
                 })
                 .OrderByDescending(g => g.TimesSold)
                 .Take(10)
                 .ToListAsync();
+
+            // Map the result to TopSellingProduct
+            var topSellingProductsViewModel = topSellingProducts.Select(p => new TopSellingProducts
+            {
+                ProductId = p.ProductId,
+                ProductName = p.ProductName,
+                Price = p.Price,
+                ImagePath = p.ImagePath
+            });
 
             // Fetch products under 10 bucks but greater than 5
             var productsUnder10Bucks = await _context.Products
@@ -93,12 +103,7 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
             var viewModel = new ProductsViewModel
             {
                 RandomProducts = randomProducts,
-                TopSellingProducts = topSellingProducts.Select(p => new TopSellingProduct
-                {
-                    ProductId = p.ProductId,
-                    ProductName = p.ProductName,
-                    Price = p.Price
-                }),
+                TopSellingProducts = topSellingProductsViewModel,
                 ProductsUnder10Bucks = productsUnder10Bucks,
                 ProductsUnder5Bucks = productsUnder5Bucks,
                 FreeProducts = freeProducts,

@@ -1,6 +1,6 @@
 ﻿namespace DrustvenaPlatformaVideoIgara.Models
 {
-    public class TopSellingProduct
+    public class TopSellingProducts
     {
         public int ProductId { get; set; }
         public string ProductName { get; set; }
