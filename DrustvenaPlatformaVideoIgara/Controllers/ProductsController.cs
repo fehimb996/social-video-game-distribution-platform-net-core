@@ -30,33 +30,43 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
                 .Take(10)
                 .ToListAsync();
 
-            // Fetch top-selling products by unique users who bought the product
-            var topSellingProducts = await _context.InvoiceItems
+            // Fetch the top-selling product IDs and their sales counts
+            var topSellingProductIds = await _context.InvoiceItems
                 .Join(_context.Invoices,
                       ii => ii.InvoiceId,
                       i => i.InvoiceId,
-                      (ii, i) => new { ii.Product, i.UserId })
-                .GroupBy(x => new { x.Product.ProductId, x.Product.ProductName, x.Product.Price, x.Product.ImagePath })
+                      (ii, i) => new { ii.ProductId, i.UserId })
+                .GroupBy(x => x.ProductId)
                 .Select(g => new
                 {
-                    ProductId = g.Key.ProductId,
-                    ProductName = g.Key.ProductName,
-                    Price = g.Key.Price,
-                    ImagePath = g.Key.ImagePath,
+                    ProductId = g.Key,
                     TimesSold = g.Select(x => x.UserId).Distinct().Count()
                 })
                 .OrderByDescending(g => g.TimesSold)
                 .Take(10)
                 .ToListAsync();
 
-            // Map the result to TopSellingProduct
-            var topSellingProductsViewModel = topSellingProducts.Select(p => new TopSellingProducts
-            {
-                ProductId = p.ProductId,
-                ProductName = p.ProductName,
-                Price = p.Price,
-                ImagePath = p.ImagePath
-            });
+            // Fetch the product details for the top-selling products
+            var topSellingProductIdsList = topSellingProductIds.Select(ts => ts.ProductId).ToList();
+            var topSellingProducts = await _context.Products
+                .Where(p => topSellingProductIdsList.Contains(p.ProductId))
+                .ToListAsync();
+
+            // Create a dictionary to access TimesSold by ProductId
+            var timesSoldDictionary = topSellingProductIds.ToDictionary(ts => ts.ProductId, ts => ts.TimesSold);
+
+            // Map the result to TopSellingProduct, and sort them by TimesSold
+            var topSellingProductsViewModel = topSellingProducts
+                .Select(p => new TopSellingProducts
+                {
+                    ProductId = p.ProductId,
+                    ProductName = p.ProductName,
+                    Price = p.Price,
+                    ImagePath = p.ImagePath,
+                    TimesSold = timesSoldDictionary.ContainsKey(p.ProductId) ? timesSoldDictionary[p.ProductId] : 0
+                })
+                .OrderByDescending(p => p.TimesSold)  // Ensure the order is by TimesSold
+                .ToList();
 
             // Fetch products under 10 bucks but greater than 5
             var productsUnder10Bucks = await _context.Products
