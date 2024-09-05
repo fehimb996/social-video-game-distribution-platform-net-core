@@ -143,14 +143,15 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
 
             var product = await _context.Products
                 .Include(p => p.ProductGenres)
-                .ThenInclude(pg => pg.Genre)
+                    .ThenInclude(pg => pg.Genre)
                 .Include(p => p.ProductPlatforms)
-                .ThenInclude(pp => pp.Platform)
+                    .ThenInclude(pp => pp.Platform)
                 .Include(p => p.ProductPublishers)
-                .ThenInclude(pp => pp.Publisher)
+                    .ThenInclude(pp => pp.Publisher)
                 .Include(p => p.ProductDevelopers)
-                .ThenInclude(pd => pd.Developer)
+                    .ThenInclude(pd => pd.Developer)
                 .Include(p => p.ProductImages)
+                .AsSplitQuery() 
                 .FirstOrDefaultAsync(m => m.ProductId == id);
 
             if (product == null)
