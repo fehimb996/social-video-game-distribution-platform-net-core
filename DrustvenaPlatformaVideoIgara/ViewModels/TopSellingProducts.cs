@@ -1,4 +1,4 @@
-﻿namespace DrustvenaPlatformaVideoIgara.Models
+﻿namespace DrustvenaPlatformaVideoIgara.ViewModels
 {
     public class TopSellingProducts
     {

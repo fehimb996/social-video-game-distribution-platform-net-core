@@ -1,4 +1,6 @@
-﻿namespace DrustvenaPlatformaVideoIgara.Models
+﻿using DrustvenaPlatformaVideoIgara.Models;
+
+namespace DrustvenaPlatformaVideoIgara.ViewModels
 {
     public class ProductsViewModel
     {

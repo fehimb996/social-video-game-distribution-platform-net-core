@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DrustvenaPlatformaVideoIgara.Models;
+using DrustvenaPlatformaVideoIgara.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using System.Security.Claims;
 
