@@ -119,7 +119,7 @@
             </div>
  
             <div>
-                <strong>Country:</strong> @Html.DisplayFor(model => model.Country.CountryName)
+                <strong>Country:</strong> @ViewData["CountryName"]
             </div>
             @if ((bool)ViewData["IsOwnProfile"])
             {

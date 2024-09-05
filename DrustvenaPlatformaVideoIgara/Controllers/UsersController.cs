@@ -37,53 +37,62 @@ namespace DrustvenaPlatformaVideoIgara.Controllers
         {
             var loggedInUserId = HttpContext.Session.GetInt32("UserId");
 
+            // Determine the profile ID to display
+            id ??= loggedInUserId;
+
             if (id == null)
             {
-                if (loggedInUserId == null)
-                {
-                    return RedirectToAction("Login", "Users");
-                }
-                id = loggedInUserId;
+                return RedirectToAction("Login", "Users");
             }
 
-            var user = await _context.Users
-                .Include(u => u.Country)
-                .Include(u => u.FriendUserId1Navigations)
-                .Include(u => u.FriendUserId2Navigations)
-                .FirstOrDefaultAsync(u => u.UserId == id);
+            // Fetch user details and related counts in one query
+            var userProfileData = await _context.Users
+                .Where(u => u.UserId == id)
+                .Select(u => new
+                {
+                    User = u,
+                    Country = u.Country.CountryName, // Include the Country property
+                    GamesCount = _context.Invoices
+                        .Where(i => i.UserId == id)
+                        .SelectMany(i => i.InvoiceItems)
+                        .Select(ii => ii.ProductId)
+                        .Distinct()
+                        .Count(),
 
-            if (user == null)
+                    ReviewsCount = _context.Reviews
+                        .Where(r => r.UserId == id)
+                        .Count(),
+
+                    FriendsCount = u.FriendUserId1Navigations.Count + u.FriendUserId2Navigations.Count,
+
+                    WalletBalance = _context.Wallets
+                        .Where(w => w.UserId == id)
+                        .Select(w => w.Balance)
+                        .FirstOrDefault(),
+
+                    IsFriend = loggedInUserId.HasValue ? _context.Friends
+                        .Any(f => (f.UserId1 == loggedInUserId.Value && f.UserId2 == id) ||
+                                  (f.UserId1 == id && f.UserId2 == loggedInUserId.Value)) : false
+                })
+                .SingleOrDefaultAsync();
+
+            if (userProfileData == null)
             {
                 return NotFound();
             }
 
-            var gamesCount = await _context.Invoices
-                .Where(i => i.UserId == id)
-                .SelectMany(i => i.InvoiceItems)
-                .Select(id => id.Product)
-                .Distinct()
-                .CountAsync();
-
-            var reviewsCount = await _context.Reviews
-                .Where(r => r.UserId == id)
-                .CountAsync();
-
-            var friendsCount = user.FriendUserId1Navigations.Count + user.FriendUserId2Navigations.Count;
-
-            ViewData["GamesCount"] = gamesCount;
-            ViewData["ReviewsCount"] = reviewsCount;
-            ViewData["FriendsCount"] = friendsCount;
+            // Set ViewData properties
+            ViewData["GamesCount"] = userProfileData.GamesCount;
+            ViewData["ReviewsCount"] = userProfileData.ReviewsCount;
+            ViewData["FriendsCount"] = userProfileData.FriendsCount;
+            ViewData["WalletBalance"] = userProfileData.WalletBalance;
             ViewData["IsOwnProfile"] = id == loggedInUserId;
+            ViewData["IsFriend"] = userProfileData.IsFriend;
 
-            // Fetch wallet balance for the user
-            var wallet = await _context.Wallets
-                .FirstOrDefaultAsync(w => w.UserId == id);
+            // Pass the country name to the view
+            ViewData["CountryName"] = userProfileData.Country;
 
-            ViewData["WalletBalance"] = wallet?.Balance ?? 0;
-
-            ViewData["IsFriend"] = loggedInUserId.HasValue ? await IsFriend(loggedInUserId.Value, id.Value) : false;
-
-            return View(user);
+            return View(userProfileData.User);
         }
 
         public async Task<IActionResult> Friends(int id)
