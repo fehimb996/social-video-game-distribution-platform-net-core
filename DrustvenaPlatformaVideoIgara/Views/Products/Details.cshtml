@@ -309,7 +309,6 @@
     </div>
 
     <!-- Reviews Section -->
-    <!-- Reviews Section -->
     <div class="product-reviews">
         <h3>Reviews</h3>
         @if (Model.Reviews == null || !Model.Reviews.Any())
@@ -324,7 +323,7 @@
                     <li class="review-item">
                         <div class="review-header">
                             <!-- Display the user's profile picture -->
-                            <img src="@review.User.ProfilePicture" alt="@review.User.NickName's Profile Picture" class="profile-picture img-fluid" />
+                            <a asp-controller="Users" asp-action="Profile" asp-route-id="@review.User.UserId"><img src="@review.User.ProfilePicture" alt="@review.User.NickName's Profile Picture" class="profile-picture img-fluid" /></a>
                             <strong>
                                 <a asp-controller="Users" asp-action="Profile" asp-route-id="@review.User.UserId">
                                     @review.User?.NickName
