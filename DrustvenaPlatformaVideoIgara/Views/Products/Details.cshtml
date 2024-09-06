@@ -144,6 +144,19 @@
     .carousel-control-next-icon {
         background-color: rgba(0, 0, 0, 0.5);
     }
+
+    .profile-picture {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+        display: inline-block;
+    }
+
+    .review-header {
+        display: flex;
+        align-items: center;
+    }
 </style>
 
 <div class="product-details-container">
@@ -296,6 +309,7 @@
     </div>
 
     <!-- Reviews Section -->
+    <!-- Reviews Section -->
     <div class="product-reviews">
         <h3>Reviews</h3>
         @if (Model.Reviews == null || !Model.Reviews.Any())
@@ -308,23 +322,27 @@
                 @foreach (var review in Model.Reviews)
                 {
                     <li class="review-item">
-                        <strong>
-                            <a asp-controller="Users" asp-action="Profile" asp-route-id="@review.User.UserId">
-                                @review.User?.NickName
-                            </a>
-                        </strong> -
-                        @if (review.Rating == true)
-                        {
-                            <span class="review-rating positive">
-                                <img src="~/images/icon_thumbsUp_v6.png" alt="Thumbs Up" /> Recommended
-                            </span>
-                        }
-                        else
-                        {
-                            <span class="review-rating negative">
-                                <img src="~/images/icon_thumbsDown_v6.png" alt="Thumbs Down" /> Not recommended
-                            </span>
-                        }
+                        <div class="review-header">
+                            <!-- Display the user's profile picture -->
+                            <img src="@review.User.ProfilePicture" alt="@review.User.NickName's Profile Picture" class="profile-picture img-fluid" />
+                            <strong>
+                                <a asp-controller="Users" asp-action="Profile" asp-route-id="@review.User.UserId">
+                                    @review.User?.NickName
+                                </a>
+                            </strong> &nbsp; &nbsp;
+                            @if (review.Rating == true)
+                            {
+                                <span class="review-rating positive">
+                                    <img src="~/images/icon_thumbsUp_v6.png" alt="Thumbs Up" /> Recommended
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="review-rating negative">
+                                    <img src="~/images/icon_thumbsDown_v6.png" alt="Thumbs Down" /> Not recommended
+                                </span>
+                            }
+                        </div>
                         <br />
                         <p>@review.Comment</p>
                         @if (review.UserId == Model.UserId)
@@ -338,6 +356,7 @@
                 }
             </ul>
         }
+
         <!-- Add/Edit Review -->
         @if (Model.IsUserLoggedIn && Model.IsOwned)
         {
