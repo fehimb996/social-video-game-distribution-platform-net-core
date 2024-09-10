@@ -1,1 +1,5 @@
 # social-video-game-distribution-platform-net-core
+
+This application is a complete platform for video game distribution, allowing users to interact through multiple features. The application provides a rich product database, including both free games and those sold at various prices. Built using a Database-First approach, the application utilizes ASP.NET Core MVC and SignalR technologies. The platform offers real-time communication features, enabling users to dynamically interact and view live updates without needing to refresh the page.
+
+Users can browse products, add them to their wishlist, or purchase them. A product search feature is implemented, allowing users to easily find desired games. The application also includes features for tracking product ownership, covering games that users own or have added to their wishlist. Additionally, it incorporates elements for displaying top-selling games, as well as those available at discounted prices. Users can leave reviews on products, where they can recommend or not recommend a game, along with the option to add comments to their reviews.
